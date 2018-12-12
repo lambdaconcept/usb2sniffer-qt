@@ -63,7 +63,7 @@ QVariant USBItem::data(int column) const
             return m_Timestamp;
         }
         else if (column == 1) {
-            return m_Pid;
+            return QString("%1").arg(m_Pid, 2, 16);
         }
         else if (column == 2) {
             return m_Dev;
