@@ -19,8 +19,11 @@ public:
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
+    QVariant headerData(int column) const;
     int row() const;
     USBItem *parentItem();
+
+    static const QVector<QString> s_header;
 
 private:
     QList<USBItem*> m_childItems;

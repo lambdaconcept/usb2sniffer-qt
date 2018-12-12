@@ -71,6 +71,22 @@ QVariant USBItem::data(int column) const
     return QVariant();
 }
 
+const QVector<QString> USBItem::s_header = {
+    "Timestamp",
+    "Record",
+    "Device",
+    "Endpoint",
+    "CRC",
+    "FrameNo",
+    "Length",
+    "Payload",
+};
+
+QVariant USBItem::headerData(int column) const
+{
+    return s_header.value(column);
+}
+
 USBItem *USBItem::parentItem()
 {
     return m_parentItem;

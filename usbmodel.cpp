@@ -92,7 +92,7 @@ QVariant USBModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return m_rootItem->data(section);
+        return m_rootItem->headerData(section);
 
     return QVariant();
 }
