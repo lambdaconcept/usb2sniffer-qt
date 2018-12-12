@@ -76,6 +76,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
         </widget>
        </item>
       </layout>
@@ -122,7 +125,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textPktdetails"/>
+         <widget class="QTextEdit" name="textPktdetails">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -152,7 +159,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textAscii"/>
+         <widget class="QTextEdit" name="textAscii">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
