@@ -5,6 +5,7 @@
 
 #include "usbmodel.h"
 #include "usbitem.h"
+#include "usbpacket.h"
 
 namespace Ui {
 class MainWindow;

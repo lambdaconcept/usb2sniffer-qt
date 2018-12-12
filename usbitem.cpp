@@ -1,26 +1,9 @@
 #include "usbitem.h"
 
-USBItem::USBItem(const quint64 timestamp,
-                 const quint8 pid,
-                 const quint8 dev,
-                 const quint8 endpoint,
-                 const quint16 crc,
-                 const quint16 frameNumber,
-                 const quint32 dataLen,
-                 const QByteArray &data,
-
-                 USBItem *parentItem)
+USBItem::USBItem(USBPacket *packet, USBItem *parentItem)
 {
     m_parentItem = parentItem;
-
-    m_Timestamp = timestamp;
-    m_Pid = pid;
-    m_Dev = dev;
-    m_Endpoint = endpoint;
-    m_CRC = crc;
-    m_FrameNumber = frameNumber;
-    m_DataLen = dataLen;
-    m_Data = data;
+    m_packet = packet;
 }
 
 USBItem::~USBItem()
@@ -60,28 +43,28 @@ QVariant USBItem::data(int column) const
 {
     if (column < 8) { // FIXME
         if (column == 0) { // FIXME
-            return m_Timestamp;
+            return m_packet->m_Timestamp;
         }
         else if (column == 1) {
-            return QString("%1").arg(m_Pid, 2, 16);
+            return m_packet->getPidStr();
         }
         else if (column == 2) {
-            return m_Dev;
+            return m_packet->m_Dev;
         }
         else if (column == 3) {
-            return m_Endpoint;
+            return m_packet->m_Endpoint;
         }
         else if (column == 4) {
-            return m_CRC;
+            return m_packet->m_CRC;
         }
         else if (column == 5) {
-            return m_FrameNumber;
+            return m_packet->m_FrameNumber;
         }
         else if (column == 6) {
-            return m_DataLen;
+            return m_packet->m_DataLen;
         }
         else if (column == 7) {
-            return m_Data.toHex();
+            return m_packet->m_Data.toHex();
         }
     }
 

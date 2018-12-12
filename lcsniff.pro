@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     usbitem.cpp \
-    usbmodel.cpp
+    usbmodel.cpp \
+    usbpacket.cpp
 
 HEADERS += \
         mainwindow.h \
     usbitem.h \
-    usbmodel.h
+    usbmodel.h \
+    usbpacket.h
 
 FORMS += \
         mainwindow.ui
