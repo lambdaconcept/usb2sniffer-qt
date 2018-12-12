@@ -56,7 +56,7 @@ QVariant USBItem::data(int column) const
         case 5:
             return m_packet->m_FrameNumber;
         case 6:
-            return m_packet->m_DataLen;
+            return m_packet->m_Data.count();
         case 7:
             return m_packet->m_Data.toHex();
         default:

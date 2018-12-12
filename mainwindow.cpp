@@ -3,12 +3,15 @@
 
 USBItem* createSampleData()
 {
-    USBItem *rootItem = new USBItem(new USBPacket(0,0,0,0,0,0,0,QByteArray()));
-    rootItem->appendChild(new USBItem(new USBPacket(0,0xa5,1,2,3,0,0,QByteArray()),rootItem));
-    USBItem *node = new USBItem(new USBPacket(0,0xb2,1,2,3,0,0,QByteArray()),rootItem);
-    node->appendChild(new USBItem(new USBPacket(0,0xb2,1,2,3,0,0,QByteArray()),node));
+    USBItem *rootItem = new USBItem(new USBPacket(0, QByteArray()));
+
+    USBItem *node = new USBItem(new USBPacket(1, QByteArray::fromHex("555342")), rootItem);
+
+    node->appendChild(new USBItem(new USBPacket(1, QByteArray::fromHex("698218")), node));
+    node->appendChild(new USBItem(new USBPacket(2, QByteArray::fromHex("4b5553425310")), node));
+    node->appendChild(new USBItem(new USBPacket(3, QByteArray::fromHex("d2")), node));
+
     rootItem->appendChild(node);
-    rootItem->appendChild(new USBItem(new USBPacket(0,0xc3,1,2,3,0,8,QByteArray::fromHex("8006000100004000")),rootItem));
 
     return rootItem;
 }

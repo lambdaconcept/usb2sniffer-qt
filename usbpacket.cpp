@@ -1,23 +1,12 @@
 #include "usbpacket.h"
 
 USBPacket::USBPacket(const quint64 timestamp,
-                     const quint8 pid,
-                     const quint8 dev,
-                     const quint8 endpoint,
-                     const quint16 crc,
-                     const quint16 frameNumber,
-                     const quint32 dataLen,
-                     const QByteArray &data)
+                     const QByteArray& packet)
 {
-
     m_Timestamp = timestamp;
-    m_Pid = pid;
-    m_Dev = dev;
-    m_Endpoint = endpoint;
-    m_CRC = crc;
-    m_FrameNumber = frameNumber;
-    m_DataLen = dataLen;
-    m_Data = data;
+    m_Packet = packet;
+
+    decode();
 }
 
 const QVector<QString> USBPacket::pidStr = {
@@ -42,4 +31,68 @@ const QVector<QString> USBPacket::pidStr = {
 QString USBPacket::getPidStr()
 {
     return pidStr[(m_Pid & 0xf)];
+}
+
+void USBPacket::decode()
+{
+    unsigned char pid;
+    unsigned char pid_type;
+
+    if((m_Packet[0] & 0xf) != (~(m_Packet[0] >> 4) & 0xf) ){
+        m_Err = 1; // FIXME
+        return;
+    }
+
+    pid = m_Packet[0] & 0xF;
+    pid_type = pid & 0x3;
+
+    m_Pid = m_Packet[0];
+
+    switch(pid_type){
+        case PID_TYPE_SPECIAL:
+            switch(pid) {
+                case PID_PRE:
+                case PID_SPLIT:
+                case PID_PING:
+                    break;
+            }
+            break;
+
+        case PID_TYPE_TOKEN:
+            m_CRC = m_Packet[2] >> 3;
+            switch(pid){
+                case PID_OUT:
+                case PID_IN:
+                case PID_SETUP:
+                    m_Dev = m_Packet[1] &0x7f;
+                    m_Endpoint = ((m_Packet[2] & 0x7) << 1) | (( m_Packet[1] & 0x80) >> 7);
+                    break;
+                case PID_SOF:
+                    m_FrameNumber = m_Packet[1] | ((m_Packet[2] & 0x7) << 8);
+                    break;
+            }
+            break;
+
+        case PID_TYPE_HANDSHAKE:
+            switch(pid) {
+                case PID_ACK:
+                case PID_NAK:
+                case PID_STALL:
+                case PID_NYET:
+                    break;
+            }
+            break;
+
+        case PID_TYPE_DATA:
+            m_Data.setRawData(m_Packet.data()+1, m_Packet.count()-3);
+            m_CRC = m_Packet[m_Packet.count() - 2] | (m_Packet[m_Packet.count() - 1] << 8);
+            switch(pid){
+                case PID_DATA0:
+                case PID_DATA1:
+                case PID_DATA2:
+                case PID_MDATA:
+                    break;
+            }
+            break;
+    }
 }
