@@ -20,7 +20,27 @@ USBPacket::USBPacket(const quint64 timestamp,
     m_Data = data;
 }
 
+const QVector<QString> USBPacket::pidStr = {
+    "RESERVED",
+    "OUT",
+    "ACK",
+    "DATA0",
+    "PING",
+    "SOF",
+    "NYET",
+    "DATA2",
+    "SPLIT",
+    "IN",
+    "NAK",
+    "DATA1",
+    "ERR/PRE",
+    "SETUP",
+    "STALL",
+    "MDATA"
+};
+
 QString USBPacket::getPidStr()
 {
-    return QString("%1").arg(m_Pid, 2, 16);
+    // return QString("%1").arg(m_Pid, 2, 16);
+    return pidStr[(m_Pid & 0xf)];
 }

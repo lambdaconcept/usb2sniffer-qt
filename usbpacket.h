@@ -1,6 +1,7 @@
 #ifndef USBPACKET_H
 #define USBPACKET_H
 
+#include <QVector>
 #include <QString>
 #include <QByteArray>
 
@@ -17,6 +18,8 @@ public:
                        const QByteArray &data);
 
     QString getPidStr();
+
+    static const QVector<QString> pidStr;
 
 public:
     quint64 m_Timestamp;
