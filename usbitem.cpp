@@ -41,34 +41,27 @@ int USBItem::columnCount() const
 
 QVariant USBItem::data(int column) const
 {
-    if (column < 8) { // FIXME
-        if (column == 0) { // FIXME
+    switch(column)
+    {
+        case 0:
             return m_packet->m_Timestamp;
-        }
-        else if (column == 1) {
+        case 1:
             return m_packet->getPidStr();
-        }
-        else if (column == 2) {
-            return m_packet->m_Dev;
-        }
-        else if (column == 3) {
-            return m_packet->m_Endpoint;
-        }
-        else if (column == 4) {
-            return m_packet->m_CRC;
-        }
-        else if (column == 5) {
+        case 2:
+            return QString("%1").arg(m_packet->m_Dev, 2, 16, QChar('0'));
+        case 3:
+            return QString("%1").arg(m_packet->m_Endpoint, 2, 16, QChar('0'));
+        case 4:
+            return QString("%1").arg(m_packet->m_CRC, 4, 16, QChar('0'));
+        case 5:
             return m_packet->m_FrameNumber;
-        }
-        else if (column == 6) {
+        case 6:
             return m_packet->m_DataLen;
-        }
-        else if (column == 7) {
+        case 7:
             return m_packet->m_Data.toHex();
-        }
+        default:
+            return QVariant();
     }
-
-    return QVariant();
 }
 
 const QVector<QString> USBItem::s_header = {
