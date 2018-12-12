@@ -2,6 +2,7 @@
 #define USBITEM_H
 
 #include <QList>
+#include <QString>
 #include <QVector>
 #include <QByteArray>
 
@@ -22,6 +23,7 @@ public:
     QVariant headerData(int column) const;
     int row() const;
     USBItem *parentItem();
+    const QString asciiData();
 
     static const QVector<QString> s_header;
 

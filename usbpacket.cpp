@@ -41,6 +41,5 @@ const QVector<QString> USBPacket::pidStr = {
 
 QString USBPacket::getPidStr()
 {
-    // return QString("%1").arg(m_Pid, 2, 16);
     return pidStr[(m_Pid & 0xf)];
 }

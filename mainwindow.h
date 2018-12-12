@@ -19,6 +19,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void updateAscii(const QModelIndex& index);
+
 private:
     Ui::MainWindow *ui;
 };

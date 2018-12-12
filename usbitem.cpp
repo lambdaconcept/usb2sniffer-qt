@@ -91,3 +91,10 @@ USBItem *USBItem::parentItem()
 {
     return m_parentItem;
 }
+
+const QString USBItem::asciiData()
+{
+    return data(7).toString(); // FIXME
+
+    // m_packet->m_Data.data(), m_packet->m_DataLen
+}
