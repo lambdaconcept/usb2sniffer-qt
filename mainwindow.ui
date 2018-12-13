@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>851</width>
-    <height>608</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,10 +26,10 @@
    <widget class="QSplitter" name="splitV">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>0</y>
-      <width>800</width>
-      <height>540</height>
+      <width>1021</width>
+      <height>701</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -56,8 +56,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>781</width>
-        <height>271</height>
+        <width>1011</width>
+        <height>331</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="vlayPktlist">
@@ -94,7 +94,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>270</height>
+       <height>350</height>
       </size>
      </property>
      <property name="orientation">
@@ -112,8 +112,8 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>381</width>
-         <height>261</height>
+         <width>491</width>
+         <height>331</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="vlayDetails">
@@ -146,8 +146,8 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>371</width>
-         <height>261</height>
+         <width>602</width>
+         <height>331</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="vlayAscii">
@@ -160,6 +160,15 @@
         </item>
         <item>
          <widget class="QTextEdit" name="textAscii">
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -176,7 +185,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>851</width>
+     <width>1024</width>
      <height>20</height>
     </rect>
    </property>
