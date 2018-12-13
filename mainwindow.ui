@@ -100,7 +100,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QFrame" name="framePktdetails">
+     <widget class="QFrame" name="frameDetails">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -116,16 +116,16 @@
          <height>261</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="vlayPktdetails">
+       <layout class="QVBoxLayout" name="vlayDetails">
         <item>
-         <widget class="QLabel" name="labelPktdetails">
+         <widget class="QLabel" name="labelDetails">
           <property name="text">
-           <string>Packet Details</string>
+           <string>Details</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textPktdetails">
+         <widget class="QTextEdit" name="textDetails">
           <property name="readOnly">
            <bool>true</bool>
           </property>

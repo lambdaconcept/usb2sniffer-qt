@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
     void updateAscii(const QModelIndex& index);
+    void updateDetails(const QModelIndex& index);
 
 private:
     Ui::MainWindow *ui;

@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->setModel(usbModel);
 
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
+    connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 }
 
 MainWindow::~MainWindow()
@@ -43,4 +44,14 @@ void MainWindow::updateAscii(const QModelIndex& index)
     USBItem *item = static_cast<USBItem*>(index.internalPointer());
 
     ui->textAscii->setPlainText(item->asciiData());
+}
+
+void MainWindow::updateDetails(const QModelIndex& index)
+{
+    if (!index.isValid())
+        return;
+
+    USBItem *item = static_cast<USBItem*>(index.internalPointer());
+
+    ui->textDetails->setPlainText(item->details());
 }

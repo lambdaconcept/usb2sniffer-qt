@@ -28,9 +28,31 @@ const QVector<QString> USBPacket::pidStr = {
     "MDATA"
 };
 
+const QVector<QString> USBPacket::typeStr = {
+    "SPECIAL",
+    "TOKEN",
+    "HANDSHAKE",
+    "DATA"
+};
+
+quint8 USBPacket::getPid()
+{
+    return (m_Pid & 0xf);
+}
+
+quint8 USBPacket::getType()
+{
+    return (m_Pid & 0x3);
+}
+
 QString USBPacket::getPidStr()
 {
     return pidStr[(m_Pid & 0xf)];
+}
+
+QString USBPacket::getTypeStr()
+{
+    return typeStr[(m_Pid & 0x3)];
 }
 
 void USBPacket::decode()

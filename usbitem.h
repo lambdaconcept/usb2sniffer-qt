@@ -11,7 +11,7 @@
 class USBItem
 {
 public:
-    explicit USBItem(USBPacket* packet, USBItem *parentItem = nullptr);
+    explicit USBItem(USBPacket* record, USBItem *parentItem = nullptr);
     ~USBItem();
 
     void appendChild(USBItem *child);
@@ -24,13 +24,14 @@ public:
     int row() const;
     USBItem *parentItem();
     const QString asciiData();
+    const QString details();
 
     static const QVector<QString> s_header;
 
 private:
     QList<USBItem*> m_childItems;
     USBItem *m_parentItem;
-    USBPacket *m_packet;
+    USBPacket *m_record;
 };
 
 #endif // USBITEM_H

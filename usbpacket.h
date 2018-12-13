@@ -35,9 +35,13 @@ public:
                        const QByteArray& packet);
 
     void decode();
+    quint8 getPid();
+    quint8 getType();
     QString getPidStr();
+    QString getTypeStr();
 
     static const QVector<QString> pidStr;
+    static const QVector<QString> typeStr;
 
 public:
     quint64 m_Timestamp;
