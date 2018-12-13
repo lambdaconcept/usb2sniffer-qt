@@ -1,5 +1,16 @@
 #include "usbitem.h"
 
+const QVector<QString> USBItem::s_header = {
+    "Record",
+    "Timestamp",
+    "Device",
+    "Endpoint",
+    "Length",
+    "Summary",
+    // Status
+    // Error
+};
+
 USBItem::USBItem(USBPacket *packet, USBItem *parentItem)
 {
     m_parentItem = parentItem;
@@ -36,7 +47,7 @@ int USBItem::row() const
 
 int USBItem::columnCount() const
 {
-    return 8; // FIXME
+    return s_header.count();
 }
 
 QVariant USBItem::data(int column) const
@@ -44,36 +55,21 @@ QVariant USBItem::data(int column) const
     switch(column)
     {
         case 0:
-            return m_packet->m_Timestamp;
-        case 1:
             return m_packet->getPidStr();
+        case 1:
+            return m_packet->m_Timestamp;
         case 2:
             return QString("%1").arg(m_packet->m_Dev, 2, 16, QChar('0'));
         case 3:
             return QString("%1").arg(m_packet->m_Endpoint, 2, 16, QChar('0'));
         case 4:
-            return QString("%1").arg(m_packet->m_CRC, 4, 16, QChar('0'));
-        case 5:
-            return m_packet->m_FrameNumber;
-        case 6:
             return m_packet->m_Data.count();
-        case 7:
+        case 5:
             return m_packet->m_Data.toHex();
         default:
             return QVariant();
     }
 }
-
-const QVector<QString> USBItem::s_header = {
-    "Timestamp",
-    "Record",
-    "Device",
-    "Endpoint",
-    "CRC",
-    "FrameNo",
-    "Length",
-    "Payload",
-};
 
 QVariant USBItem::headerData(int column) const
 {
@@ -87,7 +83,7 @@ USBItem *USBItem::parentItem()
 
 const QString USBItem::asciiData()
 {
-    return data(7).toString(); // FIXME
+    return m_packet->m_Data.toHex();
 
     // m_packet->m_Data.data(), m_packet->m_DataLen
 }
