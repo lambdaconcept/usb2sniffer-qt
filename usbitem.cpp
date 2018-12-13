@@ -65,6 +65,9 @@ QVariant USBItem::data(int column) const
         case 4:
             return m_record->m_Data.count();
         case 5:
+            if(m_record->getPid() == PID_SOF) {
+                return QString("Frame: %1").arg(m_record->m_FrameNumber);
+            }
             return m_record->m_Data.toHex();
         default:
             return QVariant();
@@ -101,7 +104,7 @@ const QString USBItem::details()
         if(m_record->getPid() == PID_SOF) {
             details = QString("PID: 0x%1\nFrame No: %2\nCRC5: 0x%3\n")
                 .arg(m_record->m_Pid, 2, 16, QChar('0'))
-                .arg(m_record->m_FrameNumber, 2, 16, QChar('0'))
+                .arg(m_record->m_FrameNumber)
                 .arg(m_record->m_CRC, 2, 16, QChar('0'));
         }
         else {

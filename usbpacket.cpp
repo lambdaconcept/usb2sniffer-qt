@@ -81,16 +81,16 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_TOKEN:
-            m_CRC = m_Packet[2] >> 3;
+            m_CRC = (m_Packet[2] >> 3) & 0x1f;
             switch(pid){
                 case PID_OUT:
                 case PID_IN:
                 case PID_SETUP:
-                    m_Dev = m_Packet[1] &0x7f;
-                    m_Endpoint = ((m_Packet[2] & 0x7) << 1) | (( m_Packet[1] & 0x80) >> 7);
+                    m_Dev = m_Packet[1] & 0x7f;
+                    m_Endpoint = (((m_Packet[2] & 0x7) << 1) | (( m_Packet[1] & 0x80) >> 7)) & 0xf;
                     break;
                 case PID_SOF:
-                    m_FrameNumber = m_Packet[1] | ((m_Packet[2] & 0x7) << 8);
+                    m_FrameNumber = (m_Packet[1] | ((m_Packet[2] & 0x7) << 8)) & 0x7ff;
                     break;
             }
             break;
@@ -106,7 +106,7 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_DATA:
-            m_Data.setRawData(m_Packet.data()+1, m_Packet.count()-3);
+            m_Data.setRawData(m_Packet.data() + 1, m_Packet.count() - 3);
             m_CRC = m_Packet[m_Packet.count() - 2] | (m_Packet[m_Packet.count() - 1] << 8);
             switch(pid){
                 case PID_DATA0:
