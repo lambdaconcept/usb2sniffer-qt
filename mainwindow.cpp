@@ -1,3 +1,5 @@
+#include <QFileDialog>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -22,18 +24,53 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    USBItem *rootItem = createSampleData();
-    USBModel *usbModel = new USBModel(rootItem);
-
-    ui->treeView->setModel(usbModel);
-
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
+
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::loadFile()
+{
+    QString file = QFileDialog::getOpenFileName(this,
+        "Open File", "", "*.bin");
+
+    FILE *in;
+    int len;
+    char *buf;
+    char *data;
+    unsigned long long int timestamp;
+
+    in = fopen(file.toUtf8().constData(), "rb");
+
+    USBItem *rootItem;
+    USBPacket *packet;
+    USBModel *usbModel;
+
+    rootItem = new USBItem(new USBPacket(0, QByteArray()));
+
+    while(!feof(in)){
+        fread(&len, 1, sizeof(int), in);
+        buf = static_cast<char *>(malloc(len));
+        fread(buf, 1, len, in);
+
+        memcpy(&len, buf, sizeof(int));
+        memcpy(&timestamp, buf + sizeof(int), 8);
+        data = buf + 12;
+
+        packet = new USBPacket(timestamp, QByteArray(data, len));
+        rootItem->appendChild(new USBItem(packet, rootItem));
+
+        free(buf);
+    }
+
+    usbModel = new USBModel(rootItem);
+    ui->treeView->setModel(usbModel);
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)

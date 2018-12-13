@@ -19,6 +19,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void loadFile();
+
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);
 
