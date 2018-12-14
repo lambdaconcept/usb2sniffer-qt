@@ -230,6 +230,19 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QLabel" name="statusPacketNum">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>704</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Records: 0</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

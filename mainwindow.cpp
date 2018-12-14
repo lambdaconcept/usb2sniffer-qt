@@ -23,11 +23,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->statusBar->addPermanentWidget(ui->statusPacketNum);
 
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
-    loadFile();
+    loadFile(); // FIXME for dev
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
 }
 
@@ -40,12 +41,13 @@ void MainWindow::loadFile()
 {
     //QString file = QFileDialog::getOpenFileName(this,
     //    "Open File", "", "*.bin");
-    QString file = "../output.bin";
+    QString file = "../output.bin"; // FIXME for dev
 
     FILE *in;
     int len;
     char *buf;
     char *data;
+    int number = 0;
     unsigned long long int timestamp;
 
     in = fopen(file.toUtf8().constData(), "rb");
@@ -67,12 +69,14 @@ void MainWindow::loadFile()
 
         packet = new USBPacket(timestamp, QByteArray(data, len));
         rootItem->appendChild(new USBItem(packet, rootItem));
+        number++;
 
         free(buf);
     }
 
     usbModel = new USBModel(rootItem);
     ui->treeView->setModel(usbModel);
+    ui->statusPacketNum->setText(QString("Records: %1").arg(number));
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)
