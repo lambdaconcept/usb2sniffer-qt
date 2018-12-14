@@ -5,6 +5,8 @@
 #include <QString>
 #include <QByteArray>
 
+#include "usbrecord.h"
+
 #define PID_RESERVED 0x0
 #define PID_OUT	     0x1
 #define PID_IN	     0x9
@@ -28,22 +30,27 @@
 #define PID_TYPE_HANDSHAKE 2
 #define PID_TYPE_DATA      3
 
-class USBPacket
+class USBPacket : public USBRecord
 {
 public:
     explicit USBPacket(const quint64 timestamp,
                        const QByteArray& packet);
 
     void decode();
-    quint8 getPid();
-    quint8 getType();
-    QString getPidStr();
-    QString getTypeStr();
+    quint8 getPid() const;
+    quint8 getType() const;
+    QString getPidStr() const;
+    QString getTypeStr() const;
 
     static const QVector<QString> pidStr;
     static const QVector<QString> typeStr;
 
-public:
+    QVariant data(int column) const;
+    const QString asciiData();
+    const QString asciiPacket();
+    const QString details();
+
+private:
     quint64 m_Timestamp;
     quint8 m_Pid = 0;
     quint8 m_Dev = 0;

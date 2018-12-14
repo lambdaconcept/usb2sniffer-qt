@@ -1,4 +1,5 @@
 #include "usbpacket.h"
+#include "helpers.h"
 
 USBPacket::USBPacket(const quint64 timestamp,
                      const QByteArray& packet)
@@ -35,22 +36,22 @@ const QVector<QString> USBPacket::typeStr = {
     "DATA"
 };
 
-quint8 USBPacket::getPid()
+quint8 USBPacket::getPid() const
 {
     return (m_Pid & 0xf);
 }
 
-quint8 USBPacket::getType()
+quint8 USBPacket::getType() const
 {
     return (m_Pid & 0x3);
 }
 
-QString USBPacket::getPidStr()
+QString USBPacket::getPidStr() const
 {
     return pidStr[(m_Pid & 0xf)];
 }
 
-QString USBPacket::getTypeStr()
+QString USBPacket::getTypeStr() const
 {
     return typeStr[(m_Pid & 0x3)];
 }
@@ -117,4 +118,79 @@ void USBPacket::decode()
             }
             break;
     }
+}
+
+QVariant USBPacket::data(int column) const
+{
+    switch(column)
+    {
+        case 0:
+            return getPidStr();
+        case 1:
+            return m_Timestamp;
+        case 2:
+            return QString("%1").arg(m_Dev, 2, 16, QChar('0'));
+        case 3:
+            return QString("%1").arg(m_Endpoint, 2, 16, QChar('0'));
+        case 4:
+            return m_Packet.count();
+        case 5:
+            if(getPid() == PID_SOF) {
+                return QString("Frame: %1").arg(m_FrameNumber);
+            }
+            return m_Packet.toHex(' ');
+        default:
+            return QVariant();
+    }
+}
+
+const QString USBPacket::asciiData()
+{
+    return formatHexdump(m_Data);
+}
+
+const QString USBPacket::asciiPacket()
+{
+    return formatHexdump(m_Packet);
+}
+
+const QString USBPacket::details()
+{
+    QString details;
+
+    switch(getType())
+    {
+    case PID_TYPE_SPECIAL:
+        break;
+
+    case PID_TYPE_TOKEN:
+        if(getPid() == PID_SOF) {
+            details = QString("PID:\t0x%1\nFrame No:\t%2\nCRC5:\t0x%3\n")
+                .arg(m_Pid, 2, 16, QChar('0'))
+                .arg(m_FrameNumber)
+                .arg(m_CRC, 2, 16, QChar('0'));
+        }
+        else {
+            details = QString("PID:\t0x%1\nDevice:\t%2\nEndpoint:\t%3\nCRC5:\t0x%4\n")
+                .arg(m_Pid, 2, 16, QChar('0'))
+                .arg(m_Dev, 2, 16, QChar('0'))
+                .arg(m_Endpoint, 2, 16, QChar('0'))
+                .arg(m_CRC, 2, 16, QChar('0'));
+        }
+        break;
+
+    case PID_TYPE_HANDSHAKE:
+        details = QString("PID:\t0x%1\n")
+            .arg(m_Pid, 2, 16, QChar('0'));
+        break;
+
+    case PID_TYPE_DATA:
+        details = QString("PID:\t0x%1\nLength:\t%2\nCRC16:\t0x%3\n")
+            .arg(m_Pid, 2, 16, QChar('0'))
+            .arg(m_Data.count())
+            .arg(m_CRC, 4, 16, QChar('0'));
+        break;
+    }
+
+    return details;
 }
