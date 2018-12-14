@@ -7,6 +7,7 @@
 #include "usbitem.h"
 #include "usbgroup.h"
 #include "usbpacket.h"
+#include "usbtransaction.h"
 
 namespace Ui {
 class MainWindow;

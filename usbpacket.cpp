@@ -125,7 +125,7 @@ QVariant USBPacket::data(int column) const
     switch(column)
     {
         case 0:
-            return getPidStr();
+            return QString("%1 Packet").arg(getPidStr());
         case 1:
             return m_Timestamp;
         case 2:

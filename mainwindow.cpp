@@ -22,27 +22,53 @@ USBItem* groupRecords(USBItem* root, const QVector<USBPacket*> packets)
 {
     USBItem *node;
     USBRecord *record;
+
+    USBPacket* token = nullptr;
+    USBPacket* data = nullptr;
+    USBPacket* handshake = nullptr;
+
     quint8 pid = 0;
+    quint8 type = 0;
     quint8 lastPid = 0;
     int start = 0;
 
     for (int i = 0; i < packets.count(); i++) {
         pid = packets[i]->getPid();
+        type = packets[i]->getType();
         if(lastPid != pid) {
             if (start != i) {
 
-                if(lastPid == PID_SOF) {
-                    record = new USBGroup(packets[start], packets[i-1]);
-                }
-                else {
-                    record = packets[start];
+                if(type == PID_TYPE_TOKEN) {
+                    token = packets[i];
+                    data = nullptr;
+                    handshake = nullptr;
+                } else if (type == PID_TYPE_DATA) {
+                    data = packets[i];
+                    handshake = nullptr;
+                } else if (type == PID_TYPE_HANDSHAKE) {
+                    handshake = packets[i];
+                } else {
+                    token = nullptr;
+                    data = nullptr;
+                    handshake = nullptr;
                 }
 
-                node = new USBItem(record, root); // FIXME
-                for (int j = start; j < i; j++) {
-                    node->appendChild(new USBItem(packets[j], node));
+                if(lastPid == PID_SOF) {
+                    record = new USBGroup(packets[start], packets[i-1]);
+                    node = new USBItem(record, root);
+                    for (int j = start; j < i; j++) {
+                        node->appendChild(new USBItem(packets[j], node));
+                    }
+                    root->appendChild(node);
                 }
-                root->appendChild(node);
+                else if (token && data && handshake) {
+                    record = new USBTransaction(token, data, handshake);
+                    node = new USBItem(record, root);
+                    node->appendChild(new USBItem(token, node));
+                    node->appendChild(new USBItem(data, node));
+                    node->appendChild(new USBItem(handshake, node));
+                    root->appendChild(node);
+                }
                 start = i;
             }
         }
