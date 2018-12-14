@@ -18,66 +18,6 @@ USBItem* createSampleData()
     return rootItem;
 }
 
-USBItem* groupRecords(USBItem* root, const QVector<USBPacket*> packets)
-{
-    USBItem *node;
-    USBRecord *record;
-
-    USBPacket* token = nullptr;
-    USBPacket* data = nullptr;
-    USBPacket* handshake = nullptr;
-
-    quint8 pid = 0;
-    quint8 type = 0;
-    quint8 lastPid = 0;
-    int start = 0;
-
-    for (int i = 0; i < packets.count(); i++) {
-        pid = packets[i]->getPid();
-        type = packets[i]->getType();
-        if(lastPid != pid) {
-            if (start != i) {
-
-                if(type == PID_TYPE_TOKEN) {
-                    token = packets[i];
-                    data = nullptr;
-                    handshake = nullptr;
-                } else if (type == PID_TYPE_DATA) {
-                    data = packets[i];
-                    handshake = nullptr;
-                } else if (type == PID_TYPE_HANDSHAKE) {
-                    handshake = packets[i];
-                } else {
-                    token = nullptr;
-                    data = nullptr;
-                    handshake = nullptr;
-                }
-
-                if(lastPid == PID_SOF) {
-                    record = new USBGroup(packets[start], packets[i-1]);
-                    node = new USBItem(record, root);
-                    for (int j = start; j < i; j++) {
-                        node->appendChild(new USBItem(packets[j], node));
-                    }
-                    root->appendChild(node);
-                }
-                else if (token && data && handshake) {
-                    record = new USBTransaction(token, data, handshake);
-                    node = new USBItem(record, root);
-                    node->appendChild(new USBItem(token, node));
-                    node->appendChild(new USBItem(data, node));
-                    node->appendChild(new USBItem(handshake, node));
-                    root->appendChild(node);
-                }
-                start = i;
-            }
-        }
-        lastPid = pid;
-    }
-
-    return root;
-}
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -111,13 +51,10 @@ void MainWindow::loadFile()
 
     in = fopen(file.toUtf8().constData(), "rb");
 
-    USBItem *rootItem;
-    USBPacket *packet;
-    USBModel *usbModel;
+    USBAggregator aggregator;
+    USBModel *usbModel = new USBModel(aggregator.getRoot());
 
-    QVector<USBPacket *> packetList;
-
-    rootItem = new USBItem(new USBPacket(0, QByteArray()));
+    ui->treeView->setModel(usbModel);
 
     while(!feof(in)){
         fread(&len, 1, sizeof(int), in);
@@ -128,18 +65,12 @@ void MainWindow::loadFile()
         memcpy(&timestamp, buf + sizeof(int), 8);
         data = buf + 12;
 
-        packet = new USBPacket(timestamp, QByteArray(data, len));
-        packetList.append(packet);
+        aggregator.append(new USBPacket(timestamp, QByteArray(data, len)));
 
         free(buf);
     }
 
-    // rootItem->appendChild(new USBItem(packet, rootItem));
-    rootItem = groupRecords(rootItem, packetList);
-
-    usbModel = new USBModel(rootItem);
-    ui->treeView->setModel(usbModel);
-    ui->statusPacketNum->setText(QString("Records: %1").arg(packetList.count()));
+    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)

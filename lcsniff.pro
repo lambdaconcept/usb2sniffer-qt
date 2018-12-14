@@ -33,7 +33,8 @@ SOURCES += \
     usbrecord.cpp \
     helpers.cpp \
     usbgroup.cpp \
-    usbtransaction.cpp
+    usbtransaction.cpp \
+    usbaggregator.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     usbrecord.h \
     helpers.h \
     usbgroup.h \
-    usbtransaction.h
+    usbtransaction.h \
+    usbaggregator.h
 
 FORMS += \
         mainwindow.ui
