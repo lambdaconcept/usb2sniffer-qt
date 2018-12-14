@@ -35,7 +35,9 @@ SOURCES += \
     usbgroup.cpp \
     usbtransaction.cpp \
     usbaggregator.cpp \
-    capture.cpp
+    capture.cpp \
+    xbar/etherbone.c \
+    xbar/xbar.c
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +49,12 @@ HEADERS += \
     usbgroup.h \
     usbtransaction.h \
     usbaggregator.h \
-    capture.h
+    capture.h \
+    xbar/csr.h \
+    xbar/etherbone.h \
+    xbar/flags.h \
+    xbar/sdram_phy.h \
+    xbar/xbar.h
 
 FORMS += \
         mainwindow.ui

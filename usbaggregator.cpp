@@ -19,6 +19,12 @@ int USBAggregator::count() const
 
 void USBAggregator::append(USBPacket* packet)
 {
+    m_root->appendChild(new USBItem(packet, m_root));
+}
+
+/*
+void USBAggregator::append(USBPacket* packet)
+{
     USBItem *node;
     USBRecord *record;
 
@@ -70,3 +76,4 @@ void USBAggregator::append(USBPacket* packet)
 
     m_packets.append(packet);
 }
+*/
