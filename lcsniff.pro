@@ -34,7 +34,8 @@ SOURCES += \
     helpers.cpp \
     usbgroup.cpp \
     usbtransaction.cpp \
-    usbaggregator.cpp
+    usbaggregator.cpp \
+    capture.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     helpers.h \
     usbgroup.h \
     usbtransaction.h \
-    usbaggregator.h
+    usbaggregator.h \
+    capture.h
 
 FORMS += \
         mainwindow.ui

@@ -23,6 +23,8 @@ public:
     ~MainWindow();
 
     void loadFile();
+    void startCapture();
+    void handleResults(USBModel *usbModel);
 
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);

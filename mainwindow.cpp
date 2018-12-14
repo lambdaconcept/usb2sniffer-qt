@@ -3,6 +3,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "capture.h"
+#include <unistd.h> // FIXME
+
 USBItem* createSampleData()
 {
     USBItem *rootItem = new USBItem(new USBPacket(0, QByteArray()));
@@ -28,13 +31,30 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
-    loadFile(); // FIXME for dev
+    // loadFile(); // FIXME for dev
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
+    connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::handleResults(USBModel *usbModel)
+{
+    ui->treeView->setModel(usbModel);
+}
+
+void MainWindow::startCapture()
+{
+    CaptureThread *workerThread = new CaptureThread();
+
+    connect(workerThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
+    connect(workerThread, &CaptureThread::finished, workerThread, &QObject::deleteLater);
+    workerThread->start();
+
+    // ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
 }
 
 void MainWindow::loadFile()
