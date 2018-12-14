@@ -31,7 +31,8 @@ SOURCES += \
     usbmodel.cpp \
     usbpacket.cpp \
     usbrecord.cpp \
-    helpers.cpp
+    helpers.cpp \
+    usbgroup.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     usbmodel.h \
     usbpacket.h \
     usbrecord.h \
-    helpers.h
+    helpers.h \
+    usbgroup.h
 
 FORMS += \
         mainwindow.ui

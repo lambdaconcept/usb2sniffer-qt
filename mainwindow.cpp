@@ -21,6 +21,7 @@ USBItem* createSampleData()
 USBItem* groupRecords(USBItem* root, const QVector<USBPacket*> packets)
 {
     USBItem *node;
+    USBRecord *record;
     quint8 pid = 0;
     quint8 lastPid = 0;
     int start = 0;
@@ -29,7 +30,15 @@ USBItem* groupRecords(USBItem* root, const QVector<USBPacket*> packets)
         pid = packets[i]->getPid();
         if(lastPid != pid) {
             if (start != i) {
-                node = new USBItem(packets[start], root); // FIXME
+
+                if(lastPid == PID_SOF) {
+                    record = new USBGroup(packets[start], packets[i-1]);
+                }
+                else {
+                    record = packets[start];
+                }
+
+                node = new USBItem(record, root); // FIXME
                 for (int j = start; j < i; j++) {
                     node->appendChild(new USBItem(packets[j], node));
                 }

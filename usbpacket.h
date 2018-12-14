@@ -50,7 +50,7 @@ public:
     const QString asciiPacket();
     const QString details();
 
-private:
+public:
     quint64 m_Timestamp;
     quint8 m_Pid = 0;
     quint8 m_Dev = 0;

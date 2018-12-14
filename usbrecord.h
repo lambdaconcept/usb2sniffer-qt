@@ -11,9 +11,9 @@ public:
     virtual ~USBRecord();
 
     virtual QVariant data(int column) const = 0;
-    virtual const QString asciiData() = 0;
-    virtual const QString asciiPacket() = 0;
-    virtual const QString details() = 0;
+    virtual const QString asciiData();
+    virtual const QString asciiPacket();
+    virtual const QString details();
 };
 
 #endif // USBRECORD_H
