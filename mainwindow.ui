@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>768</height>
+    <width>839</width>
+    <height>607</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,233 +23,194 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QSplitter" name="splitV">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1021</width>
-      <height>701</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-    <property name="opaqueResize">
-     <bool>true</bool>
-    </property>
-    <widget class="QFrame" name="framePktlist">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QWidget" name="verticalLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>1011</width>
-        <height>331</height>
-       </rect>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QLabel" name="statusPacketNum">
+      <property name="text">
+       <string>Records: 0</string>
       </property>
-      <layout class="QVBoxLayout" name="vlayPktlist">
-       <item>
-        <widget class="QLabel" name="labelPktlist">
-         <property name="text">
-          <string>Packet List</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTreeView" name="treeView">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
-    </widget>
-    <widget class="QSplitter" name="splitH">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>350</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QFrame" name="frameDetails">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+    </item>
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitV">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="verticalLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>491</width>
-         <height>331</height>
-        </rect>
+      <property name="opaqueResize">
+       <bool>true</bool>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QFrame" name="framePktlist">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <layout class="QVBoxLayout" name="vlayDetails">
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="labelDetails">
+         <widget class="QLabel" name="labelPktlist">
           <property name="text">
-           <string>Details</string>
+           <string>Packet List</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textDetails">
-          <property name="font">
-           <font>
-            <family>Monospace</family>
-            <pointsize>8</pointsize>
-           </font>
+         <widget class="QTreeView" name="treeView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="readOnly">
-           <bool>true</bool>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-     </widget>
-     <widget class="QFrame" name="frameAscii">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <widget class="QWidget" name="verticalLayoutWidget_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>602</width>
-         <height>331</height>
-        </rect>
+      <widget class="QSplitter" name="splitH">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <layout class="QVBoxLayout" name="vlayAscii">
-        <item>
-         <widget class="QLabel" name="labelAscii">
-          <property name="text">
-           <string>Ascii View</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTabWidget" name="tabAscii">
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="tabPacket">
-           <attribute name="title">
-            <string>Packet</string>
-           </attribute>
-           <widget class="QTextEdit" name="textAsciiPacket">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>600</width>
-              <height>281</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>600</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="childrenCollapsible">
+        <bool>false</bool>
+       </property>
+       <widget class="QFrame" name="frameDetails">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelDetails">
+           <property name="text">
+            <string>Details</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTextEdit" name="textDetails">
+           <property name="font">
+            <font>
+             <family>Monospace</family>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="frameAscii">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelAscii">
+           <property name="text">
+            <string>Ascii View</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTabWidget" name="tabAscii">
+           <property name="tabPosition">
+            <enum>QTabWidget::South</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="tabPacket">
+            <attribute name="title">
+             <string>Packet</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QTextEdit" name="textAsciiPacket">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabData">
+            <attribute name="title">
+             <string>Data</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QTextEdit" name="textAsciiData">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
-          <widget class="QWidget" name="tabData">
-           <attribute name="title">
-            <string>Data</string>
-           </attribute>
-           <widget class="QTextEdit" name="textAsciiData">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>600</width>
-              <height>281</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>600</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </widget>
-         </widget>
-        </item>
-       </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
-    </widget>
-   </widget>
-   <widget class="QLabel" name="statusPacketNum">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>704</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Records: 0</string>
-    </property>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1024</width>
+     <width>839</width>
      <height>20</height>
     </rect>
    </property>
