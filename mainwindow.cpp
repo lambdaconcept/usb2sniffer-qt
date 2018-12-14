@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
+    loadFile();
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
 }
 
@@ -37,8 +38,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadFile()
 {
-    QString file = QFileDialog::getOpenFileName(this,
-        "Open File", "", "*.bin");
+    //QString file = QFileDialog::getOpenFileName(this,
+    //    "Open File", "", "*.bin");
+    QString file = "../output.bin";
 
     FILE *in;
     int len;
@@ -80,7 +82,8 @@ void MainWindow::updateAscii(const QModelIndex& index)
 
     USBItem *item = static_cast<USBItem*>(index.internalPointer());
 
-    ui->textAscii->setPlainText(item->asciiData());
+    ui->textAsciiPacket->setPlainText(item->asciiPacket());
+    ui->textAsciiData->setPlainText(item->asciiData());
 }
 
 void MainWindow::updateDetails(const QModelIndex& index)

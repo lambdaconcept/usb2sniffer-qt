@@ -24,6 +24,7 @@ public:
     int row() const;
     USBItem *parentItem();
     const QString asciiData();
+    const QString asciiPacket();
     const QString details();
 
     static const QVector<QString> s_header;

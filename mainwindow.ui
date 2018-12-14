@@ -126,6 +126,12 @@
         </item>
         <item>
          <widget class="QTextEdit" name="textDetails">
+          <property name="font">
+           <font>
+            <family>Monospace</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -159,19 +165,64 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="textAscii">
-          <property name="minimumSize">
-           <size>
-            <width>600</width>
-            <height>0</height>
-           </size>
+         <widget class="QTabWidget" name="tabAscii">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="styleSheet">
-           <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
-          </property>
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
+          <widget class="QWidget" name="tabPacket">
+           <attribute name="title">
+            <string>Packet</string>
+           </attribute>
+           <widget class="QTextEdit" name="textAsciiPacket">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>600</width>
+              <height>281</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabData">
+           <attribute name="title">
+            <string>Data</string>
+           </attribute>
+           <widget class="QTextEdit" name="textAsciiData">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>600</width>
+              <height>281</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </widget>
          </widget>
         </item>
        </layout>

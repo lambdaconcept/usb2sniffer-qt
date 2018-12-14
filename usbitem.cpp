@@ -63,12 +63,12 @@ QVariant USBItem::data(int column) const
         case 3:
             return QString("%1").arg(m_record->m_Endpoint, 2, 16, QChar('0'));
         case 4:
-            return m_record->m_Data.count();
+            return m_record->m_Packet.count();
         case 5:
             if(m_record->getPid() == PID_SOF) {
                 return QString("Frame: %1").arg(m_record->m_FrameNumber);
             }
-            return m_record->m_Data.toHex(' ');
+            return m_record->m_Packet.toHex(' ');
         default:
             return QVariant();
     }
@@ -130,6 +130,11 @@ QString formatHexdump(const QByteArray &data) {
 
 const QString USBItem::asciiData()
 {
+    return formatHexdump(m_record->m_Data);
+}
+
+const QString USBItem::asciiPacket()
+{
     return formatHexdump(m_record->m_Packet);
 }
 
@@ -144,13 +149,13 @@ const QString USBItem::details()
 
     case PID_TYPE_TOKEN:
         if(m_record->getPid() == PID_SOF) {
-            details = QString("PID: 0x%1\nFrame No: %2\nCRC5: 0x%3\n")
+            details = QString("PID:\t0x%1\nFrame No:\t%2\nCRC5:\t0x%3\n")
                 .arg(m_record->m_Pid, 2, 16, QChar('0'))
                 .arg(m_record->m_FrameNumber)
                 .arg(m_record->m_CRC, 2, 16, QChar('0'));
         }
         else {
-            details = QString("PID: 0x%1\nDevice: %2\nEndpoint: %3\nCRC5: 0x%4\n")
+            details = QString("PID:\t0x%1\nDevice:\t%2\nEndpoint:\t%3\nCRC5:\t0x%4\n")
                 .arg(m_record->m_Pid, 2, 16, QChar('0'))
                 .arg(m_record->m_Dev, 2, 16, QChar('0'))
                 .arg(m_record->m_Endpoint, 2, 16, QChar('0'))
@@ -159,12 +164,12 @@ const QString USBItem::details()
         break;
 
     case PID_TYPE_HANDSHAKE:
-        details = QString("PID: 0x%1\n")
+        details = QString("PID:\t0x%1\n")
             .arg(m_record->m_Pid, 2, 16, QChar('0'));
         break;
 
     case PID_TYPE_DATA:
-        details = QString("PID: 0x%1\nLength: %2\nCRC16: 0x%3\n")
+        details = QString("PID:\t0x%1\nLength:\t%2\nCRC16:\t0x%3\n")
             .arg(m_record->m_Pid, 2, 16, QChar('0'))
             .arg(m_record->m_Data.count())
             .arg(m_record->m_CRC, 4, 16, QChar('0'));
