@@ -1,16 +1,5 @@
 #include "usbitem.h"
 
-const QVector<QString> USBItem::s_header = {
-    "Record",
-    "Timestamp",
-    "Device",
-    "Endpoint",
-    "Length",
-    "Summary",
-    // Status
-    // Error
-};
-
 USBItem::USBItem(USBRecord *record, USBItem *parentItem)
 {
     m_parentItem = parentItem;
@@ -47,12 +36,12 @@ int USBItem::row() const
 
 int USBItem::columnCount() const
 {
-    return s_header.count();
+    return USBRecord::s_header.count();
 }
 
 QVariant USBItem::headerData(int column) const
 {
-    return s_header.value(column);
+    return USBRecord::s_header.value(column);
 }
 
 USBItem *USBItem::parentItem()

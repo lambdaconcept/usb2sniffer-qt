@@ -124,17 +124,19 @@ QVariant USBPacket::data(int column) const
 {
     switch(column)
     {
-        case 0:
+        case RECORD_NAME:
             return QString("%1 Packet").arg(getPidStr());
-        case 1:
+        case RECORD_TS:
             return m_Timestamp;
-        case 2:
+        case RECORD_DEVICE:
             return QString("%1").arg(m_Dev, 2, 16, QChar('0'));
-        case 3:
+        case RECORD_ENDPOINT:
             return QString("%1").arg(m_Endpoint, 2, 16, QChar('0'));
-        case 4:
+        case RECORD_STATUS:
+            return QString("");
+        case RECORD_LENGTH:
             return m_Packet.count();
-        case 5:
+        case RECORD_SUMMARY:
             if(getPid() == PID_SOF) {
                 return QString("Frame: %1").arg(m_FrameNumber);
             }

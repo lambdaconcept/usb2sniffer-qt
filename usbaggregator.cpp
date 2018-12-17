@@ -35,7 +35,6 @@ void USBAggregator::endGroup()
     /* Push existing SOF */
 
     if((_lastPid == PID_SOF) && (_start != i)) {
-        std::cout << "push " << _start << " " << i-1 << "\n";
         record = new USBGroup(m_packets[_start], m_packets[i-1]);
         node = new USBItem(record, m_root);
         for (int j = _start; j < i; j++) {

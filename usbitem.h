@@ -21,8 +21,6 @@ public:
     int row() const;
     USBItem *parentItem();
 
-    static const QVector<QString> s_header;
-
     QVariant data(int column) const;
     const QString asciiData();
     const QString asciiPacket();

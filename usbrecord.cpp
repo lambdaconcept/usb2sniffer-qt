@@ -1,5 +1,15 @@
 #include "usbrecord.h"
 
+const QVector<QString> USBRecord::s_header = {
+    "Record",
+    "Timestamp",
+    "Device",
+    "Endpoint",
+    "Status",
+    "Length",
+    "Summary",
+};
+
 USBRecord::USBRecord()
 {
 

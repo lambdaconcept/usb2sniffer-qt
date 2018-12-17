@@ -10,17 +10,19 @@ QVariant USBGroup::data(int column) const
 {
     switch(column)
     {
-        case 0:
+        case RECORD_NAME:
             return m_first->getPidStr();
-        case 1:
+        case RECORD_TS:
             return m_first->m_Timestamp;
-        case 2:
+        case RECORD_DEVICE:
             return QString(""); // FIXME only for SOF
-        case 3:
+        case RECORD_ENDPOINT:
             return QString("");
-        case 4:
+        case RECORD_STATUS:
             return QString("");
-        case 5:
+        case RECORD_LENGTH:
+            return QString("");
+        case RECORD_SUMMARY:
             return QString("[Frames: %1-%2]")
                 .arg(m_first->m_FrameNumber)
                 .arg(m_last->m_FrameNumber);
