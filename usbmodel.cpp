@@ -72,12 +72,16 @@ QVariant USBModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
     USBItem *item = static_cast<USBItem*>(index.internalPointer());
 
-    return item->data(index.column());
+    switch(role) {
+        case Qt::DisplayRole:
+            return item->data(index.column());
+        case Qt::BackgroundRole:
+            return item->background();
+        default:
+            return QVariant();
+    }
 }
 
 Qt::ItemFlags USBModel::flags(const QModelIndex &index) const

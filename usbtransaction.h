@@ -10,6 +10,7 @@ public:
     USBTransaction(USBPacket* token, USBPacket* data, USBPacket* handshake);
 
     QVariant data(int column) const;
+    QBrush background() const;
     const QString asciiData();
 
 private:

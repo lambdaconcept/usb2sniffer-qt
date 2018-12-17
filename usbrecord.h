@@ -4,6 +4,7 @@
 #include <QString>
 #include <QVector>
 #include <QVariant>
+#include <QBrush>
 
 #define RECORD_NAME     0
 #define RECORD_TS       1
@@ -22,6 +23,7 @@ public:
     static const QVector<QString> s_header;
 
     virtual QVariant data(int column) const = 0;
+    virtual QBrush background() const;
     virtual const QString asciiData();
     virtual const QString asciiPacket();
     virtual const QString details();

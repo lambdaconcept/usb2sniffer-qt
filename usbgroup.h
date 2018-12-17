@@ -10,6 +10,7 @@ public:
     USBGroup(USBPacket* first, USBPacket *last);
 
     QVariant data(int column) const;
+    QBrush background() const;
 
 private:
     USBPacket *m_first;

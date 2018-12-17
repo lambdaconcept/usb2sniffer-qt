@@ -54,6 +54,11 @@ QVariant USBItem::data(int column) const
     return m_record->data(column);
 }
 
+QBrush USBItem::background() const
+{
+    return m_record->background();
+}
+
 const QString USBItem::asciiData()
 {
     return m_record->asciiData();

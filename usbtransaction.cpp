@@ -31,6 +31,29 @@ QVariant USBTransaction::data(int column) const
     }
 }
 
+QBrush USBTransaction::background() const
+{
+    int noack = 0;
+
+    if(m_token) {
+        if(m_handshake) {
+            if (m_handshake->getPid() != PID_ACK) {
+                noack = 1;
+            }
+        }
+
+        switch(m_token->getPid()) {
+            case PID_SETUP:
+                return noack ? QBrush(Qt::darkYellow) : QBrush(Qt::yellow);
+            case PID_IN:
+                return noack ? QBrush(Qt::darkMagenta) : QBrush(Qt::magenta);
+            case PID_OUT:
+                return noack ? QBrush(Qt::darkCyan) : QBrush(Qt::cyan);
+        }
+    }
+    return QBrush();
+}
+
 const QString USBTransaction::asciiData()
 {
     return m_data ? formatHexdump(m_data->m_Data) : "";

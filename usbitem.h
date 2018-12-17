@@ -4,6 +4,7 @@
 #include <QList>
 #include <QString>
 #include <QVector>
+#include <QBrush>
 
 #include "usbrecord.h"
 
@@ -22,6 +23,7 @@ public:
     USBItem *parentItem();
 
     QVariant data(int column) const;
+    QBrush background() const;
     const QString asciiData();
     const QString asciiPacket();
     const QString details();

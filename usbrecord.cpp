@@ -20,6 +20,11 @@ USBRecord::~USBRecord()
 
 }
 
+QBrush USBRecord::background() const
+{
+    return QBrush();
+}
+
 const QString USBRecord::asciiData()
 {
     return QString();

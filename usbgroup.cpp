@@ -30,3 +30,8 @@ QVariant USBGroup::data(int column) const
             return QVariant();
     }
 }
+
+QBrush USBGroup::background() const
+{
+    return QBrush(Qt::green);
+}
