@@ -64,21 +64,17 @@ void CaptureThread::run()
     // while(1){
     for (int var = 0; var < 450; ++var)
     {
-        std::cout << "packet: " << var << "\n";
-
         if(ubar_recv_packet(fd, &buf, &len) == 1)
         {
             memcpy(&len, buf, sizeof(int));
             memcpy(&timestamp, buf + sizeof(int), 8);
             data = buf + 12;
 
-            std::cout << "aggregator! \n";
             aggregator.append(new USBPacket(timestamp, QByteArray(data, len)));
         }
         usleep(100);
         free(buf);
     }
-    aggregator.append(new USBPacket(10, QByteArray::fromHex("d2")));  // FIXME
 
     close(fd);
 

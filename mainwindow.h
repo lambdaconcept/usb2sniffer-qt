@@ -24,6 +24,7 @@ public:
 
     void loadFile();
     void startCapture();
+    void stopCapture();
     void handleResults(USBModel *usbModel);
 
     void updateAscii(const QModelIndex& index);

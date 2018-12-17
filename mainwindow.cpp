@@ -31,11 +31,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
-    loadFile(); // FIXME for dev
+    // loadFile(); // FIXME for dev
 
     ui->treeView->setColumnWidth(0, 300);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
+    connect(ui->actionStop, &QAction::triggered, this, &MainWindow::stopCapture);
 }
 
 MainWindow::~MainWindow()
@@ -55,6 +56,15 @@ void MainWindow::startCapture()
     connect(workerThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
     connect(workerThread, &CaptureThread::finished, workerThread, &QObject::deleteLater);
     workerThread->start();
+
+    ui->actionStart->setEnabled(false);
+    ui->actionStop->setEnabled(true);
+}
+
+void MainWindow::stopCapture()
+{
+    ui->actionStart->setEnabled(true);
+    ui->actionStop->setEnabled(false);
 
     // ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
 }
