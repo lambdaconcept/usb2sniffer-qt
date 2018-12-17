@@ -49,6 +49,12 @@
        <bool>false</bool>
       </property>
       <widget class="QFrame" name="framePktlist">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>10</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -74,6 +80,9 @@
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
+          <property name="animated">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -82,7 +91,7 @@
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
+         <verstretch>5</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
@@ -148,7 +157,7 @@
             <enum>QTabWidget::South</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tabPacket">
             <attribute name="title">

@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
     loadFile(); // FIXME for dev
+
+    ui->treeView->setColumnWidth(0, 300);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
 }
