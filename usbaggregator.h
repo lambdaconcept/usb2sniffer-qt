@@ -6,6 +6,11 @@
 #include "usbitem.h"
 #include "usbpacket.h"
 
+#define TRANS_IDLE 0
+#define TRANS_TOKEN 1
+#define TRANS_DATA 2
+#define TRANS_HANDSHAKE 3
+
 class USBAggregator
 {
 public:
@@ -14,6 +19,9 @@ public:
     USBItem* getRoot();
     int count() const;
     void append(USBPacket* packet);
+    void endTransaction();
+    void endGroup();
+    void done();
 
 private:
     USBItem *m_root;
@@ -21,6 +29,7 @@ private:
 
     quint8 _lastPid = 0;
     int _start = 0;
+    int _state = 0;
     USBPacket* _token = nullptr;
     USBPacket* _data = nullptr;
     USBPacket* _handshake = nullptr;

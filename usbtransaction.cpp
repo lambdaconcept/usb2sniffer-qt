@@ -21,9 +21,9 @@ QVariant USBTransaction::data(int column) const
         case 3:
             return QString("%1").arg(m_token->m_Endpoint, 2, 16, QChar('0'));
         case 4:
-            return m_data->m_Data.count();
+            return m_data ? m_data->m_Data.count() : 0;
         case 5:
-            return m_data->m_Data.toHex(' ');
+            return m_data ? m_data->m_Data.toHex(' ') : "";
         default:
             return QVariant();
     }
@@ -31,5 +31,5 @@ QVariant USBTransaction::data(int column) const
 
 const QString USBTransaction::asciiData()
 {
-    return formatHexdump(m_data->m_Data);
+    return m_data ? formatHexdump(m_data->m_Data) : "";
 }
