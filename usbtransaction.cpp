@@ -44,11 +44,11 @@ QBrush USBTransaction::background() const
 
         switch(m_token->getPid()) {
             case PID_SETUP:
-                return noack ? QBrush(Qt::darkYellow) : QBrush(Qt::yellow);
+                return noack ? QBrush(QColor(188, 170, 164)) : QBrush(QColor(141, 110, 99));
             case PID_IN:
-                return noack ? QBrush(Qt::darkMagenta) : QBrush(Qt::magenta);
+                return noack ? QBrush(QColor(165, 214, 167)) : QBrush(QColor(102, 187, 106));
             case PID_OUT:
-                return noack ? QBrush(Qt::darkCyan) : QBrush(Qt::cyan);
+                return noack ? QBrush(QColor(144, 202, 249)) : QBrush(QColor(66, 165, 245));
         }
     }
     return QBrush();

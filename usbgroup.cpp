@@ -33,5 +33,5 @@ QVariant USBGroup::data(int column) const
 
 QBrush USBGroup::background() const
 {
-    return QBrush(Qt::green);
+    return QBrush(QColor(255, 241, 118));
 }
