@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <QMessageBox>
+
 #include "capture.h"
 #include "usbaggregator.h"
 
@@ -58,6 +60,11 @@ void CaptureThread::run()
     USBModel *usbModel = new USBModel(aggregator.getRoot());
 
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
+    if (fd < 0) {
+        QMessageBox::warning(nullptr, "Error", "Capture device not found");
+
+        goto err;
+    }
 
     init_sequence();
 
@@ -85,5 +92,6 @@ void CaptureThread::run()
 
     close(fd);
 
+err:
     emit resultReady(usbModel);
 }

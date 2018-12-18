@@ -25,7 +25,6 @@ public:
     ~MainWindow();
 
     void loadFile();
-    void configureCapture();
     void startCapture();
     void stopCapture();
     void handleResults(USBModel *usbModel);

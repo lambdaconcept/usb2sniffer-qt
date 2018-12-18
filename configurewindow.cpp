@@ -35,3 +35,16 @@ void ConfigureWindow::accept()
 
     QDialog::accept();
 }
+
+void ConfigureWindow::autoConfig()
+{
+    /* If no device is selected, find the first available */
+
+    if (m_config.device.isEmpty()) {
+        QStringList filter = {"ft60x*"};
+        QDirIterator it("/dev", filter, QDir::System);
+        if(it.hasNext()) {
+            m_config.device = it.next();
+        }
+    }
+}

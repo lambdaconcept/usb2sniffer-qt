@@ -18,6 +18,8 @@ public:
     void accept();
     void open();
 
+    void autoConfig();
+
     CaptureConfig m_config;
 
 private:

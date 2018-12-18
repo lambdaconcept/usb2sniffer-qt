@@ -52,17 +52,14 @@ void MainWindow::handleResults(USBModel *usbModel)
     ui->treeView->setColumnWidth(0, 300);
 }
 
-void MainWindow::configureCapture()
-{
-
-}
-
 void MainWindow::startCapture()
 {
     CaptureThread *workerThread = new CaptureThread();
 
     connect(workerThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
     connect(workerThread, &CaptureThread::finished, workerThread, &QObject::deleteLater);
+
+    configWindow->autoConfig();
     workerThread->setConfig(&configWindow->m_config);
     workerThread->start();
 
