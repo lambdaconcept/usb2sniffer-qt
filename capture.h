@@ -26,7 +26,7 @@ private:
     CaptureConfig *m_config;
 
 signals:
-    void resultReady(USBModel *usbModel);
+    void resultReady(USBModel *usbModel, int count);
 };
 
 #endif // CAPTURE_H

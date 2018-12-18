@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "configurewindow.h"
+#include "capture.h"
 
 #include "usbmodel.h"
 #include "usbitem.h"
@@ -27,7 +28,8 @@ public:
     void loadFile();
     void startCapture();
     void stopCapture();
-    void handleResults(USBModel *usbModel);
+    void handleResults(USBModel *usbModel, int count);
+    void captureFinished();
 
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);
@@ -35,6 +37,8 @@ public:
 private:
     Ui::MainWindow *ui;
     ConfigureWindow *configWindow;
+
+    CaptureThread *captureThread = nullptr;
 };
 
 #endif // MAINWINDOW_H

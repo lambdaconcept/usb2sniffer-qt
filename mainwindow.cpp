@@ -3,7 +3,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "capture.h"
 #include <unistd.h> // FIXME
 
 USBItem* createSampleData()
@@ -46,33 +45,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleResults(USBModel *usbModel)
+void MainWindow::handleResults(USBModel *usbModel, int count)
 {
+    // FIXME should not pass usbModel
     ui->treeView->setModel(usbModel);
     ui->treeView->setColumnWidth(0, 300);
+
+    ui->statusPacketNum->setText(QString("Records: %1").arg(count));
 }
 
-void MainWindow::startCapture()
-{
-    CaptureThread *workerThread = new CaptureThread();
-
-    connect(workerThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
-    connect(workerThread, &CaptureThread::finished, workerThread, &QObject::deleteLater);
-
-    configWindow->autoConfig();
-    workerThread->setConfig(&configWindow->m_config);
-    workerThread->start();
-
-    ui->actionStart->setEnabled(false);
-    ui->actionStop->setEnabled(true);
-}
-
-void MainWindow::stopCapture()
+void MainWindow::captureFinished()
 {
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
 
-    // ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
+    captureThread->deleteLater();
+    captureThread = nullptr;
+}
+
+void MainWindow::startCapture()
+{
+    if (captureThread == nullptr) {
+        captureThread = new CaptureThread();
+
+        connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
+        connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
+
+        configWindow->autoConfig();
+        captureThread->setConfig(&configWindow->m_config);
+        captureThread->start();
+
+        ui->actionStart->setEnabled(false);
+        ui->actionStop->setEnabled(true);
+    }
+}
+
+void MainWindow::stopCapture()
+{
+    if ((captureThread != nullptr) && (captureThread->isRunning())) {
+        // FIXME stop thread
+    }
 }
 
 void MainWindow::loadFile()

@@ -93,5 +93,5 @@ void CaptureThread::run()
     close(fd);
 
 err:
-    emit resultReady(usbModel);
+    emit resultReady(usbModel, aggregator.count());
 }
