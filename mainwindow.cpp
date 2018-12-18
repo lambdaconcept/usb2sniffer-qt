@@ -28,13 +28,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
 
+    configWindow = new ConfigureWindow(this);
+
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
     // loadFile(); // FIXME for dev
 
-    ui->treeView->setColumnWidth(0, 300);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
+    connect(ui->actionConfigure, &QAction::triggered, configWindow, &ConfigureWindow::open);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
     connect(ui->actionStop, &QAction::triggered, this, &MainWindow::stopCapture);
 }
@@ -47,6 +49,12 @@ MainWindow::~MainWindow()
 void MainWindow::handleResults(USBModel *usbModel)
 {
     ui->treeView->setModel(usbModel);
+    ui->treeView->setColumnWidth(0, 300);
+}
+
+void MainWindow::configureCapture()
+{
+
 }
 
 void MainWindow::startCapture()
@@ -55,6 +63,7 @@ void MainWindow::startCapture()
 
     connect(workerThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
     connect(workerThread, &CaptureThread::finished, workerThread, &QObject::deleteLater);
+    workerThread->setConfig(&configWindow->m_config);
     workerThread->start();
 
     ui->actionStart->setEnabled(false);
@@ -87,6 +96,7 @@ void MainWindow::loadFile()
     USBModel *usbModel = new USBModel(aggregator.getRoot());
 
     ui->treeView->setModel(usbModel);
+    ui->treeView->setColumnWidth(0, 300);
 
     while(!feof(in)){
         fread(&len, 1, sizeof(int), in);

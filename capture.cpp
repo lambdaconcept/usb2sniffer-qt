@@ -38,6 +38,11 @@ void CaptureThread::run()
 }
 */
 
+void CaptureThread::setConfig(CaptureConfig* config)
+{
+    m_config = config;
+}
+
 void CaptureThread::run()
 {
     int fd;
@@ -47,10 +52,12 @@ void CaptureThread::run()
     unsigned long long int timestamp;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
+    std::cout << "config: " << m_config->device.toStdString() << "\n";
+
     USBAggregator aggregator;
     USBModel *usbModel = new USBModel(aggregator.getRoot());
 
-    fd = open("/dev/ft60x0", O_RDWR, mode);
+    fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
 
     init_sequence();
 

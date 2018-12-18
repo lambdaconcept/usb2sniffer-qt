@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "configurewindow.h"
+
 #include "usbmodel.h"
 #include "usbitem.h"
 #include "usbgroup.h"
@@ -23,6 +25,7 @@ public:
     ~MainWindow();
 
     void loadFile();
+    void configureCapture();
     void startCapture();
     void stopCapture();
     void handleResults(USBModel *usbModel);
@@ -32,6 +35,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ConfigureWindow *configWindow;
 };
 
 #endif // MAINWINDOW_H

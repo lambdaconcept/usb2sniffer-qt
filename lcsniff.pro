@@ -37,7 +37,8 @@ SOURCES += \
     usbaggregator.cpp \
     capture.cpp \
     xbar/etherbone.c \
-    xbar/xbar.c
+    xbar/xbar.c \
+    configurewindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,10 +55,12 @@ HEADERS += \
     xbar/etherbone.h \
     xbar/flags.h \
     xbar/sdram_phy.h \
-    xbar/xbar.h
+    xbar/xbar.h \
+    configurewindow.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    configurewindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
