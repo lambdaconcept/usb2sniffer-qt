@@ -1,4 +1,5 @@
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -35,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // loadFile(); // FIXME for dev
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
+    connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(ui->actionExit, &QAction::triggered, this, &MainWindow::exit);
+
     connect(ui->actionConfigure, &QAction::triggered, configWindow, &ConfigureWindow::open);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
     connect(ui->actionStop, &QAction::triggered, this, &MainWindow::stopCapture);
@@ -77,6 +81,8 @@ void MainWindow::startCapture()
 
         ui->actionStart->setEnabled(false);
         ui->actionStop->setEnabled(true);
+
+        fileSaved = false;
     }
 }
 
@@ -85,6 +91,42 @@ void MainWindow::stopCapture()
     if ((captureThread != nullptr) && (captureThread->isRunning())) {
         // FIXME stop thread
     }
+}
+
+
+void MainWindow::exit()
+{
+    if (!fileSaved) {
+        QMessageBox msgBox(this);
+        msgBox.setText("Capture file not saved");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+
+        switch (msgBox.exec()) {
+          case QMessageBox::Save:
+              saveFile();
+              close();
+              break;
+          case QMessageBox::Discard:
+              close();
+              break;
+          case QMessageBox::Cancel:
+              break;
+          default:
+              break;
+        }
+    }
+    else {
+        close();
+    }
+}
+
+void MainWindow::saveFile()
+{
+    // FIXME
+
+    fileSaved = true;
 }
 
 void MainWindow::loadFile()
@@ -122,6 +164,8 @@ void MainWindow::loadFile()
     }
 
     ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
+
+    fileSaved = true;
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)

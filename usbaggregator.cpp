@@ -112,8 +112,10 @@ void USBAggregator::append(USBPacket* packet)
     } else if ((_state == TRANS_DATA) && (type == PID_TYPE_TOKEN)) {
         /* Was isochronous */
         endTransaction();
-        _token = packet;
-        _state = TRANS_TOKEN;
+        if (pid != PID_SOF) {
+            _token = packet;
+            _state = TRANS_TOKEN;
+        }
     } else {
         /* FSM error */
         endTransaction();

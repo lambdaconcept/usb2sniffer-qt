@@ -26,6 +26,9 @@ public:
     ~MainWindow();
 
     void loadFile();
+    void saveFile();
+    void exit();
+
     void startCapture();
     void stopCapture();
     void handleResults(USBModel *usbModel, int count);
@@ -39,6 +42,7 @@ private:
     ConfigureWindow *configWindow;
 
     CaptureThread *captureThread = nullptr;
+    bool fileSaved = true; /* Used for warning on exit */
 };
 
 #endif // MAINWINDOW_H
