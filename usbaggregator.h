@@ -15,6 +15,7 @@ class USBAggregator
 {
 public:
     USBAggregator();
+    ~USBAggregator();
 
     USBItem* getRoot();
     int count() const;

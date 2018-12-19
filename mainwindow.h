@@ -31,7 +31,7 @@ public:
 
     void startCapture();
     void stopCapture();
-    void handleResults(USBModel *usbModel, int count);
+    void handleResults(USBAggregator *usbAggregator);
     void captureFinished();
 
     void updateAscii(const QModelIndex& index);
@@ -40,6 +40,9 @@ public:
 private:
     Ui::MainWindow *ui;
     ConfigureWindow *configWindow;
+
+    USBModel *currentModel = nullptr;
+    USBAggregator *currentAggregator = nullptr;
 
     CaptureThread *captureThread = nullptr;
     bool fileSaved = true; /* Used for warning on exit */

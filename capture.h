@@ -3,7 +3,7 @@
 
 #include <QThread>
 
-#include "usbmodel.h"
+#include "usbaggregator.h"
 
 namespace CaptureMask {
 enum CaptureMask {
@@ -47,7 +47,7 @@ private:
     CaptureConfig *m_config;
 
 signals:
-    void resultReady(USBModel *usbModel, int count);
+    void resultReady(USBAggregator *usbAggregator);
 };
 
 #endif // CAPTURE_H

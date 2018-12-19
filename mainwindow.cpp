@@ -46,16 +46,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete configWindow;
     delete ui;
 }
 
-void MainWindow::handleResults(USBModel *usbModel, int count)
+void MainWindow::handleResults(USBAggregator* aggregator)
 {
-    // FIXME should not pass usbModel
+    USBModel *usbModel = new USBModel(aggregator->getRoot());
+
+    QItemSelectionModel *m = ui->treeView->selectionModel();
     ui->treeView->setModel(usbModel);
     ui->treeView->setColumnWidth(0, 300);
 
-    ui->statusPacketNum->setText(QString("Records: %1").arg(count));
+    m->deleteLater();
+    delete currentModel;
+    delete currentAggregator;
+    currentModel = usbModel;
+    currentAggregator = aggregator;
+
+    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
 }
 
 void MainWindow::captureFinished()
@@ -143,11 +152,18 @@ void MainWindow::loadFile()
 
     in = fopen(file.toUtf8().constData(), "rb");
 
-    USBAggregator aggregator;
-    USBModel *usbModel = new USBModel(aggregator.getRoot());
+    USBAggregator *aggregator = new USBAggregator();
+    USBModel *usbModel = new USBModel(aggregator->getRoot());
 
+    QItemSelectionModel *m = ui->treeView->selectionModel();
     ui->treeView->setModel(usbModel);
     ui->treeView->setColumnWidth(0, 300);
+
+    m->deleteLater();
+    delete currentModel;
+    delete currentAggregator;
+    currentModel = usbModel;
+    currentAggregator = aggregator;
 
     while(!feof(in)){
         fread(&len, 1, sizeof(int), in);
@@ -158,12 +174,12 @@ void MainWindow::loadFile()
         memcpy(&timestamp, buf + sizeof(int), 8);
         data = buf + 12;
 
-        aggregator.append(new USBPacket(timestamp, QByteArray(data, len)));
+        aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));
 
         free(buf);
     }
 
-    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator.count()));
+    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
 
     fileSaved = true;
 }

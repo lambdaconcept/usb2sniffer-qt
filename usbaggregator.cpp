@@ -9,6 +9,12 @@ USBAggregator::USBAggregator()
     m_root = new USBItem(new USBPacket(0, QByteArray()));  // FIXME
 }
 
+USBAggregator::~USBAggregator()
+{
+    // delete m_root;
+    qDeleteAll(m_packets);
+}
+
 USBItem* USBAggregator::getRoot()
 {
     return m_root;

@@ -3,7 +3,6 @@
 #include <QMessageBox>
 
 #include "capture.h"
-#include "usbaggregator.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -23,23 +22,6 @@ extern "C" {
 }
 #endif
 
-/*
-void CaptureThread::run()
-{
-    USBAggregator aggregator;
-    USBModel *usbModel = new USBModel(aggregator.getRoot());
-
-    for (int i = 0; i < 5; ++i) {
-        aggregator.append(new USBPacket(i, QByteArray::fromHex("a50f18")));
-
-        sleep(1); // FIXME
-    }
-    aggregator.append(new USBPacket(10, QByteArray::fromHex("d2")));
-
-    emit resultReady(usbModel);
-}
-*/
-
 void CaptureThread::setConfig(CaptureConfig* config)
 {
     m_config = config;
@@ -56,8 +38,7 @@ void CaptureThread::run()
 
     std::cout << "config: " << m_config->device.toStdString() << "\n";
 
-    USBAggregator aggregator;
-    USBModel *usbModel = new USBModel(aggregator.getRoot());
+    USBAggregator *aggregator = new USBAggregator();
 
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
     if (fd < 0) {
@@ -84,7 +65,7 @@ void CaptureThread::run()
             memcpy(&timestamp, buf + sizeof(int), 8);
             data = buf + 12;
 
-            aggregator.append(new USBPacket(timestamp, QByteArray(data, len)));
+            aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));
         }
         usleep(100);
         free(buf);
@@ -93,5 +74,5 @@ void CaptureThread::run()
     close(fd);
 
 err:
-    emit resultReady(usbModel, aggregator.count());
+    emit resultReady(aggregator);
 }
