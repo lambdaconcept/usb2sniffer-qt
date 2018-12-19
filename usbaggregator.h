@@ -19,6 +19,7 @@ public:
 
     USBItem* getRoot();
     int count() const;
+    USBPacket* value(int i);
     void append(USBPacket* packet);
     void endTransaction();
     void endGroup();
@@ -26,7 +27,7 @@ public:
 
 private:
     USBItem *m_root;
-    QVector<USBPacket *> m_packets;
+    QVector<USBPacket *> m_packets; // FIXME should inherit from QVector
 
     quint8 _lastPid = 0;
     int _start = 0;

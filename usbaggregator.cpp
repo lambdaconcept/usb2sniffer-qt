@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "usbaggregator.h"
 #include "usbgroup.h"
 #include "usbtransaction.h"
@@ -11,8 +9,13 @@ USBAggregator::USBAggregator()
 
 USBAggregator::~USBAggregator()
 {
-    // delete m_root;
+    // delete m_root; // FIXME
     qDeleteAll(m_packets);
+}
+
+USBPacket* USBAggregator::value(int i)
+{
+    return m_packets.value(i);
 }
 
 USBItem* USBAggregator::getRoot()

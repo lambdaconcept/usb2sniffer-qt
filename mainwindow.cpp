@@ -133,24 +133,59 @@ void MainWindow::exit()
 
 void MainWindow::saveFile()
 {
-    // FIXME
+    QString file = QFileDialog::getSaveFileName(this,
+        "Save File", "", "*.bin");
+
+    FILE *out;
+    unsigned int len;
+    char *buf;
+    unsigned long long int timestamp;
+
+    out = fopen(file.toUtf8().constData(), "wb");
+    if(!out) {
+        return;
+    }
+
+    buf = static_cast<char *>(malloc(1024 + 12));
+
+    USBPacket *packet;
+    for (int i = 0; i < currentAggregator->count(); ++i) {
+        packet = currentAggregator->value(i);
+
+        len = packet->m_Packet.count();
+        timestamp = packet->m_Timestamp;
+
+        memcpy(buf, &len, sizeof(int));
+        memcpy(buf + sizeof(int), &timestamp, 8);
+        memcpy(buf + 12, packet->m_Packet.data(), len);
+
+        len = (((len + 12) - 1) & 0xfffffffc) + 4; // align to next dword
+        fwrite(&len, 1, sizeof(int), out);
+        fwrite(buf, 1, len, out);
+    }
+
+    free(buf);
+    fclose(out);
 
     fileSaved = true;
 }
 
 void MainWindow::loadFile()
 {
-    //QString file = QFileDialog::getOpenFileName(this,
-    //    "Open File", "", "*.bin");
-    QString file = "../output.bin"; // FIXME for dev
+    QString file = QFileDialog::getOpenFileName(this,
+        "Open File", "", "*.bin");
 
     FILE *in;
     int len;
+    size_t size;
     char *buf;
     char *data;
     unsigned long long int timestamp;
 
     in = fopen(file.toUtf8().constData(), "rb");
+    if(!in) {
+        return;
+    }
 
     USBAggregator *aggregator = new USBAggregator();
     USBModel *usbModel = new USBModel(aggregator->getRoot());
@@ -166,18 +201,25 @@ void MainWindow::loadFile()
     currentAggregator = aggregator;
 
     while(!feof(in)){
-        fread(&len, 1, sizeof(int), in);
+        size = fread(&len, 1, sizeof(int), in);
+        if (size < sizeof(int))
+            break;
         buf = static_cast<char *>(malloc(len));
-        fread(buf, 1, len, in);
+        size = fread(buf, 1, len, in);
+        if (size < len) {
+            free(buf);
+            break;
+        }
 
         memcpy(&len, buf, sizeof(int));
         memcpy(&timestamp, buf + sizeof(int), 8);
         data = buf + 12;
 
-        aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));
+        aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));  // FIXME ?
 
         free(buf);
     }
+    fclose(in);
 
     ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
 

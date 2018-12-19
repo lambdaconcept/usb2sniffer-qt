@@ -2,7 +2,7 @@
 #include "helpers.h"
 
 USBPacket::USBPacket(const quint64 timestamp,
-                     const QByteArray& packet)
+                     const QByteArray& packet)  // FIXME use ref or pointer ??
 {
     m_Timestamp = timestamp;
     m_Packet = packet;
