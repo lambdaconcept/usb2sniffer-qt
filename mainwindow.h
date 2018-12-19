@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "configurewindow.h"
+#include "filterwindow.h"
 #include "capture.h"
 
 #include "usbmodel.h"
@@ -35,12 +36,15 @@ public:
     void handleRecords(USBAggregator *usbAggregator);
     void captureFinished();
 
+    void setFilter();
+
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);
 
 private:
     Ui::MainWindow *ui;
     ConfigureWindow *configWindow;
+    FilterWindow *filterWindow;
 
     USBModel *currentModel = nullptr;
     USBProxy *currentProxy = nullptr;

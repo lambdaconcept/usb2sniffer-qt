@@ -4,19 +4,30 @@
 #include <QString>
 #include <QSortFilterProxyModel>
 
+class USBProxyFilter
+{
+public:
+    bool sof = true;
+    bool nakIn = true;
+    bool nakOut = true;
+    bool nakSetup = true;
+    QString device;
+    QString endpoint;
+};
+
 class USBProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
     USBProxy(QObject *parent = 0);
-    void setFilter(const QString &text);
+    void setFilter(const USBProxyFilter *filter);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
-    QString m_filter;
+    const USBProxyFilter *m_filter = nullptr;
 };
 
 #endif // USBPROXY_H

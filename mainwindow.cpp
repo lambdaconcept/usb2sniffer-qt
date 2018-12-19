@@ -1,5 +1,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -29,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
 
     configWindow = new ConfigureWindow(this);
+    filterWindow = new FilterWindow(this);
 
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
@@ -43,13 +45,22 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
     connect(ui->actionStop, &QAction::triggered, this, &MainWindow::stopCapture);
 
-    connect(ui->lineEdit, &QLineEdit::textChanged, currentProxy, &USBProxy::setFilter);
+    connect(ui->actionFilter, &QAction::triggered, filterWindow, &FilterWindow::open);
+    connect(filterWindow, &FilterWindow::accepted, this, &MainWindow::setFilter);
 }
 
 MainWindow::~MainWindow()
 {
     delete configWindow;
     delete ui;
+}
+
+void MainWindow::setFilter()
+{
+    if (currentProxy) {
+        qDebug() << "setFilter\n";
+        currentProxy->setFilter(filterWindow->getFilter());
+    }
 }
 
 void MainWindow::handleRecords(USBAggregator* aggregator)
@@ -60,6 +71,7 @@ void MainWindow::handleRecords(USBAggregator* aggregator)
 
     USBModel *usbModel = new USBModel(aggregator->getRoot());
     USBProxy *proxyModel = new USBProxy(this);
+    proxyModel->setFilter(filterWindow->getFilter());
     proxyModel->setSourceModel(usbModel);
 
     QItemSelectionModel *m = ui->treeView->selectionModel();

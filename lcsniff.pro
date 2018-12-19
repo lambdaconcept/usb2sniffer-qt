@@ -39,7 +39,8 @@ SOURCES += \
     xbar/etherbone.c \
     xbar/xbar.c \
     configurewindow.cpp \
-    usbproxy.cpp
+    usbproxy.cpp \
+    filterwindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -58,11 +59,13 @@ HEADERS += \
     xbar/sdram_phy.h \
     xbar/xbar.h \
     configurewindow.h \
-    usbproxy.h
+    usbproxy.h \
+    filterwindow.h
 
 FORMS += \
         mainwindow.ui \
-    configurewindow.ui
+    configurewindow.ui \
+    filterwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
