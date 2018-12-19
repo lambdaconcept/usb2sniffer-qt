@@ -2,6 +2,7 @@
 #define CONFIGUREWINDOW_H
 
 #include <QDialog>
+#include <QStringList>
 
 #include "capture.h"
 
@@ -18,6 +19,7 @@ public:
     void accept();
     void open();
 
+    QStringList listAvailableDevices();
     void autoConfig();
 
     CaptureConfig m_config;
