@@ -26,6 +26,12 @@ public:
 
 private:
     Ui::ConfigureWindow *ui;
+    /* Save & Restore group box states */
+    bool gsPackets = true;
+    bool gsToken = true;
+    bool gsData = true;
+    bool gsHandshake = true;
+    bool gsSpecial = true;
 };
 
 #endif // CONFIGUREWINDOW_H
