@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
-    // loadFile(); // FIXME for dev
+    loadFile(); // FIXME for dev
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
     connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionConfigure, &QAction::triggered, configWindow, &ConfigureWindow::open);
     connect(ui->actionStart, &QAction::triggered, this, &MainWindow::startCapture);
     connect(ui->actionStop, &QAction::triggered, this, &MainWindow::stopCapture);
+
+    connect(ui->lineEdit, &QLineEdit::textChanged, currentProxy, &USBProxy::setFilter);
 }
 
 MainWindow::~MainWindow()
@@ -50,21 +52,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::handleResults(USBAggregator* aggregator)
+void MainWindow::handleRecords(USBAggregator* aggregator)
 {
+    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
+
+    /* Put data into model */
+
     USBModel *usbModel = new USBModel(aggregator->getRoot());
+    USBProxy *proxyModel = new USBProxy(this);
+    proxyModel->setSourceModel(usbModel);
 
     QItemSelectionModel *m = ui->treeView->selectionModel();
-    ui->treeView->setModel(usbModel);
+    ui->treeView->setModel(proxyModel);
     ui->treeView->setColumnWidth(0, 300);
 
+    /* Delete previous data */
+
     m->deleteLater();
+    delete currentProxy;
     delete currentModel;
     delete currentAggregator;
+    currentProxy = proxyModel;
     currentModel = usbModel;
     currentAggregator = aggregator;
-
-    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
 }
 
 void MainWindow::captureFinished()
@@ -81,7 +91,7 @@ void MainWindow::startCapture()
     if (captureThread == nullptr) {
         captureThread = new CaptureThread();
 
-        connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleResults);
+        connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleRecords);
         connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
 
         configWindow->autoConfig();
@@ -172,8 +182,9 @@ void MainWindow::saveFile()
 
 void MainWindow::loadFile()
 {
-    QString file = QFileDialog::getOpenFileName(this,
-        "Open File", "", "*.bin");
+    // QString file = QFileDialog::getOpenFileName(this,
+    //    "Open File", "", "*.bin");
+    QString file = "../output.bin"; // FIXME
 
     FILE *in;
     int len;
@@ -187,18 +198,9 @@ void MainWindow::loadFile()
         return;
     }
 
+    /* Read file and push packets in aggregator */
+
     USBAggregator *aggregator = new USBAggregator();
-    USBModel *usbModel = new USBModel(aggregator->getRoot());
-
-    QItemSelectionModel *m = ui->treeView->selectionModel();
-    ui->treeView->setModel(usbModel);
-    ui->treeView->setColumnWidth(0, 300);
-
-    m->deleteLater();
-    delete currentModel;
-    delete currentAggregator;
-    currentModel = usbModel;
-    currentAggregator = aggregator;
 
     while(!feof(in)){
         size = fread(&len, 1, sizeof(int), in);
@@ -219,9 +221,10 @@ void MainWindow::loadFile()
 
         free(buf);
     }
+    aggregator->done();
     fclose(in);
 
-    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
+    handleRecords(aggregator);
 
     fileSaved = true;
 }
@@ -231,7 +234,8 @@ void MainWindow::updateAscii(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    USBItem *item = static_cast<USBItem*>(index.internalPointer());
+    QModelIndex source = currentProxy->mapToSource(index);
+    USBItem *item = static_cast<USBItem*>(source.internalPointer());
 
     ui->textAsciiPacket->setPlainText(item->asciiPacket());
     ui->textAsciiData->setPlainText(item->asciiData());
@@ -242,7 +246,8 @@ void MainWindow::updateDetails(const QModelIndex& index)
     if (!index.isValid())
         return;
 
-    USBItem *item = static_cast<USBItem*>(index.internalPointer());
+    QModelIndex source = currentProxy->mapToSource(index);
+    USBItem *item = static_cast<USBItem*>(source.internalPointer());
 
     ui->textDetails->setPlainText(item->details());
 }

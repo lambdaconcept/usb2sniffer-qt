@@ -24,7 +24,7 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="statusPacketNum">
       <property name="text">
        <string>Records: 0</string>
@@ -79,6 +79,9 @@
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
           </property>
           <property name="animated">
            <bool>true</bool>
@@ -212,6 +215,9 @@
       </widget>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="lineEdit"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -268,7 +274,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -279,7 +286,8 @@
   </action>
   <action name="actionSave_As">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save As</string>
@@ -298,7 +306,8 @@
   </action>
   <action name="actionConfigure">
    <property name="icon">
-    <iconset theme="emblem-system"/>
+    <iconset theme="emblem-system">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Configure</string>
@@ -306,7 +315,8 @@
   </action>
   <action name="actionStart">
    <property name="icon">
-    <iconset theme="media-playback-start"/>
+    <iconset theme="media-playback-start">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Start</string>
@@ -317,7 +327,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset theme="media-playback-stop"/>
+    <iconset theme="media-playback-stop">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Stop</string>

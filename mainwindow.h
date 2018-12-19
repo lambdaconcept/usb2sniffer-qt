@@ -8,6 +8,7 @@
 
 #include "usbmodel.h"
 #include "usbitem.h"
+#include "usbproxy.h"
 #include "usbgroup.h"
 #include "usbpacket.h"
 #include "usbtransaction.h"
@@ -31,7 +32,7 @@ public:
 
     void startCapture();
     void stopCapture();
-    void handleResults(USBAggregator *usbAggregator);
+    void handleRecords(USBAggregator *usbAggregator);
     void captureFinished();
 
     void updateAscii(const QModelIndex& index);
@@ -42,6 +43,7 @@ private:
     ConfigureWindow *configWindow;
 
     USBModel *currentModel = nullptr;
+    USBProxy *currentProxy = nullptr;
     USBAggregator *currentAggregator = nullptr;
 
     CaptureThread *captureThread = nullptr;

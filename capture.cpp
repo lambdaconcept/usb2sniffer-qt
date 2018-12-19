@@ -70,6 +70,7 @@ void CaptureThread::run()
         usleep(100);
         free(buf);
     }
+    aggregator->done();
 
     close(fd);
 

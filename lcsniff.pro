@@ -38,7 +38,8 @@ SOURCES += \
     capture.cpp \
     xbar/etherbone.c \
     xbar/xbar.c \
-    configurewindow.cpp
+    configurewindow.cpp \
+    usbproxy.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,7 +57,8 @@ HEADERS += \
     xbar/flags.h \
     xbar/sdram_phy.h \
     xbar/xbar.h \
-    configurewindow.h
+    configurewindow.h \
+    usbproxy.h
 
 FORMS += \
         mainwindow.ui \
