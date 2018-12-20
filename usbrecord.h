@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QVariant>
 #include <QBrush>
+#include <QFont>
 
 #define RECORD_NAME     0
 #define RECORD_TS       1
@@ -24,6 +25,7 @@ public:
 
     virtual QVariant data(int column) const = 0;
     virtual QBrush background() const;
+    virtual QFont font(int column) const;
     virtual const QString asciiData();
     virtual const QString asciiPacket();
     virtual const QString details();

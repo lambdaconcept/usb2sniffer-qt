@@ -25,6 +25,11 @@ QBrush USBRecord::background() const
     return QBrush();
 }
 
+QFont USBRecord::font(int column) const
+{
+    return QFont();
+}
+
 const QString USBRecord::asciiData()
 {
     return QString();

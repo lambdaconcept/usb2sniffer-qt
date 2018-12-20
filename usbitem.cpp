@@ -59,6 +59,11 @@ QBrush USBItem::background() const
     return m_record->background();
 }
 
+QFont USBItem::font(int column) const
+{
+    return m_record->font(column);
+}
+
 const QString USBItem::asciiData()
 {
     return m_record->asciiData();

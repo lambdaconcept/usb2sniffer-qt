@@ -1,6 +1,5 @@
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QDebug>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -58,7 +57,6 @@ MainWindow::~MainWindow()
 void MainWindow::setFilter()
 {
     if (currentProxy) {
-        qDebug() << "setFilter\n";
         currentProxy->setFilter(filterWindow->getFilter());
     }
 }

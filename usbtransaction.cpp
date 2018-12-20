@@ -54,6 +54,17 @@ QBrush USBTransaction::background() const
     return QBrush();
 }
 
+QFont USBTransaction::font(int column) const
+{
+    switch(column)
+    {
+        case RECORD_SUMMARY:
+            return QFont(QString::fromUtf8("Monospace"));
+        default:
+            return QFont();
+    }
+}
+
 const QString USBTransaction::asciiData()
 {
     return m_data ? formatHexdump(m_data->m_Data) : "";

@@ -129,7 +129,7 @@
            <property name="font">
             <font>
              <family>Monospace</family>
-             <pointsize>8</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="readOnly">
@@ -160,7 +160,7 @@
             <enum>QTabWidget::South</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tabPacket">
             <attribute name="title">
@@ -175,8 +175,10 @@
                  <height>0</height>
                 </size>
                </property>
-               <property name="styleSheet">
-                <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+               <property name="font">
+                <font>
+                 <family>Monospace</family>
+                </font>
                </property>
                <property name="readOnly">
                 <bool>true</bool>
@@ -198,8 +200,10 @@
                  <height>0</height>
                 </size>
                </property>
-               <property name="styleSheet">
-                <string notr="true">font: 8pt &quot;Monospace&quot;;</string>
+               <property name="font">
+                <font>
+                 <family>Monospace</family>
+                </font>
                </property>
                <property name="readOnly">
                 <bool>true</bool>

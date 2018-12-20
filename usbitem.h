@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVector>
 #include <QBrush>
+#include <QFont>
 
 #include "usbrecord.h"
 
@@ -24,6 +25,7 @@ public:
 
     QVariant data(int column) const;
     QBrush background() const;
+    QFont font(int column) const;
     const QString asciiData();
     const QString asciiPacket();
     const QString details();

@@ -79,6 +79,8 @@ QVariant USBModel::data(const QModelIndex &index, int role) const
             return item->data(index.column());
         case Qt::BackgroundRole:
             return item->background();
+        case Qt::FontRole:
+            return item->font(index.column());
         default:
             return QVariant();
     }

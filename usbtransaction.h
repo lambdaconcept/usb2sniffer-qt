@@ -11,6 +11,7 @@ public:
 
     QVariant data(int column) const;
     QBrush background() const;
+    QFont font(int column) const;
     const QString asciiData();
 
 private:
