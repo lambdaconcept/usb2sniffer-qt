@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/applications-development.png</file>
+        <file>icons/document-open.png</file>
+        <file>icons/document-save-as.png</file>
+        <file>icons/media-playback-start.png</file>
+        <file>icons/media-playback-stop.png</file>
+        <file>icons/system-search.png</file>
+        <file>icons/format-justify-center.png</file>
+        <file>icons/format-list-unordered.png</file>
+        <file>icons/view-list-filter.png</file>
+        <file>icons/view-list-tree.png</file>
+    </qresource>
+</RCC>
