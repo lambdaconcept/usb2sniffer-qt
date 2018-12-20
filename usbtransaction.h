@@ -13,6 +13,7 @@ public:
     QBrush background() const;
     QFont font(int column) const;
     const QString asciiData();
+    const QString details();
 
 private:
     USBPacket* m_token;

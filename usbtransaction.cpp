@@ -69,3 +69,19 @@ const QString USBTransaction::asciiData()
 {
     return m_data ? formatHexdump(m_data->m_Data) : "";
 }
+
+const QString USBTransaction::details()
+{
+    QString details;
+
+    details += QString("%1 Transaction\t[%2]\n\n")
+        .arg(m_token->getPidStr())
+        .arg(m_handshake ? m_handshake->getPidStr() : "");
+
+    details += QString("Token:\t%1\nData:\t%2\nHandshake:\t%3\n")
+        .arg(m_token->getPidStr())
+        .arg(m_data ? m_data->getPidStr() : "None")
+        .arg(m_handshake ? m_handshake->getPidStr() : "None");
+
+    return details;
+}

@@ -1,7 +1,8 @@
 #include "usbgroup.h"
 
-USBGroup::USBGroup(USBPacket* first, USBPacket *last)
+USBGroup::USBGroup(int count, USBPacket* first, USBPacket *last)
 {
+    m_count = count;
     m_first = first;
     m_last = last;
 }
@@ -11,7 +12,9 @@ QVariant USBGroup::data(int column) const
     switch(column)
     {
         case RECORD_NAME:
-            return m_first->getPidStr();
+            return QString("%1 Group [%2]")
+                .arg(m_first->getPidStr())
+                .arg(m_count);
         case RECORD_TS:
             return m_first->m_Timestamp;
         case RECORD_DEVICE:
@@ -34,4 +37,19 @@ QVariant USBGroup::data(int column) const
 QBrush USBGroup::background() const
 {
     return QBrush(QColor(255, 241, 118));
+}
+
+const QString USBGroup::details()
+{
+    QString details;
+
+    details += QString("%1 Group\n\n")
+        .arg(m_first->getPidStr());
+
+    details += QString("Number of Frames:\t%1\nFirst Frame Number:\t%2\nLast Frame Number:\t%3\n")
+        .arg(m_count)
+        .arg(m_first->m_FrameNumber)
+        .arg(m_last->m_FrameNumber);
+
+    return details;
 }

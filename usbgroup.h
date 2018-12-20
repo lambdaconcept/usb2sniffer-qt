@@ -7,12 +7,14 @@
 class USBGroup : public USBRecord
 {
 public:
-    USBGroup(USBPacket* first, USBPacket *last);
+    USBGroup(int count, USBPacket* first, USBPacket *last);
 
     QVariant data(int column) const;
     QBrush background() const;
+    const QString details();
 
 private:
+    int m_count;
     USBPacket *m_first;
     USBPacket *m_last;
 };
