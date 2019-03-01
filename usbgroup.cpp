@@ -1,4 +1,5 @@
 #include "usbgroup.h"
+#include "helpers.h"
 
 USBGroup::USBGroup(int count, USBPacket* first, USBPacket *last)
 {
@@ -16,7 +17,7 @@ QVariant USBGroup::data(int column) const
                 .arg(m_first->getPidStr())
                 .arg(m_count);
         case RECORD_TS:
-            return m_first->m_Timestamp;
+            return formatTimestamp(m_first->m_Timestamp);
         case RECORD_DEVICE:
             return QString(""); // FIXME only for SOF
         case RECORD_ENDPOINT:

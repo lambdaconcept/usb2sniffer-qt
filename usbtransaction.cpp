@@ -15,7 +15,7 @@ QVariant USBTransaction::data(int column) const
         case RECORD_NAME:
             return QString("%1 Transaction").arg(m_token->getPidStr());
         case RECORD_TS:
-            return m_token->m_Timestamp;
+            return formatTimestamp(m_token->m_Timestamp);
         case RECORD_DEVICE:
             return QString("%1").arg(m_token->m_Dev, 2, 16, QChar('0'));
         case RECORD_ENDPOINT:

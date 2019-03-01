@@ -75,6 +75,7 @@ void MainWindow::handleRecords(USBAggregator* aggregator)
     QItemSelectionModel *m = ui->treeView->selectionModel();
     ui->treeView->setModel(proxyModel);
     ui->treeView->setColumnWidth(0, 300);
+    ui->treeView->setColumnWidth(1, 150);
 
     /* Delete previous data */
 

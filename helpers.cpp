@@ -1,5 +1,26 @@
 #include "helpers.h"
 
+QString formatTimestamp(quint64 timestamp)
+{
+    quint64 ts = timestamp * 10;
+    uint ns = ts % 1000;
+    ts = (ts - ns) / 1000;
+    uint us = ts % 1000;
+    ts = (ts - us) / 1000;
+    uint ms = ts % 1000;
+    ts = (ts - ms) / 1000;
+    uint sec = ts % 60;
+    ts = (ts - sec) / 60;
+    uint min = ts;
+
+    return QString("%1:%2:%3:%4:%5")
+        .arg(min, 2, 10, QChar('0'))
+        .arg(sec, 2, 10, QChar('0'))
+        .arg(ms, 3, 10, QChar('0'))
+        .arg(us, 3, 10, QChar('0'))
+        .arg(ns, 3, 10, QChar('0'));
+}
+
 QString formatHexdump(const QByteArray &data) {
     QString out;
 
