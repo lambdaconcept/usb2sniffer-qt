@@ -14,6 +14,8 @@
 #include "usbpacket.h"
 #include "usbtransaction.h"
 #include "usbaggregator.h"
+#include "msgmodel.h"
+#include "msgitem.h"
 
 namespace Ui {
 class MainWindow;

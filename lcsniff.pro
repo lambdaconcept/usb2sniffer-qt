@@ -40,7 +40,9 @@ SOURCES += \
     xbar/xbar.c \
     configurewindow.cpp \
     usbproxy.cpp \
-    filterwindow.cpp
+    filterwindow.cpp \
+    msgitem.cpp \
+    msgmodel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +62,9 @@ HEADERS += \
     xbar/xbar.h \
     configurewindow.h \
     usbproxy.h \
-    filterwindow.h
+    filterwindow.h \
+    msgitem.h \
+    msgmodel.h
 
 FORMS += \
         mainwindow.ui \

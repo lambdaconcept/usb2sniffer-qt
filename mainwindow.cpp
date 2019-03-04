@@ -21,6 +21,17 @@ USBItem* createSampleData()
     return rootItem;
 }
 
+MSGItem* createSampleMsg()
+{
+    MSGItem *rootItem = new MSGItem();
+
+    rootItem->appendChild(new MSGItem(rootItem));
+    rootItem->appendChild(new MSGItem(rootItem));
+    rootItem->appendChild(new MSGItem(rootItem));
+
+    return rootItem;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -76,6 +87,12 @@ void MainWindow::handleRecords(USBAggregator* aggregator)
     ui->treeView->setModel(proxyModel);
     ui->treeView->setColumnWidth(0, 300);
     ui->treeView->setColumnWidth(1, 150);
+
+    /* Put raw messages into model */
+
+    MSGItem *msg = createSampleMsg(); // XXX only for tests
+    MSGModel *msgModel = new MSGModel(msg);
+    ui->messageView->setModel(msgModel);
 
     /* Delete previous data */
 
