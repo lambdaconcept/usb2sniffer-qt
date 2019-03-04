@@ -2,7 +2,7 @@
 
 QString formatTimestamp(quint64 timestamp)
 {
-    quint64 ts = timestamp * 10;
+    quint64 ts = timestamp;
     uint ns = ts % 1000;
     ts = (ts - ns) / 1000;
     uint us = ts % 1000;

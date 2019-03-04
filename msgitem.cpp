@@ -1,8 +1,30 @@
 #include "msgitem.h"
+#include "helpers.h"
 
-MSGItem::MSGItem(MSGItem *parentItem)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "parser/parse.h"
+
+#ifdef __cplusplus
+}
+#endif
+
+const QVector<QString> MSGItem::s_header = {
+    "Timestamp",
+    "Type",
+    "Value",
+    "",
+};
+
+MSGItem::MSGItem(uint64_t ts, uint8_t type, uint8_t val, MSGItem *parentItem)
 {
     m_parentItem = parentItem;
+
+    m_ts = ts;
+    m_type = type;
+    m_val = val;
 }
 
 MSGItem::~MSGItem()
@@ -35,12 +57,12 @@ int MSGItem::row() const
 
 int MSGItem::columnCount() const
 {
-    return 3; // XXX
+    return s_header.count();
 }
 
 QVariant MSGItem::headerData(int column) const
 {
-    return "TOTO"; // XXX
+    return s_header.value(column);
 }
 
 MSGItem *MSGItem::parentItem()
@@ -50,5 +72,21 @@ MSGItem *MSGItem::parentItem()
 
 QVariant MSGItem::data(int column) const
 {
-    return "DATA"; // XXX
+    char *type;
+
+    switch(column)
+    {
+        case MSG_TS:
+            return formatTimestamp(m_ts);
+        case MSG_TYPE:
+            type = usb_get_header_type(m_type);
+            if (type)
+                return QString(type);
+            else
+                return QString("");
+        case MSG_VALUE:
+            return QString("%1").arg(m_val, 2, 16, QChar('0'));
+        default:
+            return QVariant();
+    }
 }

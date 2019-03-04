@@ -30,12 +30,13 @@ public:
     ~MainWindow();
 
     void loadFile();
+     void loadFile2();
     void saveFile();
     void exit();
 
     void startCapture();
     void stopCapture();
-    void handleRecords(USBAggregator *usbAggregator);
+    void handleRecords(USBAggregator *usbAggregator, MSGItem *msgRoot);
     void captureFinished();
 
     void setFilter();

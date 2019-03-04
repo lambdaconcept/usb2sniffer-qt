@@ -42,7 +42,8 @@ SOURCES += \
     usbproxy.cpp \
     filterwindow.cpp \
     msgitem.cpp \
-    msgmodel.cpp
+    msgmodel.cpp \
+    parser/parse.c
 
 HEADERS += \
         mainwindow.h \
@@ -64,7 +65,8 @@ HEADERS += \
     usbproxy.h \
     filterwindow.h \
     msgitem.h \
-    msgmodel.h
+    msgmodel.h \
+    parser/parse.h
 
 FORMS += \
         mainwindow.ui \

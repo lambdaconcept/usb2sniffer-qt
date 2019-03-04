@@ -6,6 +6,16 @@
 
 #include <unistd.h> // FIXME
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "parser/parse.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 USBItem* createSampleData()
 {
     USBItem *rootItem = new USBItem(new USBPacket(0, QByteArray()));
@@ -23,11 +33,11 @@ USBItem* createSampleData()
 
 MSGItem* createSampleMsg()
 {
-    MSGItem *rootItem = new MSGItem();
+    MSGItem *rootItem = new MSGItem(0, 0, 0);
 
-    rootItem->appendChild(new MSGItem(rootItem));
-    rootItem->appendChild(new MSGItem(rootItem));
-    rootItem->appendChild(new MSGItem(rootItem));
+    rootItem->appendChild(new MSGItem(0, 0, 0, rootItem));
+    rootItem->appendChild(new MSGItem(0, 0, 0, rootItem));
+    rootItem->appendChild(new MSGItem(0, 0, 0, rootItem));
 
     return rootItem;
 }
@@ -72,7 +82,7 @@ void MainWindow::setFilter()
     }
 }
 
-void MainWindow::handleRecords(USBAggregator* aggregator)
+void MainWindow::handleRecords(USBAggregator* aggregator, MSGItem *msgRoot)
 {
     ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
 
@@ -90,9 +100,9 @@ void MainWindow::handleRecords(USBAggregator* aggregator)
 
     /* Put raw messages into model */
 
-    MSGItem *msg = createSampleMsg(); // XXX only for tests
-    MSGModel *msgModel = new MSGModel(msg);
+    MSGModel *msgModel = new MSGModel(msgRoot);
     ui->messageView->setModel(msgModel);
+    ui->messageView->setColumnWidth(0, 150);
 
     /* Delete previous data */
 
@@ -209,6 +219,44 @@ void MainWindow::saveFile()
 }
 
 void MainWindow::loadFile()
+{
+    struct usb_session_s *sess;
+    FILE *in;
+    size_t len;
+    uint32_t plen;
+    uint8_t buf[512];
+    uint8_t type;
+    uint8_t val;
+    uint64_t ts;
+
+    sess = usb_new_session();
+
+    USBAggregator *aggregator = new USBAggregator();
+    MSGItem *rootItem = new MSGItem(0, 0, 0);
+
+    in = fopen("../stream.bin", "rb");
+    while(!feof(in)){
+        len = fread(buf, 1, 512, in);
+        if(len < 0)
+            return;
+
+        usb_add_data(sess, buf, len);
+
+        while(usb_read_data(sess, &type, &val, &ts)){
+            rootItem->appendChild(new MSGItem(ts, type, val, rootItem));
+        }
+        while(usb_read_packet(sess, &type, buf, &plen, &ts)){
+            aggregator->append(new USBPacket(ts, QByteArray((char *)buf, plen)));
+        }
+    }
+
+    aggregator->done();
+    fclose(in);
+
+    handleRecords(aggregator, rootItem);
+}
+
+void MainWindow::loadFile2()
 {
     // QString file = QFileDialog::getOpenFileName(this,
     //    "Open File", "", "*.bin");
