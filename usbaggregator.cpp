@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "usbaggregator.h"
 #include "usbgroup.h"
 #include "usbtransaction.h"
@@ -105,18 +107,24 @@ void USBAggregator::append(USBPacket* packet)
     /* Group transactions */
 
     if((_state == TRANS_IDLE) && (type == PID_TYPE_TOKEN) && (pid != PID_SOF)) {
+        /* Receive the first token */
         _token = packet;
         _state = TRANS_TOKEN;
     } else if ((_state == TRANS_TOKEN) && (type == PID_TYPE_DATA)) {
+        /* Token followed by data */
         _data = packet;
         _state = TRANS_DATA;
     } else if ((_state == TRANS_TOKEN) && (type == PID_TYPE_HANDSHAKE)) {
+        /* Token without data followed by handshake */
         _handshake = packet;
         _state = TRANS_IDLE;
+        /* Done transaction */
         endTransaction();
     } else if ((_state == TRANS_DATA) && (type == PID_TYPE_HANDSHAKE)) {
+        /* Token + data followed by handshake */
         _handshake = packet;
         _state = TRANS_IDLE;
+        /* Done transaction */
         endTransaction();
     } else if ((_state == TRANS_DATA) && (type == PID_TYPE_TOKEN)) {
         /* Was isochronous */
@@ -125,8 +133,20 @@ void USBAggregator::append(USBPacket* packet)
             _token = packet;
             _state = TRANS_TOKEN;
         }
+    } else if ((_state == TRANS_TOKEN) && (type == PID_TYPE_TOKEN)) {
+        /* Incomplete transaction */
+        endTransaction();
+        if (pid != PID_SOF) {
+            _token = packet;
+            _state = TRANS_TOKEN;
+        }
+    } else if (pid == PID_SOF) {
+        /* Catch SOF, nothing to do really */
     } else {
         /* FSM error */
+        std::cout << "FSM error: unknown state (new PID: " <<
+                     QString("%1").arg(pid, 2, 16, QChar('0')).toStdString()
+                  << ") (state: " << _state << ")\n";
         endTransaction();
     }
 
