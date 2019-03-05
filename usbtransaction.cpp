@@ -21,7 +21,7 @@ QVariant USBTransaction::data(int column) const
         case RECORD_ENDPOINT:
             return QString("%1").arg(m_token->m_Endpoint, 2, 16, QChar('0'));
         case RECORD_STATUS:
-            return m_handshake ? m_handshake->getPidStr() : "";
+            return m_handshake ? m_handshake->getPidStr() : "Incomplete";
         case RECORD_LENGTH:
             return m_data ? m_data->m_Data.count() : 0;
         case RECORD_SUMMARY:
@@ -33,22 +33,22 @@ QVariant USBTransaction::data(int column) const
 
 QBrush USBTransaction::background() const
 {
-    int noack = 0;
+    int ack = 0;
 
     if(m_token) {
         if(m_handshake) {
-            if (m_handshake->getPid() != PID_ACK) {
-                noack = 1;
+            if (m_handshake->getPid() == PID_ACK) {
+                ack = 1;
             }
         }
 
         switch(m_token->getPid()) {
             case PID_SETUP:
-                return noack ? QBrush(QColor(188, 170, 164)) : QBrush(QColor(141, 110, 99));
+                return !ack ? QBrush(QColor(188, 170, 164)) : QBrush(QColor(141, 110, 99));
             case PID_IN:
-                return noack ? QBrush(QColor(165, 214, 167)) : QBrush(QColor(102, 187, 106));
+                return !ack ? QBrush(QColor(165, 214, 167)) : QBrush(QColor(102, 187, 106));
             case PID_OUT:
-                return noack ? QBrush(QColor(144, 202, 249)) : QBrush(QColor(66, 165, 245));
+                return !ack ? QBrush(QColor(144, 202, 249)) : QBrush(QColor(66, 165, 245));
         }
     }
     return QBrush();

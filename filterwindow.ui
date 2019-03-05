@@ -45,7 +45,7 @@
       <item>
        <widget class="QCheckBox" name="checkNAKIN">
         <property name="text">
-         <string>NAKed IN</string>
+         <string>NAK/Incomplete IN</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -55,7 +55,7 @@
       <item>
        <widget class="QCheckBox" name="checkNAKOUT">
         <property name="text">
-         <string>NAKed OUT</string>
+         <string>NAK/Incomplete OUT</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -65,7 +65,7 @@
       <item>
        <widget class="QCheckBox" name="checkNAKSETUP">
         <property name="text">
-         <string>NAKed SETUP</string>
+         <string>NAK/Incomplete SETUP</string>
         </property>
         <property name="checked">
          <bool>true</bool>

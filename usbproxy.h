@@ -8,6 +8,7 @@ class USBProxyFilter
 {
 public:
     bool sof = true;
+    /* For now Incomplete is treated as NAK */
     bool nakIn = true;
     bool nakOut = true;
     bool nakSetup = true;

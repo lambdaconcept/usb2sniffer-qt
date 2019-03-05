@@ -33,7 +33,8 @@ bool USBProxy::filterAcceptsRow(int sourceRow,
 
     if (sourceParent.isValid()) {
         USBItem *item = static_cast<USBItem*>(sourceParent.internalPointer());
-        if (item->data(RECORD_STATUS).toString().contains("NAK")) {
+        QString status = item->data(RECORD_STATUS).toString();
+        if (status.contains("NAK") || status.contains("Incomplete")) {
             if (item->data(RECORD_NAME).toString().contains("IN")) {
                 return m_filter->nakIn;
             } else if (item->data(RECORD_NAME).toString().contains("OUT")) {
