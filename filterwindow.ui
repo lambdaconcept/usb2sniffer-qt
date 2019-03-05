@@ -16,6 +16,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Rx Commands</string>
      </property>
@@ -133,7 +136,7 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="groupBox_4">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="title">
       <string>Device Filters</string>
@@ -154,7 +157,7 @@
    <item row="2" column="1">
     <widget class="QGroupBox" name="groupBox_5">
      <property name="enabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="title">
       <string>Endpoint Filters</string>
