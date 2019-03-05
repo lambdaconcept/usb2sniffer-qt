@@ -305,7 +305,6 @@ void MainWindow::loadFile2()
     aggregator->done();
     fclose(in);
 
-    // XXX
     // handleRecords(aggregator);
 
     fileSaved = true;

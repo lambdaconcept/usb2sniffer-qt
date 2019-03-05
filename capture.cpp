@@ -17,6 +17,7 @@ extern "C" {
 #include "xbar/csr.h"
 #include "xbar/sdram_phy.h"
 #include "xbar/xbar.h"
+#include "parser/parse.h"
 
 #ifdef __cplusplus
 }
@@ -33,6 +34,7 @@ void CaptureThread::setModel(USBModel *model, MSGModel *msg)
     m_msg = msg;
 }
 
+/*
 void CaptureThread::run()
 {
     for (int i = 0; i < 2; i++)
@@ -42,7 +44,6 @@ void CaptureThread::run()
         m_msg->addMessage(1, 2, 0xda);
         m_msg->addMessage(1, 2, 0x0f);
         sleep(1);
-        printf("done sleep\n");
     }
 
     m_model->addPacket(new USBPacket(1, QByteArray::fromHex("2d01e8")));
@@ -61,25 +62,27 @@ void CaptureThread::run()
 
     // emit resultReady(m_aggregator);
 }
-/*
+*/
+
 void CaptureThread::run()
 {
     int fd;
+    struct usb_session_s *sess;
     char *buf;
     size_t len;
-    char *data;
-    unsigned long long int timestamp;
+    uint32_t plen;
+    uint8_t type;
+    uint8_t val;
+    uint64_t ts;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
     std::cout << "config: " << m_config->device.toStdString() << "\n";
-
-    USBAggregator *aggregator = new USBAggregator();
 
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
     if (fd < 0) {
         QMessageBox::warning(nullptr, "Error", "Capture device not found");
 
-        goto err;
+        return;
     }
 
     init_sequence();
@@ -89,27 +92,32 @@ void CaptureThread::run()
 
     ulpi_init(fd);
 
+    /* Start capture */
+    ulpi_enable(fd, 1);
+
     std::cout << "init done\n";
 
-    // while(1){
-    for (int var = 0; var < 450; ++var)
+    sess = usb_new_session();
+
+    while(1)
+    // for (int var = 0; var < 450; ++var)  // XXX FIXME
     {
         if(ubar_recv_packet(fd, &buf, &len) == 1)
         {
-            memcpy(&len, buf, sizeof(int));
-            memcpy(&timestamp, buf + sizeof(int), 8);
-            data = buf + 12;
-
-            aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));
+            usb_add_data(sess, (uint8_t*)buf, len);
+            while(usb_read_data(sess, &type, &val, &ts)){
+                m_msg->addMessage(ts, type, val);
+            }
+            while(usb_read_packet(sess, &type, (uint8_t*)buf, &plen, &ts)){
+                m_model->addPacket(new USBPacket(ts, QByteArray(buf, plen)));
+            }
         }
         usleep(100);
         free(buf);
     }
-    aggregator->done();
+    m_model->lastPacket();
 
     close(fd);
 
-err:
-    emit resultReady(aggregator);
+    // emit resultReady(aggregator);
 }
-*/
