@@ -7,6 +7,7 @@
 int ubar_recv_packet(int fd, char **buf, size_t *len);
 void ulpi_reset(int fd, uint32_t val);
 void ulpi_init(int fd);
+void ulpi_enable(int fd, uint32_t val);
 void cdelay(int val);
 
 #endif

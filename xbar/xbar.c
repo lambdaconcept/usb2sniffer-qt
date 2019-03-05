@@ -157,6 +157,11 @@ void ulpi_reset(int fd, uint32_t val)
   eb_write_reg32(fd, CSR_ULPI_PHY0_ULPI_PHY_RESET_ADDR, val);
 }
 
+void ulpi_enable(int fd, uint32_t val)
+{
+  eb_write_reg32(fd, CSR_ULPI_CORE0_ENABLE_SOURCE_ADDR, val);
+}
+
 void ulpi_dump(int fd)
 {
   int i;
