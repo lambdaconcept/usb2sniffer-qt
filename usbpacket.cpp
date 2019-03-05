@@ -58,6 +58,8 @@ QString USBPacket::getTypeStr() const
 
 void USBPacket::decode()
 {
+    int len;
+    char *data;
     unsigned char pid;
     unsigned char pid_type;
 
@@ -66,10 +68,10 @@ void USBPacket::decode()
         return;
     }
 
-    pid = m_Packet[0] & 0xF;
+    pid = m_Packet[0] & 0xf;
     pid_type = pid & 0x3;
 
-    m_Pid = m_Packet[0];
+    m_Pid = m_Packet[0] & 0xff;
 
     switch(pid_type){
         case PID_TYPE_SPECIAL:
@@ -82,7 +84,7 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_TOKEN:
-            m_CRC = (m_Packet[2] >> 3) & 0x1f;
+            m_CRC = ((m_Packet[2] & 0xff) >> 3) & 0x1f;
             switch(pid){
                 case PID_OUT:
                 case PID_IN:
@@ -91,7 +93,7 @@ void USBPacket::decode()
                     m_Endpoint = (((m_Packet[2] & 0x7) << 1) | (( m_Packet[1] & 0x80) >> 7)) & 0xf;
                     break;
                 case PID_SOF:
-                    m_FrameNumber = (m_Packet[1] | ((m_Packet[2] & 0x7) << 8)) & 0x7ff;
+                    m_FrameNumber = ((m_Packet[1] & 0xff) | ((m_Packet[2] & 0x7) << 8)) & 0x7ff;
                     break;
             }
             break;
@@ -107,8 +109,10 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_DATA:
-            m_Data.setRawData(m_Packet.data() + 1, m_Packet.count() - 3);
-            m_CRC = m_Packet[m_Packet.count() - 2] | (m_Packet[m_Packet.count() - 1] << 8);
+            len = m_Packet.count();
+            data = m_Packet.data() + 1;
+            m_Data.setRawData(data, len-3);
+            m_CRC = (m_Packet[len-2] & 0xff) | ((m_Packet[len-1] & 0xff) << 8);
             switch(pid){
                 case PID_DATA0:
                 case PID_DATA1:
