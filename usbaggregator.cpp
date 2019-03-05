@@ -6,12 +6,11 @@
 
 USBAggregator::USBAggregator()
 {
-    m_root = new USBItem(new USBPacket(0, QByteArray()));  // FIXME
+
 }
 
 USBAggregator::~USBAggregator()
 {
-    // delete m_root; // FIXME
     qDeleteAll(m_packets);
 }
 
@@ -20,14 +19,23 @@ USBPacket* USBAggregator::value(int i)
     return m_packets.value(i);
 }
 
-USBItem* USBAggregator::getRoot()
-{
-    return m_root;
-}
-
 int USBAggregator::count() const
 {
     return m_packets.count();
+}
+
+void USBAggregator::setRoot(USBItem* root)
+{
+    m_root = root;
+}
+
+bool USBAggregator::getPending(USBItem **item)
+{
+    if (m_pending.isEmpty())
+        return false;
+
+    *item = m_pending.takeFirst();
+    return true;
 }
 
 void USBAggregator::done()
@@ -51,7 +59,7 @@ void USBAggregator::endGroup()
         for (int j = _start; j < i; j++) {
             node->appendChild(new USBItem(m_packets[j], node));
         }
-        m_root->appendChild(node);
+        m_pending.append(node);
     }
 
     _lastPid = 0;
@@ -76,7 +84,7 @@ void USBAggregator::endTransaction()
         if (_handshake) {
             node->appendChild(new USBItem(_handshake, node));
         }
-        m_root->appendChild(node);
+        m_pending.append(node);
     }
 
     /* Reset state */

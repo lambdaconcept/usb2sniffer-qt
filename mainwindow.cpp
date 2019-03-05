@@ -82,13 +82,13 @@ void MainWindow::setFilter()
     }
 }
 
-void MainWindow::handleRecords(USBAggregator* aggregator, MSGItem *msgRoot)
+void MainWindow::newSession()
 {
-    ui->statusPacketNum->setText(QString("Records: %1").arg(aggregator->count()));
-
     /* Put data into model */
 
-    USBModel *usbModel = new USBModel(aggregator->getRoot());
+    USBModel *usbModel = new USBModel();
+    connect(usbModel, &USBModel::numberPopulated, this, &MainWindow::updateRecordsStats);
+
     USBProxy *proxyModel = new USBProxy(this);
     proxyModel->setFilter(filterWindow->getFilter());
     proxyModel->setSourceModel(usbModel);
@@ -100,7 +100,7 @@ void MainWindow::handleRecords(USBAggregator* aggregator, MSGItem *msgRoot)
 
     /* Put raw messages into model */
 
-    MSGModel *msgModel = new MSGModel(msgRoot);
+    MSGModel *msgModel = new MSGModel();
     ui->messageView->setModel(msgModel);
     ui->messageView->setColumnWidth(0, 150);
 
@@ -109,10 +109,12 @@ void MainWindow::handleRecords(USBAggregator* aggregator, MSGItem *msgRoot)
     m->deleteLater();
     delete currentProxy;
     delete currentModel;
-    delete currentAggregator;
+    delete currentMsg;
+    // delete currentAggregator;
     currentProxy = proxyModel;
     currentModel = usbModel;
-    currentAggregator = aggregator;
+    currentMsg = msgModel;
+    // currentAggregator = aggregator;
 }
 
 void MainWindow::captureFinished()
@@ -127,10 +129,14 @@ void MainWindow::captureFinished()
 void MainWindow::startCapture()
 {
     if (captureThread == nullptr) {
-        captureThread = new CaptureThread();
 
-        connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleRecords);
-        connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
+        newSession();
+
+        captureThread = new CaptureThread();
+        captureThread->setModel(currentModel, currentMsg);
+
+        // connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleRecords);
+        // connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
 
         configWindow->autoConfig();
         captureThread->setConfig(&configWindow->m_config);
@@ -195,7 +201,7 @@ void MainWindow::saveFile()
     }
 
     buf = static_cast<char *>(malloc(1024 + 12));
-
+/*
     USBPacket *packet;
     for (int i = 0; i < currentAggregator->count(); ++i) {
         packet = currentAggregator->value(i);
@@ -211,7 +217,7 @@ void MainWindow::saveFile()
         fwrite(&len, 1, sizeof(int), out);
         fwrite(buf, 1, len, out);
     }
-
+*/
     free(buf);
     fclose(out);
 
@@ -231,8 +237,7 @@ void MainWindow::loadFile()
 
     sess = usb_new_session();
 
-    USBAggregator *aggregator = new USBAggregator();
-    MSGItem *rootItem = new MSGItem(0, 0, 0);
+    newSession();
 
     in = fopen("../stream.bin", "rb");
     while(!feof(in)){
@@ -243,17 +248,17 @@ void MainWindow::loadFile()
         usb_add_data(sess, buf, len);
 
         while(usb_read_data(sess, &type, &val, &ts)){
-            rootItem->appendChild(new MSGItem(ts, type, val, rootItem));
+            currentMsg->addMessage(ts, type, val);
         }
         while(usb_read_packet(sess, &type, buf, &plen, &ts)){
-            aggregator->append(new USBPacket(ts, QByteArray((char *)buf, plen)));
+            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)));
         }
     }
 
-    aggregator->done();
+    currentModel->lastPacket();
     fclose(in);
 
-    handleRecords(aggregator, rootItem);
+    // handleRecords(aggregator, rootItem);
 }
 
 void MainWindow::loadFile2()
@@ -300,7 +305,8 @@ void MainWindow::loadFile2()
     aggregator->done();
     fclose(in);
 
-    handleRecords(aggregator);
+    // XXX
+    // handleRecords(aggregator);
 
     fileSaved = true;
 }
@@ -326,4 +332,9 @@ void MainWindow::updateDetails(const QModelIndex& index)
     USBItem *item = static_cast<USBItem*>(source.internalPointer());
 
     ui->textDetails->setPlainText(item->details());
+}
+
+void MainWindow::updateRecordsStats(int number)
+{
+    ui->statusPacketNum->setText(QString("Records: %1").arg(number));
 }

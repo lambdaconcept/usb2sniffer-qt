@@ -1,14 +1,50 @@
 #include "usbmodel.h"
 #include "usbitem.h"
 
-USBModel::USBModel(USBItem *rootItem, QObject *parent) : QAbstractItemModel(parent)
+USBModel::USBModel(QObject *parent) : QAbstractItemModel(parent)
 {
-    m_rootItem = rootItem;
+    m_rootItem = new USBItem(new USBPacket(0, QByteArray()));
+
+    m_aggregator.setRoot(m_rootItem);
 }
 
 USBModel::~USBModel()
 {
-    delete m_rootItem;
+    delete m_rootItem; // FIXME
+}
+
+int USBModel::addPacket(USBPacket *packet)
+{
+    /* Push packet to aggregator */
+    m_aggregator.append(packet);
+    updateNodes();
+    emit numberPopulated(m_aggregator.count());
+
+    return true;
+}
+
+int USBModel::lastPacket()
+{
+    m_aggregator.done();
+    updateNodes();
+
+    return true;
+}
+
+void USBModel::updateNodes()
+{
+    int size;
+    USBItem *child;
+
+    /* Add new nodes from aggregator, if any */
+
+    while(m_aggregator.getPending(&child))
+    {
+        size = m_rootItem->childCount();
+        beginInsertRows(QModelIndex(), size, size);
+        m_rootItem->appendChild(child);
+        endInsertRows();
+    }
 }
 
 QModelIndex USBModel::index(int row, int column, const QModelIndex &parent)

@@ -15,7 +15,7 @@ const QVector<QString> MSGItem::s_header = {
     "Timestamp",
     "Type",
     "Value",
-    "",
+    "Details",
 };
 
 MSGItem::MSGItem(uint64_t ts, uint8_t type, uint8_t val, MSGItem *parentItem)
@@ -86,6 +86,8 @@ QVariant MSGItem::data(int column) const
                 return QString("");
         case MSG_VALUE:
             return QString("%1").arg(m_val, 2, 16, QChar('0'));
+        case MSG_DETAILS:
+            return ""; // XXX to be implemented
         default:
             return QVariant();
     }

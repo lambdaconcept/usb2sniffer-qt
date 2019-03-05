@@ -3,14 +3,16 @@
 
 #include <QAbstractItemModel>
 
+#include "usbpacket.h"
 #include "usbitem.h"
+#include "usbaggregator.h"
 
 class USBModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit USBModel(USBItem *rootItem, QObject *parent = nullptr);
+    explicit USBModel(QObject *parent = nullptr);
     ~USBModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -23,7 +25,16 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    /* custom API */
+    int addPacket(USBPacket *packet);
+    int lastPacket();
+    void updateNodes();
+
+signals:
+    void numberPopulated(int number);
+
 private:
+    USBAggregator m_aggregator;
     USBItem *m_rootItem;
 };
 

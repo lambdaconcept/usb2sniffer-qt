@@ -1,14 +1,26 @@
 #include "msgmodel.h"
 #include "msgitem.h"
 
-MSGModel::MSGModel(MSGItem *rootItem, QObject *parent) : QAbstractItemModel(parent)
+MSGModel::MSGModel(QObject *parent) : QAbstractItemModel(parent)
 {
-    m_rootItem = rootItem;
+    m_rootItem = new MSGItem(0, 0, 0);
 }
 
 MSGModel::~MSGModel()
 {
     delete m_rootItem;
+}
+
+int MSGModel::addMessage(uint64_t ts, uint8_t type, uint8_t val)
+{
+    int size;
+
+    size = m_rootItem->childCount();
+    beginInsertRows(QModelIndex(), size, size);
+    m_rootItem->appendChild(new MSGItem(ts, type, val, m_rootItem));
+    endInsertRows();
+
+    return true;
 }
 
 QModelIndex MSGModel::index(int row, int column, const QModelIndex &parent)

@@ -3,7 +3,8 @@
 
 #include <QThread>
 
-#include "usbaggregator.h"
+#include "usbmodel.h"
+#include "msgmodel.h"
 
 namespace CaptureMask {
 enum CaptureMask {
@@ -42,12 +43,15 @@ class CaptureThread : public QThread
 
 public:
     void setConfig(CaptureConfig* config);
+    void setModel(USBModel *model, MSGModel *msg);
 
 private:
     CaptureConfig *m_config;
+    USBModel *m_model;
+    MSGModel *m_msg;
 
 signals:
-    void resultReady(USBAggregator *usbAggregator);
+    // void resultReady(USBAggregator *usbAggregator);
 };
 
 #endif // CAPTURE_H

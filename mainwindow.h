@@ -36,13 +36,14 @@ public:
 
     void startCapture();
     void stopCapture();
-    void handleRecords(USBAggregator *usbAggregator, MSGItem *msgRoot);
+    void newSession();
     void captureFinished();
 
     void setFilter();
 
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);
+    void updateRecordsStats(int number);
 
 private:
     Ui::MainWindow *ui;
@@ -51,7 +52,7 @@ private:
 
     USBModel *currentModel = nullptr;
     USBProxy *currentProxy = nullptr;
-    USBAggregator *currentAggregator = nullptr;
+    MSGModel *currentMsg = nullptr;
 
     CaptureThread *captureThread = nullptr;
     bool fileSaved = true; /* Used for warning on exit */

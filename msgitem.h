@@ -3,9 +3,11 @@
 
 #include <QList>
 
+/* Columns numbers */
 #define MSG_TS      0
 #define MSG_TYPE    1
 #define MSG_VALUE   2
+#define MSG_DETAILS 3
 
 class MSGItem
 {

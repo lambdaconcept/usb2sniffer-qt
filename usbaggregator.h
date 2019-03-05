@@ -17,17 +17,19 @@ public:
     USBAggregator();
     ~USBAggregator();
 
-    USBItem* getRoot();
     int count() const;
     USBPacket* value(int i);
     void append(USBPacket* packet);
     void endTransaction();
     void endGroup();
     void done();
+    void setRoot(USBItem* root);
+    bool getPending(USBItem **item);
 
 private:
     USBItem *m_root;
     QVector<USBPacket *> m_packets; // FIXME should inherit from QVector
+    QList<USBItem *> m_pending;
 
     quint8 _lastPid = 0;
     int _start = 0;

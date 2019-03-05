@@ -27,6 +27,41 @@ void CaptureThread::setConfig(CaptureConfig* config)
     m_config = config;
 }
 
+void CaptureThread::setModel(USBModel *model, MSGModel *msg)
+{
+    m_model = model;
+    m_msg = msg;
+}
+
+void CaptureThread::run()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        m_model->addPacket(new USBPacket(1, QByteArray::fromHex("a5da0f")));
+        m_msg->addMessage(1, 2, 0xa5);
+        m_msg->addMessage(1, 2, 0xda);
+        m_msg->addMessage(1, 2, 0x0f);
+        sleep(1);
+        printf("done sleep\n");
+    }
+
+    m_model->addPacket(new USBPacket(1, QByteArray::fromHex("2d01e8")));
+    m_msg->addMessage(1, 2, 0x2d);
+    m_msg->addMessage(1, 2, 0x01);
+    m_msg->addMessage(1, 2, 0xe8);
+    sleep(1);
+
+    for (int i = 0; i < 3; i++)
+    {
+        m_model->addPacket(new USBPacket(1, QByteArray::fromHex("a5da0f")));
+        sleep(1);
+    }
+
+    m_model->lastPacket();
+
+    // emit resultReady(m_aggregator);
+}
+/*
 void CaptureThread::run()
 {
     int fd;
@@ -77,3 +112,4 @@ void CaptureThread::run()
 err:
     emit resultReady(aggregator);
 }
+*/

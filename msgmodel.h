@@ -10,7 +10,7 @@ class MSGModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit MSGModel(MSGItem *rootItem, QObject *parent = nullptr);
+    explicit MSGModel(QObject *parent = nullptr);
     ~MSGModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -22,6 +22,9 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    /* custom API */
+    int addMessage(uint64_t ts, uint8_t type, uint8_t val);
 
 private:
     MSGItem *m_rootItem;
