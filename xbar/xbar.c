@@ -41,6 +41,7 @@ int ubar_send_packet(int fd, char *buf, size_t len, int streamid)
   }
   printf("\n"); */
   write(fd, tosend, len+12);
+  free(tosend);
   return 0;
 
 }
@@ -53,6 +54,8 @@ size_t readft(int fd, void *buf, size_t len)
 
   while(toread){
     rdl = read(fd, pnt, toread);
+    if (rdl < 0)
+        exit(0);
     if(rdl > toread)
       exit(0);
     pnt += rdl;
@@ -64,9 +67,7 @@ size_t readft(int fd, void *buf, size_t len)
 int ubar_recv_packet(int fd, char **buf, size_t *len)
 {
   struct xbar_s xbar;
-  int i;
   char *tmp;
-  int rdl;
   unsigned char header[4];
 
   memset(header,0, 4);
@@ -97,17 +98,27 @@ uint32_t  eb_read_reg32(int fd, uint32_t addr)
 {
   char *buf;
   size_t len;
-  uint32_t *data;
+  uint32_t *data = NULL;
   size_t dlen;
-  uint32_t ret;
+  uint32_t ret = 0;
+  int streamid;
 
   eb_make_read_pkt(addr, 1, &buf, &len);
   ubar_send_packet(fd, buf, len, 0);
   free(buf);
-  ubar_recv_packet(fd, &buf, &len);
+  do {
+      streamid = ubar_recv_packet(fd, &buf, &len);
+      printf("streamid %d\n", streamid);
+      if (streamid && buf) {
+          free(buf);
+      }
+  } while(streamid);
   eb_decode_rcv_pkt(buf, len, &data, &dlen);
-  ret = data[0];
-  free(data);
+  free(buf);
+  if (data) {
+    ret = data[0];
+    free(data);
+  }
   return ret;
 }
 

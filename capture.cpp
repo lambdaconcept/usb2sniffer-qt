@@ -112,8 +112,8 @@ void CaptureThread::run()
                 m_model->addPacket(new USBPacket(ts, QByteArray(buf, plen)));
             }
         }
-        usleep(100);
-        free(buf);
+        if (buf)
+            free(buf);
     }
     m_model->lastPacket();
 
