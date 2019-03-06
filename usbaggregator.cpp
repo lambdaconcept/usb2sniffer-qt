@@ -148,6 +148,11 @@ void USBAggregator::append(USBPacket* packet)
             _token = packet;
             _state = TRANS_TOKEN;
         }
+    } else if (pid == PID_SPLIT) {
+        /* Split transaction */
+        endTransaction();
+        _token = packet;
+        endTransaction();
     } else if (pid == PID_SOF) {
         /* Catch SOF, nothing to do really */
     } else {

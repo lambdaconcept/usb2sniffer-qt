@@ -16,15 +16,22 @@ void USBProxy::setFilter(const USBProxyFilter *filter)
 bool USBProxy::filterAcceptsRow(int sourceRow,
         const QModelIndex &sourceParent) const
 {
+    QModelIndex index = sourceModel()->index(sourceRow, RECORD_NAME, sourceParent);
+
     if (!m_filter) {
         return true;
     }
 
-    /* Search inside record name */
+    /* Search inside record name: SOF */
 
-    QModelIndex index = sourceModel()->index(sourceRow, RECORD_NAME, sourceParent);
     if (sourceModel()->data(index).toString().contains("SOF")) { // FIXME check pid type instead of string matching
         return m_filter->sof;
+    }
+
+    /* Search inside record name: SPLIT */
+
+    if (sourceModel()->data(index).toString().contains("SPLIT")) { // FIXME check pid type instead of string matching
+        return true; // XXX FIXME SPLIT filter not yet implemented
     }
 
     /* Search inside record status */
@@ -41,6 +48,8 @@ bool USBProxy::filterAcceptsRow(int sourceRow,
                 return m_filter->nakOut;
             } else if (item->data(RECORD_NAME).toString().contains("SETUP")) {
                 return m_filter->nakSetup;
+            } else {
+                return true;
             }
         } else {
             return true;

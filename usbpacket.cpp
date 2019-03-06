@@ -167,6 +167,10 @@ const QString USBPacket::details()
     switch(getType())
     {
     case PID_TYPE_SPECIAL:
+        if(getPid() == PID_SPLIT) {
+            details = QString("PID:\t0x%1\n")
+                .arg(m_Pid, 2, 16, QChar('0'));
+        }
         break;
 
     case PID_TYPE_TOKEN:

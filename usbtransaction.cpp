@@ -21,7 +21,13 @@ QVariant USBTransaction::data(int column) const
         case RECORD_ENDPOINT:
             return QString("%1").arg(m_token->m_Endpoint, 2, 16, QChar('0'));
         case RECORD_STATUS:
-            return m_handshake ? m_handshake->getPidStr() : "Incomplete";
+            if (m_handshake) {
+                return m_handshake->getPidStr();
+            } else if (m_token->getPid() == PID_SPLIT) {
+                return QString("");
+            } else {
+                return QString("Incomplete");
+            }
         case RECORD_LENGTH:
             return m_data ? m_data->m_Data.count() : 0;
         case RECORD_SUMMARY:
@@ -49,6 +55,9 @@ QBrush USBTransaction::background() const
                 return !ack ? QBrush(QColor(165, 214, 167)) : QBrush(QColor(102, 187, 106));
             case PID_OUT:
                 return !ack ? QBrush(QColor(144, 202, 249)) : QBrush(QColor(66, 165, 245));
+            default:
+                // XXX FIXME PID_SPLIT color not implemented
+                return QBrush();
         }
     }
     return QBrush();
