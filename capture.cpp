@@ -91,9 +91,11 @@ void CaptureThread::run()
     /* configure sdram */
     sdram_configure();
 
-    ulpi_reset(fd, 0);
-    usleep(10000);
+    /* ulpi switch */
+    ulpi_sw_oe_n_out_write(0);
+    ulpi_sw_s_out_write(0);
 
+    /* ulpi init 0 */
     ulpi_init(fd);
 
     /* Start capture */

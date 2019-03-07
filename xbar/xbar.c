@@ -184,12 +184,15 @@ void ulpi_dump(int fd)
 
 void ulpi_init(int fd)
 {
+  ulpi_reset(fd, 1);
+  usleep(100000);
+
   ulpi_reset(fd, 0);
   usleep(100000);
 
   ulpi_dump(fd);
-  ulpi_write_reg(fd, 0x04, 0x48);
-  ulpi_write_reg(fd, 0x0a, 0x00);
-  ulpi_write_reg(fd, 0x0f, 0x1f);
-  ulpi_write_reg(fd, 0x12, 0x1f);
+  ulpi_write_reg(fd, 0x0a, 0x00); // disable 15kohms pull-down resistors
+  ulpi_write_reg(fd, 0x0f, 0x1f); // clear interrupt rising
+  ulpi_write_reg(fd, 0x12, 0x1f); // clear interrupt falling
+  ulpi_write_reg(fd, 0x04, 0x48); // set non driving
 }
