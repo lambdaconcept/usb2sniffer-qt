@@ -71,6 +71,7 @@ void CaptureThread::run()
     int fd;
     struct usb_session_s *sess;
     char *buf;
+    char *pktbuf;
     size_t len;
     uint32_t plen;
     uint8_t type;
@@ -101,8 +102,7 @@ void CaptureThread::run()
     /* Start capture */
     ulpi_enable(fd, 1);
 
-    std::cout << "init done\n";
-
+    pktbuf = (char *)malloc(2048);
     sess = usb_new_session();
 
     while(1)
@@ -114,8 +114,9 @@ void CaptureThread::run()
             while(usb_read_data(sess, &type, &val, &ts)){
                 m_msg->addMessage(ts, type, val);
             }
-            while(usb_read_packet(sess, &type, (uint8_t*)buf, &plen, &ts)){
-                m_model->addPacket(new USBPacket(ts, QByteArray(buf, plen)));
+            while(usb_read_packet(sess, &type, (uint8_t*)pktbuf, &plen, &ts)){
+                // printf("add packet\n");
+                m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
             }
         }
         if (buf)
@@ -123,7 +124,6 @@ void CaptureThread::run()
     }
     m_model->lastPacket();
 
+    free(pktbuf);
     close(fd);
-
-    // emit resultReady(aggregator);
 }
