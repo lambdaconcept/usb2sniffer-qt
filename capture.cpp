@@ -19,6 +19,8 @@ extern "C" {
 #include "xbar/xbar.h"
 #include "parser/parse.h"
 
+extern int gfd;
+
 #ifdef __cplusplus
 }
 #endif
@@ -84,8 +86,10 @@ void CaptureThread::run()
 
         return;
     }
+    gfd = fd;
 
-    init_sequence();
+    /* configure sdram */
+    sdram_configure();
 
     ulpi_reset(fd, 0);
     usleep(10000);

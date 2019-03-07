@@ -96,4 +96,38 @@ static void init_sequence(void)
 	cdelay(200);
 
 }
+
+static void sdram_configure(void)
+{
+    int i;
+    int module;
+    int bitslip;
+    int delay;
+
+    /* software control */
+    sdram_dfii_control_write(0);
+
+    /* sdram initialization */
+    init_sequence();
+
+    /* hardware control */
+    sdram_dfii_control_write(DFII_CONTROL_SEL);
+
+    /* configure bitslip and delay */
+    bitslip = 1;
+    delay = 18;
+    for (module=0; module<2; module++)
+    {
+        ddrphy_dly_sel_write(1<<module);
+        ddrphy_rdly_dq_rst_write(1);
+        ddrphy_rdly_dq_bitslip_rst_write(1);
+        for (i=0; i<bitslip; i++) {
+            ddrphy_rdly_dq_bitslip_write(1);
+        }
+        for (i=0; i<delay; i++) {
+            ddrphy_rdly_dq_inc_write(1);
+        }
+    }
+}
+
 #endif
