@@ -79,8 +79,6 @@ void CaptureThread::run()
     uint64_t ts;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
-    std::cout << "config: " << m_config->device.toStdString() << "\n";
-
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
     if (fd < 0) {
         QMessageBox::warning(nullptr, "Error", "Capture device not found");
@@ -99,19 +97,26 @@ void CaptureThread::run()
     /* ulpi init 0 */
     ulpi_init(fd);
 
-    /* Start capture */
+    /* start capture */
     ulpi_enable(fd, 1);
 
     pktbuf = (char *)malloc(2048);
     sess = usb_new_session();
 
     while(1)
-    // for (int var = 0; var < 450; ++var)  // XXX FIXME
     {
         if(ubar_recv_packet(fd, &buf, &len) == 1)
         {
+            /*
+            printf("ubar_recv: %d\n", len);
+            for (int i=0; i<len; i++) {
+                printf("%02x ", buf[i]);
+            }
+            printf("\n");
+            */
             usb_add_data(sess, (uint8_t*)buf, len);
             while(usb_read_data(sess, &type, &val, &ts)){
+                // printf("add message\n");
                 m_msg->addMessage(ts, type, val);
             }
             while(usb_read_packet(sess, &type, (uint8_t*)pktbuf, &plen, &ts)){

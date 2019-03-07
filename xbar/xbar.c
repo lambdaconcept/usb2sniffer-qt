@@ -61,6 +61,12 @@ size_t readft(int fd, void *buf, size_t len)
     pnt += rdl;
     toread-=rdl;
   }
+  /*
+  for (int i=0; i<len; i++) {
+      printf("%02x ", ((unsigned char*)buf)[i]);
+  }
+  printf("\n");
+  */
   return len;
 }
 
@@ -80,7 +86,7 @@ int ubar_recv_packet(int fd, char **buf, size_t *len)
   }while(memcmp(header, "\x5a\xa5\x5a\xa5", 4));
   xbar.magic = 0x5aa55aa5;
   readft(fd, (unsigned char*)&xbar + 4, 8);
-  //printf("XBAR: %08x %08x %08x %d\n", xbar.magic, (unsigned)xbar.streamid, (unsigned )xbar.len, rdl);
+  // printf("XBAR: %08x %08x %08x\n", xbar.magic, (unsigned)xbar.streamid, (unsigned )xbar.len);
   if(xbar.len > 32768)
     {
       exit(1);

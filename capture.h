@@ -49,9 +49,6 @@ private:
     CaptureConfig *m_config;
     USBModel *m_model;
     MSGModel *m_msg;
-
-signals:
-    // void resultReady(USBAggregator *usbAggregator);
 };
 
 #endif // CAPTURE_H

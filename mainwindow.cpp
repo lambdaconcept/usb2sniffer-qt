@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
 
-    loadFile(); // FIXME for dev
+    // loadFile(); // FIXME for dev
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
     connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
@@ -89,6 +89,8 @@ void MainWindow::newSession()
     USBModel *usbModel = new USBModel();
     connect(usbModel, &USBModel::numberPopulated, this, &MainWindow::updateRecordsStats);
 
+    /* Create proxy view for filtering */
+
     USBProxy *proxyModel = new USBProxy(this);
     proxyModel->setFilter(filterWindow->getFilter());
     proxyModel->setSourceModel(usbModel);
@@ -110,11 +112,10 @@ void MainWindow::newSession()
     delete currentProxy;
     delete currentModel;
     delete currentMsg;
-    // delete currentAggregator;
+
     currentProxy = proxyModel;
     currentModel = usbModel;
     currentMsg = msgModel;
-    // currentAggregator = aggregator;
 }
 
 void MainWindow::captureFinished()
@@ -135,8 +136,7 @@ void MainWindow::startCapture()
         captureThread = new CaptureThread();
         captureThread->setModel(currentModel, currentMsg);
 
-        // connect(captureThread, &CaptureThread::resultReady, this, &MainWindow::handleRecords);
-        // connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
+        connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
 
         configWindow->autoConfig();
         captureThread->setConfig(&configWindow->m_config);
