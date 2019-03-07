@@ -44,11 +44,14 @@ class CaptureThread : public QThread
 public:
     void setConfig(CaptureConfig* config);
     void setModel(USBModel *model, MSGModel *msg);
+    void stop();
 
 private:
     CaptureConfig *m_config;
     USBModel *m_model;
     MSGModel *m_msg;
+
+    bool m_stoprequest;
 };
 
 #endif // CAPTURE_H

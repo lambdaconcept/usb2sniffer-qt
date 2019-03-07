@@ -152,10 +152,9 @@ void MainWindow::startCapture()
 void MainWindow::stopCapture()
 {
     if ((captureThread != nullptr) && (captureThread->isRunning())) {
-        // FIXME stop thread
+        captureThread->stop();
     }
 }
-
 
 void MainWindow::exit()
 {

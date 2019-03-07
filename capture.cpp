@@ -36,6 +36,11 @@ void CaptureThread::setModel(USBModel *model, MSGModel *msg)
     m_msg = msg;
 }
 
+void CaptureThread::stop()
+{
+    m_stoprequest = true;
+}
+
 /*
 void CaptureThread::run()
 {
@@ -79,6 +84,8 @@ void CaptureThread::run()
     uint64_t ts;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
+    m_stoprequest = false;
+
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
     if (fd < 0) {
         QMessageBox::warning(nullptr, "Error", "Capture device not found");
@@ -103,7 +110,7 @@ void CaptureThread::run()
     pktbuf = (char *)malloc(2048);
     sess = usb_new_session();
 
-    while(1)
+    while(!m_stoprequest)
     {
         if(ubar_recv_packet(fd, &buf, &len) == 1)
         {
@@ -128,6 +135,9 @@ void CaptureThread::run()
             free(buf);
     }
     m_model->lastPacket();
+
+    /* stop capture */
+    ulpi_enable(fd, 0);
 
     free(pktbuf);
     close(fd);
