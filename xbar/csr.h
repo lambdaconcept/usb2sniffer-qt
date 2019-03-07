@@ -12,137 +12,6 @@ extern uint32_t csr_readl(uint32_t addr);
 #include <hw/common.h>
 #endif /* ! CSR_ACCESSORS_DEFINED */
 
-/* analyzer */
-#define CSR_ANALYZER_BASE 0xe000c000
-#define CSR_ANALYZER_MUX_VALUE_ADDR 0xe000c000
-#define CSR_ANALYZER_MUX_VALUE_SIZE 1
-static inline unsigned int analyzer_mux_value_read(void) {
-	unsigned int r = csr_readl(0xe000c000);
-	return r;
-}
-static inline void analyzer_mux_value_write(unsigned int value) {
-	csr_writel(value, 0xe000c000);
-}
-#define CSR_ANALYZER_TRIGGER_ENABLE_ADDR 0xe000c004
-#define CSR_ANALYZER_TRIGGER_ENABLE_SIZE 1
-static inline unsigned int analyzer_trigger_enable_read(void) {
-	unsigned int r = csr_readl(0xe000c004);
-	return r;
-}
-static inline void analyzer_trigger_enable_write(unsigned int value) {
-	csr_writel(value, 0xe000c004);
-}
-#define CSR_ANALYZER_TRIGGER_DONE_ADDR 0xe000c008
-#define CSR_ANALYZER_TRIGGER_DONE_SIZE 1
-static inline unsigned int analyzer_trigger_done_read(void) {
-	unsigned int r = csr_readl(0xe000c008);
-	return r;
-}
-#define CSR_ANALYZER_TRIGGER_MEM_WRITE_ADDR 0xe000c00c
-#define CSR_ANALYZER_TRIGGER_MEM_WRITE_SIZE 1
-static inline unsigned int analyzer_trigger_mem_write_read(void) {
-	unsigned int r = csr_readl(0xe000c00c);
-	return r;
-}
-static inline void analyzer_trigger_mem_write_write(unsigned int value) {
-	csr_writel(value, 0xe000c00c);
-}
-#define CSR_ANALYZER_TRIGGER_MEM_MASK_ADDR 0xe000c010
-#define CSR_ANALYZER_TRIGGER_MEM_MASK_SIZE 2
-static inline unsigned long long int analyzer_trigger_mem_mask_read(void) {
-	unsigned long long int r = csr_readl(0xe000c010);
-	r <<= 32;
-	r |= csr_readl(0xe000c014);
-	return r;
-}
-static inline void analyzer_trigger_mem_mask_write(unsigned long long int value) {
-	csr_writel(value >> 32, 0xe000c010);
-	csr_writel(value, 0xe000c014);
-}
-#define CSR_ANALYZER_TRIGGER_MEM_VALUE_ADDR 0xe000c018
-#define CSR_ANALYZER_TRIGGER_MEM_VALUE_SIZE 2
-static inline unsigned long long int analyzer_trigger_mem_value_read(void) {
-	unsigned long long int r = csr_readl(0xe000c018);
-	r <<= 32;
-	r |= csr_readl(0xe000c01c);
-	return r;
-}
-static inline void analyzer_trigger_mem_value_write(unsigned long long int value) {
-	csr_writel(value >> 32, 0xe000c018);
-	csr_writel(value, 0xe000c01c);
-}
-#define CSR_ANALYZER_TRIGGER_MEM_FULL_ADDR 0xe000c020
-#define CSR_ANALYZER_TRIGGER_MEM_FULL_SIZE 1
-static inline unsigned int analyzer_trigger_mem_full_read(void) {
-	unsigned int r = csr_readl(0xe000c020);
-	return r;
-}
-#define CSR_ANALYZER_SUBSAMPLER_VALUE_ADDR 0xe000c024
-#define CSR_ANALYZER_SUBSAMPLER_VALUE_SIZE 1
-static inline unsigned int analyzer_subsampler_value_read(void) {
-	unsigned int r = csr_readl(0xe000c024);
-	return r;
-}
-static inline void analyzer_subsampler_value_write(unsigned int value) {
-	csr_writel(value, 0xe000c024);
-}
-#define CSR_ANALYZER_STORAGE_ENABLE_ADDR 0xe000c028
-#define CSR_ANALYZER_STORAGE_ENABLE_SIZE 1
-static inline unsigned int analyzer_storage_enable_read(void) {
-	unsigned int r = csr_readl(0xe000c028);
-	return r;
-}
-static inline void analyzer_storage_enable_write(unsigned int value) {
-	csr_writel(value, 0xe000c028);
-}
-#define CSR_ANALYZER_STORAGE_DONE_ADDR 0xe000c02c
-#define CSR_ANALYZER_STORAGE_DONE_SIZE 1
-static inline unsigned int analyzer_storage_done_read(void) {
-	unsigned int r = csr_readl(0xe000c02c);
-	return r;
-}
-#define CSR_ANALYZER_STORAGE_LENGTH_ADDR 0xe000c030
-#define CSR_ANALYZER_STORAGE_LENGTH_SIZE 1
-static inline unsigned int analyzer_storage_length_read(void) {
-	unsigned int r = csr_readl(0xe000c030);
-	return r;
-}
-static inline void analyzer_storage_length_write(unsigned int value) {
-	csr_writel(value, 0xe000c030);
-}
-#define CSR_ANALYZER_STORAGE_OFFSET_ADDR 0xe000c034
-#define CSR_ANALYZER_STORAGE_OFFSET_SIZE 1
-static inline unsigned int analyzer_storage_offset_read(void) {
-	unsigned int r = csr_readl(0xe000c034);
-	return r;
-}
-static inline void analyzer_storage_offset_write(unsigned int value) {
-	csr_writel(value, 0xe000c034);
-}
-#define CSR_ANALYZER_STORAGE_MEM_VALID_ADDR 0xe000c038
-#define CSR_ANALYZER_STORAGE_MEM_VALID_SIZE 1
-static inline unsigned int analyzer_storage_mem_valid_read(void) {
-	unsigned int r = csr_readl(0xe000c038);
-	return r;
-}
-#define CSR_ANALYZER_STORAGE_MEM_READY_ADDR 0xe000c03c
-#define CSR_ANALYZER_STORAGE_MEM_READY_SIZE 1
-static inline unsigned int analyzer_storage_mem_ready_read(void) {
-	unsigned int r = csr_readl(0xe000c03c);
-	return r;
-}
-static inline void analyzer_storage_mem_ready_write(unsigned int value) {
-	csr_writel(value, 0xe000c03c);
-}
-#define CSR_ANALYZER_STORAGE_MEM_DATA_ADDR 0xe000c040
-#define CSR_ANALYZER_STORAGE_MEM_DATA_SIZE 2
-static inline unsigned long long int analyzer_storage_mem_data_read(void) {
-	unsigned long long int r = csr_readl(0xe000c040);
-	r <<= 32;
-	r |= csr_readl(0xe000c044);
-	return r;
-}
-
 /* blinker0 */
 #define CSR_BLINKER0_BASE 0xe000b000
 #define CSR_BLINKER0_FORCEBLINK_ADDR 0xe000b000
@@ -317,6 +186,15 @@ static inline unsigned int itipacker0_time_reset_read(void) {
 }
 static inline void itipacker0_time_reset_write(unsigned int value) {
 	csr_writel(value, 0xe000a000);
+}
+#define CSR_ITIPACKER0_EV_EVENT_ADDR 0xe000a004
+#define CSR_ITIPACKER0_EV_EVENT_SIZE 1
+static inline unsigned int itipacker0_ev_event_read(void) {
+	unsigned int r = csr_readl(0xe000a004);
+	return r;
+}
+static inline void itipacker0_ev_event_write(unsigned int value) {
+	csr_writel(value, 0xe000a004);
 }
 
 /* sdram */

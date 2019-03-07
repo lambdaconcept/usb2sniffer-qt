@@ -3,38 +3,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define MAX_CHUNK_SIZE  512
+#include "parse.h"
 
-#define USB_HEADER_TYPE_NONE  0
-#define USB_HEADER_TYPE_EVENT 1
-#define USB_HEADER_TYPE_DATA  2
-#define USB_HEADER_TYPE_RXCMD 3
-
-#define USB_RXCMD_ID_MASK           0x40
-#define USB_RXCMD_ID_SHIFT          6
-#define USB_RXCMD_ID(x) ((x & USB_RXCMD_ID_MASK) >> USB_RXCMD_ID_SHIFT)
-#define USB_RXCMD_EV_ENCODING_MASK  0x30
-#define USB_RXCMD_EV_ENCODING_SHIFT 4
-#define USB_RXCMD_EV_ENCODING(x) ((x & USB_RXCMD_EV_ENCODING_MASK) >> USB_RXCMD_EV_ENCODING_SHIFT)
-#define USB_RXCMD_VBUS_STATE_MASK   0x0C
-#define USB_RXCMD_VBUS_STATE_SHIFT  2
-#define USB_RXCMD_VBUS_STATE(x) ((x & USB_RXCMD_VBUS_STATE_MASK) >> USB_RXCMD_VBUS_STATE_SHIFT)
-#define USB_RXCMD_DATA_STATE_MASK   0x03
-#define USB_RXCMD_DATA_STATE_SHIFT  0
-#define USB_RXCMD_DATA_STATE(x) ((x & USB_RXCMD_DATA_STATE_MASK) >> USB_RXCMD_DATA_STATE_SHIFT)
-
-#define USB_RXCMD_EV_ENCODING_RXACTIVE       1
-#define USB_RXCMD_EV_ENCODING_RXERROR        2
-#define USB_RXCMD_EV_ENCODING_HOSTDISCONNECT 4
-
-uint8_t usb_rxcmd_ev_encoding_var[] = {
+static uint8_t usb_rxcmd_ev_encoding_var[] = {
 	0,
 	USB_RXCMD_EV_ENCODING_RXACTIVE,
 	USB_RXCMD_EV_ENCODING_HOSTDISCONNECT,
 	USB_RXCMD_EV_ENCODING_RXACTIVE | USB_RXCMD_EV_ENCODING_RXERROR
 };
 
-char *usb_header_type_strings[] = {
+static char *usb_header_type_strings[] = {
     "None",
     "Event",
     "Data",
@@ -48,11 +26,6 @@ char *usb_get_header_type(int type)
     }
     return NULL;
 }
-
-#define USB_RXCMD_VBUS_STATE_SESSEND  0
-#define USB_RXCMD_VBUS_STATE_VBUS     1
-#define USB_RXCMD_VBUS_STATE_SESS_VLD 2
-#define USB_RXCMD_VBUS_STATE_VBUS_VLD 3
 
 struct usb_data_s {
 	uint8_t type;
@@ -73,7 +46,7 @@ struct usb_session_s {
 	uint8_t *buf;
 	uint32_t len;
 	uint64_t ts;
-	uint8_t last_ev_encoding;
+    uint8_t last_event;
 	struct usb_data_s data_list;
 	struct usb_data_s *last_data;
 	struct usb_data_s *last_data_decoded;
@@ -101,7 +74,8 @@ static void decode_data(struct usb_session_s *s)
 		case USB_HEADER_TYPE_NONE:
 			break;
 		case USB_HEADER_TYPE_EVENT:
-			//printf("%ld:\tEvent: %02x\n", d->ts, d->val);
+            printf("%ld:\tEvent: %02x\n", d->ts, d->val);
+            s->last_event = d->val;
 			break;
 		case USB_HEADER_TYPE_DATA:
 			*p++ = d->val;
@@ -250,6 +224,18 @@ void print_data(struct usb_session_s *s)
 	}
 }
 
+int usb_read_event(struct usb_session_s *s, uint8_t *event)
+{
+    int ret = 0;
+
+    if(s->last_event != USB_EVENT_NONE) {
+        *event = s->last_event;
+        s->last_event = USB_EVENT_NONE;
+        ret = 1;
+    }
+
+    return ret;
+}
 
 int usb_read_packet(struct usb_session_s *s, uint8_t *type, uint8_t *buf, uint32_t *len, uint64_t *ts)
 {

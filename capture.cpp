@@ -82,8 +82,11 @@ void CaptureThread::run()
     uint8_t type;
     uint8_t val;
     uint64_t ts;
+    uint8_t event;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
+    bool stop_sent = false;
+    bool stop_event = false;
     m_stoprequest = false;
 
     fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
@@ -97,6 +100,9 @@ void CaptureThread::run()
     /* configure sdram */
     sdram_configure();
 
+    /* flush fifo */
+    // XXX FIXME
+
     /* ulpi switch */
     ulpi_sw_oe_n_out_write(0);
     ulpi_sw_s_out_write(0);
@@ -104,14 +110,29 @@ void CaptureThread::run()
     /* ulpi init 0 */
     ulpi_init(fd);
 
+    /* reset timer */
+    itipacker0_time_reset_write(1);
+
+    /* event start */
+    itipacker0_ev_event_write(USB_EVENT_START);
+
     /* start capture */
     ulpi_enable(fd, 1);
 
     pktbuf = (char *)malloc(2048);
     sess = usb_new_session();
 
-    while(!m_stoprequest)
+    while(!stop_event)
     {
+        if (m_stoprequest && !stop_sent) {
+            /* stop capture */
+            ulpi_enable(fd, 0);
+            stop_sent = true;
+
+            /* event stop */
+            itipacker0_ev_event_write(USB_EVENT_STOP);
+        }
+
         if(ubar_recv_packet(fd, &buf, &len) == 1)
         {
             /*
@@ -130,14 +151,16 @@ void CaptureThread::run()
                 // printf("add packet\n");
                 m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
             }
+            while(usb_read_event(sess, &event)) {
+                if (event == USB_EVENT_STOP) {
+                    stop_event = true;
+                }
+            }
         }
         if (buf)
             free(buf);
     }
     m_model->lastPacket();
-
-    /* stop capture */
-    ulpi_enable(fd, 0);
 
     free(pktbuf);
     close(fd);
