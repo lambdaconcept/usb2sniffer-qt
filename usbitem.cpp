@@ -8,30 +8,51 @@ USBItem::USBItem(USBRecord *record, USBItem *parentItem)
 
 USBItem::~USBItem()
 {
+    m_mutex.lock();
     qDeleteAll(m_childItems);
+    m_mutex.unlock();
 }
 
 void USBItem::appendChild(USBItem *item)
 {
+    m_mutex.lock();
     m_childItems.append(item);
+    m_mutex.unlock();
 }
 
 USBItem *USBItem::child(int row)
 {
-    return m_childItems.value(row);
+    USBItem *tmp;
+
+    m_mutex.lock();
+    tmp = m_childItems.value(row);
+    m_mutex.unlock();
+
+    return tmp;
 }
 
-int USBItem::childCount() const
+int USBItem::childCount()
 {
-    return m_childItems.count();
+    int count;
+
+    m_mutex.lock();
+    count = m_childItems.count();
+    m_mutex.unlock();
+
+    return count;
 }
 
-int USBItem::row() const
+int USBItem::row()
 {
-    if (m_parentItem)
-        return m_parentItem->m_childItems.indexOf(const_cast<USBItem*>(this));
+    int idx = 0;
 
-    return 0;
+    if (m_parentItem) {
+        m_mutex.lock();
+        idx = m_parentItem->m_childItems.indexOf(const_cast<USBItem*>(this));
+        m_mutex.unlock();
+    }
+
+    return idx;
 }
 
 int USBItem::columnCount() const

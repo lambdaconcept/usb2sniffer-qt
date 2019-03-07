@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QBrush>
 #include <QFont>
+#include <QMutex>
 
 #include "usbrecord.h"
 
@@ -17,10 +18,10 @@ public:
 
     void appendChild(USBItem *child);
     USBItem *child(int row);
-    int childCount() const;
+    int childCount();
     int columnCount() const;
     QVariant headerData(int column) const;
-    int row() const;
+    int row();
     USBItem *parentItem();
 
     QVariant data(int column) const;
@@ -34,6 +35,7 @@ private:
     QList<USBItem*> m_childItems;
     USBItem *m_parentItem;
     USBRecord *m_record;
+    QMutex m_mutex;
 };
 
 #endif // USBITEM_H

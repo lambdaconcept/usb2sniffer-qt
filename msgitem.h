@@ -2,6 +2,7 @@
 #define MSGITEM_H
 
 #include <QList>
+#include <QMutex>
 
 /* Columns numbers */
 #define MSG_TS      0
@@ -17,10 +18,10 @@ public:
 
     void appendChild(MSGItem *child);
     MSGItem *child(int row);
-    int childCount() const;
+    int childCount();
     int columnCount() const;
     QVariant headerData(int column) const;
-    int row() const;
+    int row();
     MSGItem *parentItem();
 
     QVariant data(int column) const;
@@ -30,6 +31,7 @@ public:
 private:
     QList<MSGItem*> m_childItems;
     MSGItem *m_parentItem;
+    QMutex m_mutex;
 
     uint64_t m_ts;
     uint8_t m_type;
