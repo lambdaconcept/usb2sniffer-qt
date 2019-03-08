@@ -197,10 +197,10 @@ void usb_add_data(struct usb_session_s *s, uint8_t *buf, uint32_t buflen)
 		s->len = len;
 	} else {
 		s->len = 0;
-		s->buf = NULL;
 		if(s->buf){
 			free(s->buf);
 		}
+		s->buf = NULL;
 	}	
 
 	decode_data(s);
@@ -354,24 +354,38 @@ struct usb_session_s *usb_new_session()
 
 void usb_free_session(struct usb_session_s *s)
 {
-    struct usb_raw_s *raw;
-    struct usb_raw_s *p;
-	struct usb_data_s *data;
+    struct usb_raw_s *raw, *p_raw;
+	struct usb_packet_s *pkt, *p_pkt;
+	struct usb_data_s *data, *p_data;
 
     raw = s->raw_list.next;
     while (raw) {
-        p = raw;
-        free(p->buf);
-        raw = p->next;
-        if(p != &s->raw_list)
-            free(p);
+        p_raw = raw;
+        free(p_raw->buf);
+        raw = p_raw->next;
+        if(p_raw != &s->raw_list)
+            free(p_raw);
     }
 
-	// data = s->last_data_read->next;
-	// while(data){
-    // }
-    // XXX FIXME
+	pkt = s->packet_list.next;
+	while(pkt){
+        p_pkt = pkt;
+        free(p_pkt->buf);
+        pkt = p_pkt->next;
+        if(p_pkt != &s->packet_list)
+            free(p_pkt);
+    }
 
+	data = s->data_list.next;
+	while(data){
+        p_data = data;
+        data = p_data->next;
+        if(p_data != &s->data_list)
+            free(p_data);
+    }
+
+    if (s->buf)
+        free(s->buf);
     free(s);
 }
 
