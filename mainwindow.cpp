@@ -198,7 +198,7 @@ void MainWindow::exit()
 void MainWindow::saveFile()
 {
     QString file = QFileDialog::getSaveFileName(this,
-        "Save File", "", "*.bin");
+        "Save File", "", "*.usb");
 
     FILE *out;
 
@@ -222,13 +222,13 @@ void MainWindow::loadFile()
     size_t len;
     uint32_t plen;
     uint8_t buf[512];
+    uint8_t swp[512];
     uint8_t type;
     uint8_t val;
     uint64_t ts;
 
-    // QString file = QFileDialog::getOpenFileName(this,
-    //    "Open File", "", "*.bin");
-    QString file = "../stream.bin"; // FIXME
+    QString file = QFileDialog::getOpenFileName(this,
+        "Open File", "", "*.usb");
 
     in = fopen(file.toUtf8().constData(), "rb");
     if(!in) {
@@ -249,13 +249,16 @@ void MainWindow::loadFile()
         if(len < 0)
             return;
 
-        usb_add_data(usb_sess, buf, len);
+        /* file stored in byte swapped format */
+        usb_swap_bytes(swp, buf, len);
+
+        usb_add_data(usb_sess, swp, len);
 
         while(usb_read_data(usb_sess, &type, &val, &ts)){
             currentMsg->addMessage(ts, type, val);
         }
-        while(usb_read_packet(usb_sess, &type, buf, &plen, &ts)){
-            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)));
+        while(usb_read_packet(usb_sess, &type, swp, &plen, &ts)){
+            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)swp, plen)));
         }
     }
 

@@ -46,6 +46,7 @@ int usb_read_data(struct usb_session_s *s, uint8_t *type, uint8_t *val, uint64_t
 struct usb_session_s *usb_new_session();
 void usb_free_session(struct usb_session_s *s);
 int usb_write_session(struct usb_session_s *s, FILE *out);
+void usb_swap_bytes(uint8_t *dst, uint8_t *src, uint32_t len);
 
 char *usb_get_header_type(int type);
 

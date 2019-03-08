@@ -137,7 +137,7 @@ void usb_add_data(struct usb_session_s *s, uint8_t *buf, uint32_t buflen)
     s->last_raw->buf = malloc(buflen);
     memcpy(s->last_raw->buf, buf, buflen);
     s->last_raw->len = buflen;
-    printf("stored (%d) %p\n", s->last_raw->len, s->last_raw->buf);
+    // printf("stored (%d) %p\n", s->last_raw->len, s->last_raw->buf);
 	
 	if(!s->buf) {
 		s->buf = malloc(buflen);
@@ -297,17 +297,17 @@ int usb_read_data(struct usb_session_s *s, uint8_t *type, uint8_t *val, uint64_t
 	return  0;
 }
 
-void swap_bytes(uint8_t *buf, uint32_t len)
+void usb_swap_bytes(uint8_t *dst, uint8_t *src, uint32_t len)
 {
     int i;
-    uint8_t tmp;
 
-    /* swap bytes in place */
+    if(len % 2)
+        printf("warning: odd swap bytes len\n");
+
     for (i=0; i<len; i+=2)
     {
-        tmp = buf[0];
-        buf[0] = buf[1];
-        buf[1] = tmp;
+        dst[i] = src[i+1];
+        dst[i+1] = src[i];
     }
 }
 
@@ -315,13 +315,22 @@ int usb_write_session(struct usb_session_s *s, FILE *out)
 {
     int len = 0;
     struct usb_raw_s *raw;
+    uint8_t *swp;
 
     raw = s->raw_list.next;
     while (raw) {
-        printf("write (%d) %p\n", raw->len, raw->buf);
-        fwrite(raw->buf, 1, raw->len, out);
+        // printf("write (%d) %p\n", raw->len, raw->buf);
+
+        /* file stored in byte swapped format */
+
+        swp = malloc(raw->len);
+        usb_swap_bytes(swp, raw->buf, raw->len);
+
+        fwrite(swp, 1, raw->len, out);
         len += raw->len;
         raw = raw->next;
+
+        free(swp);
     }
 
     return len;
@@ -374,17 +383,20 @@ int main()
 	size_t len;
 	uint32_t plen;
 	uint8_t buf[MAX_CHUNK_SIZE];
+	uint8_t swp[MAX_CHUNK_SIZE];
 	uint8_t type;
 	uint8_t val;
 	uint64_t ts;
 	
 	sess = usb_new_session();
 	
-	in = fopen("../../toto.bin", "rb");
+	in = fopen("../../sniff-keyboard.usb", "rb");
 	while(!feof(in)){
-		len = fread(buf, 1, MAX_CHUNK_SIZE, in);
+		len = fread(swp, 1, MAX_CHUNK_SIZE, in);
 		if(len < 0)
 			exit(0);
+
+        usb_swap_bytes(buf, swp, len);
 
 		usb_add_data(sess, buf, len);
 
