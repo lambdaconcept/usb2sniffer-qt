@@ -27,6 +27,12 @@ char *usb_get_header_type(int type)
     return NULL;
 }
 
+struct usb_raw_s {
+	uint8_t *buf;
+	uint32_t len;
+	struct usb_raw_s *next;
+};
+
 struct usb_data_s {
 	uint8_t type;
 	uint8_t val;
@@ -54,6 +60,8 @@ struct usb_session_s {
 	struct usb_packet_s packet_list;
 	struct usb_packet_s *last_packet;
 	struct usb_packet_s *last_packet_read;
+    struct usb_raw_s raw_list;
+    struct usb_raw_s *last_raw;
 };
 
 static void decode_data(struct usb_session_s *s)
@@ -74,7 +82,7 @@ static void decode_data(struct usb_session_s *s)
 		case USB_HEADER_TYPE_NONE:
 			break;
 		case USB_HEADER_TYPE_EVENT:
-            printf("%ld:\tEvent: %02x\n", d->ts, d->val);
+            // printf("%ld:\tEvent: %02x\n", d->ts, d->val);
             s->last_event = d->val;
 			break;
 		case USB_HEADER_TYPE_DATA:
@@ -121,6 +129,15 @@ void usb_add_data(struct usb_session_s *s, uint8_t *buf, uint32_t buflen)
 	if(!buflen) {
 		return;
 	}
+
+    /* keep raw buffers for file save */
+    s->last_raw->next = malloc(sizeof(struct usb_raw_s));
+    s->last_raw = s->last_raw->next;
+    memset(s->last_raw, 0, sizeof(struct usb_raw_s));
+    s->last_raw->buf = malloc(buflen);
+    memcpy(s->last_raw->buf, buf, buflen);
+    s->last_raw->len = buflen;
+    printf("stored (%d) %p\n", s->last_raw->len, s->last_raw->buf);
 	
 	if(!s->buf) {
 		s->buf = malloc(buflen);
@@ -280,6 +297,35 @@ int usb_read_data(struct usb_session_s *s, uint8_t *type, uint8_t *val, uint64_t
 	return  0;
 }
 
+void swap_bytes(uint8_t *buf, uint32_t len)
+{
+    int i;
+    uint8_t tmp;
+
+    /* swap bytes in place */
+    for (i=0; i<len; i+=2)
+    {
+        tmp = buf[0];
+        buf[0] = buf[1];
+        buf[1] = tmp;
+    }
+}
+
+int usb_write_session(struct usb_session_s *s, FILE *out)
+{
+    int len = 0;
+    struct usb_raw_s *raw;
+
+    raw = s->raw_list.next;
+    while (raw) {
+        printf("write (%d) %p\n", raw->len, raw->buf);
+        fwrite(raw->buf, 1, raw->len, out);
+        len += raw->len;
+        raw = raw->next;
+    }
+
+    return len;
+}
 
 struct usb_session_s *usb_new_session()
 {
@@ -292,15 +338,39 @@ struct usb_session_s *usb_new_session()
 	sess->last_data_read = &sess->data_list;
 	sess->last_packet = &sess->packet_list;
 	sess->last_packet_read = &sess->packet_list;
+    sess->last_raw = &sess->raw_list;
 
 	return sess;
+}
+
+void usb_free_session(struct usb_session_s *s)
+{
+    struct usb_raw_s *raw;
+    struct usb_raw_s *p;
+	struct usb_data_s *data;
+
+    raw = s->raw_list.next;
+    while (raw) {
+        p = raw;
+        free(p->buf);
+        raw = p->next;
+        if(p != &s->raw_list)
+            free(p);
+    }
+
+	// data = s->last_data_read->next;
+	// while(data){
+    // }
+    // XXX FIXME
+
+    free(s);
 }
 
 /*
 int main()
 {
 	struct usb_session_s *sess;
-	FILE *in;
+	FILE *in, *out;
 	size_t len;
 	uint32_t plen;
 	uint8_t buf[MAX_CHUNK_SIZE];
@@ -310,7 +380,7 @@ int main()
 	
 	sess = usb_new_session();
 	
-	in = fopen("stream.bin", "rb");
+	in = fopen("../../toto.bin", "rb");
 	while(!feof(in)){
 		len = fread(buf, 1, MAX_CHUNK_SIZE, in);
 		if(len < 0)
@@ -327,5 +397,10 @@ int main()
 			
 		}
 	}
+
+	out = fopen("out.bin", "wb");
+    usb_write_session(sess, out);
+
+    usb_free_session(sess);
 }
 */

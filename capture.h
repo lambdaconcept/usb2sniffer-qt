@@ -6,6 +6,16 @@
 #include "usbmodel.h"
 #include "msgmodel.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "parser/parse.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 namespace CaptureMask {
 enum CaptureMask {
     RESERVED = 0x0001,
@@ -44,12 +54,15 @@ class CaptureThread : public QThread
 public:
     void setConfig(CaptureConfig* config);
     void setModel(USBModel *model, MSGModel *msg);
+    void setUsbSession(struct usb_session_s *sess);
     void stop();
 
 private:
     CaptureConfig *m_config;
     USBModel *m_model;
     MSGModel *m_msg;
+
+    struct usb_session_s *m_sess;
 
     bool m_stoprequest;
 };

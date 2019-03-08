@@ -17,6 +17,16 @@
 #include "msgmodel.h"
 #include "msgitem.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "parser/parse.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 namespace Ui {
 class MainWindow;
 }
@@ -30,7 +40,6 @@ public:
     ~MainWindow();
 
     void loadFile();
-     void loadFile2();
     void saveFile();
     void exit();
 
@@ -56,6 +65,8 @@ private:
 
     CaptureThread *captureThread = nullptr;
     bool fileSaved = true; /* Used for warning on exit */
+
+    struct usb_session_s *usb_sess = nullptr;
 };
 
 #endif // MAINWINDOW_H

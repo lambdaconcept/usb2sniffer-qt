@@ -17,7 +17,6 @@ extern "C" {
 #include "xbar/csr.h"
 #include "xbar/sdram_phy.h"
 #include "xbar/xbar.h"
-#include "parser/parse.h"
 
 extern int gfd;
 
@@ -34,6 +33,11 @@ void CaptureThread::setModel(USBModel *model, MSGModel *msg)
 {
     m_model = model;
     m_msg = msg;
+}
+
+void CaptureThread::setUsbSession(struct usb_session_s *sess)
+{
+    m_sess = sess;
 }
 
 void CaptureThread::stop()
@@ -74,7 +78,6 @@ void CaptureThread::run()
 void CaptureThread::run()
 {
     int fd;
-    struct usb_session_s *sess;
     char *buf;
     char *pktbuf;
     size_t len;
@@ -120,7 +123,6 @@ void CaptureThread::run()
     ulpi_enable(fd, 1);
 
     pktbuf = (char *)malloc(2048);
-    sess = usb_new_session();
 
     while(!stop_event)
     {
@@ -142,16 +144,16 @@ void CaptureThread::run()
             }
             printf("\n");
             */
-            usb_add_data(sess, (uint8_t*)buf, len);
-            while(usb_read_data(sess, &type, &val, &ts)){
+            usb_add_data(m_sess, (uint8_t*)buf, len);
+            while(usb_read_data(m_sess, &type, &val, &ts)){
                 // printf("add message\n");
                 m_msg->addMessage(ts, type, val);
             }
-            while(usb_read_packet(sess, &type, (uint8_t*)pktbuf, &plen, &ts)){
+            while(usb_read_packet(m_sess, &type, (uint8_t*)pktbuf, &plen, &ts)){
                 // printf("add packet\n");
                 m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
             }
-            while(usb_read_event(sess, &event)) {
+            while(usb_read_event(m_sess, &event)) {
                 if (event == USB_EVENT_STOP) {
                     stop_event = true;
                 }

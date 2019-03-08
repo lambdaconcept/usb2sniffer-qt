@@ -6,16 +6,6 @@
 
 #include <unistd.h> // FIXME
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "parser/parse.h"
-
-#ifdef __cplusplus
-}
-#endif
-
 USBItem* createSampleData()
 {
     USBItem *rootItem = new USBItem(new USBPacket(0, QByteArray()));
@@ -120,8 +110,14 @@ void MainWindow::newSession()
 
 void MainWindow::captureFinished()
 {
+    /* enable / disable action buttons */
+
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
+
+    ui->actionOpen->setEnabled(true);
+    ui->actionSave_As->setEnabled(true);
+    ui->actionConfigure->setEnabled(true);
 
     captureThread->deleteLater();
     captureThread = nullptr;
@@ -131,10 +127,20 @@ void MainWindow::startCapture()
 {
     if (captureThread == nullptr) {
 
+        /* free old and create new session */
+
+        if (usb_sess) {
+            usb_free_session(usb_sess);
+            usb_sess = nullptr;
+        }
+        usb_sess = usb_new_session();
         newSession();
+
+        /* run capture in a separate thread */
 
         captureThread = new CaptureThread();
         captureThread->setModel(currentModel, currentMsg);
+        captureThread->setUsbSession(usb_sess);
 
         connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
 
@@ -142,10 +148,15 @@ void MainWindow::startCapture()
         captureThread->setConfig(&configWindow->m_config);
         captureThread->start();
 
+        /* enable / disable action buttons */
+
         ui->actionStart->setEnabled(false);
         ui->actionStop->setEnabled(true);
 
         fileSaved = false;
+        ui->actionOpen->setEnabled(false);
+        ui->actionSave_As->setEnabled(false);
+        ui->actionConfigure->setEnabled(false);
     }
 }
 
@@ -190,34 +201,16 @@ void MainWindow::saveFile()
         "Save File", "", "*.bin");
 
     FILE *out;
-    unsigned int len;
-    char *buf;
-    unsigned long long int timestamp;
 
     out = fopen(file.toUtf8().constData(), "wb");
     if(!out) {
         return;
     }
 
-    buf = static_cast<char *>(malloc(1024 + 12));
-/*
-    USBPacket *packet;
-    for (int i = 0; i < currentAggregator->count(); ++i) {
-        packet = currentAggregator->value(i);
-
-        len = packet->m_Packet.count();
-        timestamp = packet->m_Timestamp;
-
-        memcpy(buf, &len, sizeof(int));
-        memcpy(buf + sizeof(int), &timestamp, 8);
-        memcpy(buf + 12, packet->m_Packet.data(), len);
-
-        len = (((len + 12) - 1) & 0xfffffffc) + 4; // align to next dword
-        fwrite(&len, 1, sizeof(int), out);
-        fwrite(buf, 1, len, out);
+    if (usb_sess) {
+        usb_write_session(usb_sess, out);
     }
-*/
-    free(buf);
+
     fclose(out);
 
     fileSaved = true;
@@ -225,7 +218,6 @@ void MainWindow::saveFile()
 
 void MainWindow::loadFile()
 {
-    struct usb_session_s *sess;
     FILE *in;
     size_t len;
     uint32_t plen;
@@ -234,22 +226,35 @@ void MainWindow::loadFile()
     uint8_t val;
     uint64_t ts;
 
-    sess = usb_new_session();
+    // QString file = QFileDialog::getOpenFileName(this,
+    //    "Open File", "", "*.bin");
+    QString file = "../stream.bin"; // FIXME
 
+    in = fopen(file.toUtf8().constData(), "rb");
+    if(!in) {
+        return;
+    }
+
+    /* free old and create new session */
+
+    if (usb_sess) {
+        usb_free_session(usb_sess);
+        usb_sess = nullptr;
+    }
+    usb_sess = usb_new_session();
     newSession();
 
-    in = fopen("../stream.bin", "rb");
     while(!feof(in)){
         len = fread(buf, 1, 512, in);
         if(len < 0)
             return;
 
-        usb_add_data(sess, buf, len);
+        usb_add_data(usb_sess, buf, len);
 
-        while(usb_read_data(sess, &type, &val, &ts)){
+        while(usb_read_data(usb_sess, &type, &val, &ts)){
             currentMsg->addMessage(ts, type, val);
         }
-        while(usb_read_packet(sess, &type, buf, &plen, &ts)){
+        while(usb_read_packet(usb_sess, &type, buf, &plen, &ts)){
             currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)));
         }
     }
@@ -257,56 +262,8 @@ void MainWindow::loadFile()
     currentModel->lastPacket();
     fclose(in);
 
-    // handleRecords(aggregator, rootItem);
-}
-
-void MainWindow::loadFile2()
-{
-    // QString file = QFileDialog::getOpenFileName(this,
-    //    "Open File", "", "*.bin");
-    QString file = "../output.bin"; // FIXME
-
-    FILE *in;
-    int len;
-    size_t size;
-    char *buf;
-    char *data;
-    unsigned long long int timestamp;
-
-    in = fopen(file.toUtf8().constData(), "rb");
-    if(!in) {
-        return;
-    }
-
-    /* Read file and push packets in aggregator */
-
-    USBAggregator *aggregator = new USBAggregator();
-
-    while(!feof(in)){
-        size = fread(&len, 1, sizeof(int), in);
-        if (size < sizeof(int))
-            break;
-        buf = static_cast<char *>(malloc(len));
-        size = fread(buf, 1, len, in);
-        if (size < len) {
-            free(buf);
-            break;
-        }
-
-        memcpy(&len, buf, sizeof(int));
-        memcpy(&timestamp, buf + sizeof(int), 8);
-        data = buf + 12;
-
-        aggregator->append(new USBPacket(timestamp, QByteArray(data, len)));  // FIXME ?
-
-        free(buf);
-    }
-    aggregator->done();
-    fclose(in);
-
-    // handleRecords(aggregator);
-
     fileSaved = true;
+    // ui->actionSave_As->setEnabled(false);
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)

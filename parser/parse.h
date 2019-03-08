@@ -1,6 +1,7 @@
 #ifndef __PARSE_H
 #define __PARSE_H
 
+#include <stdio.h>
 #include <stdint.h>
 
 #define MAX_CHUNK_SIZE  512
@@ -43,6 +44,8 @@ int usb_read_event(struct usb_session_s *s, uint8_t *event);
 int usb_read_packet(struct usb_session_s *s, uint8_t *type, uint8_t *buf, uint32_t *len, uint64_t *ts);
 int usb_read_data(struct usb_session_s *s, uint8_t *type, uint8_t *val, uint64_t *ts);
 struct usb_session_s *usb_new_session();
+void usb_free_session(struct usb_session_s *s);
+int usb_write_session(struct usb_session_s *s, FILE *out);
 
 char *usb_get_header_type(int type);
 
