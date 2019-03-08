@@ -266,7 +266,7 @@ void MainWindow::loadFile()
     fclose(in);
 
     fileSaved = true;
-    // ui->actionSave_As->setEnabled(false);
+    ui->actionSave_As->setEnabled(false);
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)

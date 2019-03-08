@@ -153,6 +153,11 @@ void USBAggregator::append(USBPacket* packet)
         endTransaction();
         _token = packet;
         endTransaction();
+    } else if (pid == PID_PING) {
+        /* Consider Ping as Special Token */
+        endTransaction();
+        _token = packet;
+        _state = TRANS_TOKEN;
     } else if (pid == PID_SOF) {
         /* Catch SOF, nothing to do really */
     } else {
