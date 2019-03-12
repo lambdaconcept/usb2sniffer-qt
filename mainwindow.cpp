@@ -99,6 +99,8 @@ void MainWindow::newSession()
     MSGModel *msgModel = new MSGModel();
     ui->messageView->setModel(msgModel);
     ui->messageView->setColumnWidth(0, 150);
+    ui->messageView->setColumnWidth(1, 60);
+    ui->messageView->setColumnWidth(2, 60);
 
     /* Delete previous data */
 

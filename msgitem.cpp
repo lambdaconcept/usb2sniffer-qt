@@ -11,6 +11,51 @@ extern "C" {
 }
 #endif
 
+static const QVector<QString> strId = {
+    "A",
+    "B",
+};
+
+static const QVector<QString> strEvent = {
+    "Inactive",
+    "Active",
+    "Disconnect",
+    "Error",
+};
+
+static const QVector<QString> strVbus = {
+    "SessEnd",
+    "",
+    "SessValid",
+    "VbusValid",
+};
+
+static const QVector<QString> strLine = {
+    "",
+    "Data0(DP)",
+    "Data1(DM)",
+    "Data0(DP), Data1(DM)"
+};
+
+QString decodeRxCmd(uint8_t val)
+{
+    uint8_t id;
+    uint8_t event;
+    uint8_t vbus;
+    uint8_t line;
+
+    id = (val & 0x40) >> 6;
+    event = (val & 0x30) >> 4;
+    vbus = (val & 0xc) >> 2;
+    line = (val & 0x3);
+
+    return QString("%1, %2, %3, %4")
+            .arg(strId.value(id))
+            .arg(strEvent.value(event))
+            .arg(strVbus.value(vbus))
+            .arg(strLine.value(line));
+}
+
 const QVector<QString> MSGItem::s_header = {
     "Timestamp",
     "Type",
@@ -108,7 +153,10 @@ QVariant MSGItem::data(int column) const
         case MSG_VALUE:
             return QString("%1").arg(m_val, 2, 16, QChar('0'));
         case MSG_DETAILS:
-            return ""; // XXX to be implemented
+            if (m_type == USB_HEADER_TYPE_RXCMD)
+                return decodeRxCmd(m_val);
+            else
+                return QString("");
         default:
             return QVariant();
     }
