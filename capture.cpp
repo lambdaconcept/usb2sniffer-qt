@@ -133,6 +133,7 @@ void CaptureThread::run()
 
             /* event stop */
             itipacker0_ev_event_write(USB_EVENT_STOP);
+            itipacker0_ev_event_write(USB_EVENT_STOP);
         }
 
         if(ubar_recv_packet(fd, &buf, &len) == 1)
