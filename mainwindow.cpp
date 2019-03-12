@@ -61,6 +61,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete currentProxy;
+    delete currentModel;
+    delete currentMsg;
+
     delete configWindow;
     delete ui;
 }
