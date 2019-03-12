@@ -37,12 +37,25 @@ enum CaptureMask {
     };
 }
 
+namespace CaptureSpeed {
+/* From ULPI XcvrSelect specification:
+00b: Enables HS transceiver
+01b: Enables FS transceiver
+10b: Enables LS transceiver
+11b: Enables FS transceiver for LS packets
+*/
+enum CaptureSpeed {
+    HS = 0,
+    FS = 1,
+    LS = 2,
+    };
+}
+
 class CaptureConfig
 {
 public:
     QString device;
-    int32_t rx_cmd = 0;
-    int32_t pid_mask = 0;
+    int speed = 0;
 };
 
 class CaptureThread : public QThread

@@ -8,6 +8,13 @@ ConfigureWindow::ConfigureWindow(QWidget *parent) :
     ui(new Ui::ConfigureWindow)
 {
     ui->setupUi(this);
+
+    ui->comboSpeed->clear();
+    ui->comboSpeed->addItem("HS (High Speed)", CaptureSpeed::HS);
+    ui->comboSpeed->addItem("FS (Full Speed)", CaptureSpeed::FS);
+    ui->comboSpeed->addItem("LS (Low Speed)", CaptureSpeed::LS);
+
+    m_config.speed = CaptureSpeed::FS;
 }
 
 ConfigureWindow::~ConfigureWindow()
@@ -28,7 +35,8 @@ QStringList ConfigureWindow::listAvailableDevices()
 
 void ConfigureWindow::open()
 {
-    QString current = ui->comboDevice->currentText();
+    int index;
+    QString current = m_config.device;
 
     /* Refresh devices list */
 
@@ -42,6 +50,9 @@ void ConfigureWindow::open()
         ui->comboDevice->setCurrentText(current);
     }
 
+    index = ui->comboSpeed->findData(m_config.speed);
+    ui->comboSpeed->setCurrentIndex(index);
+
     QDialog::open();
 }
 
@@ -50,6 +61,7 @@ void ConfigureWindow::accept()
     /* Update configuration object based on user input */
 
     m_config.device = ui->comboDevice->currentText();
+    m_config.speed = ui->comboSpeed->currentData().toInt();
 
     QDialog::accept();
 }

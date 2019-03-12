@@ -110,8 +110,8 @@ void CaptureThread::run()
     ulpi_sw_oe_n_out_write(0);
     ulpi_sw_s_out_write(0);
 
-    /* ulpi init 0 */
-    ulpi_init(fd);
+    /* ulpi init */
+    ulpi_init(fd, m_config->speed);
 
     /* reset timer */
     itipacker0_time_reset_write(1);
