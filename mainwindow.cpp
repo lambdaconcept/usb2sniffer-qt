@@ -251,20 +251,20 @@ void MainWindow::loadFile()
     newSession();
 
     while(!feof(in)){
-        len = fread(buf, 1, 512, in);
+        len = fread(swp, 1, 512, in);
         if(len < 0)
             return;
 
         /* file stored in byte swapped format */
-        usb_swap_bytes(swp, buf, len);
+        usb_swap_bytes(buf, swp, len);
 
-        usb_add_data(usb_sess, swp, len);
+        usb_add_data(usb_sess, buf, len);
 
         while(usb_read_data(usb_sess, &type, &val, &ts)){
             currentMsg->addMessage(ts, type, val);
         }
-        while(usb_read_packet(usb_sess, &type, swp, &plen, &ts)){
-            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)swp, plen)));
+        while(usb_read_packet(usb_sess, &type, buf, &plen, &ts)){
+            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)));
         }
     }
 
