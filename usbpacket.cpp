@@ -63,7 +63,16 @@ void USBPacket::decode()
     unsigned char pid;
     unsigned char pid_type;
 
+    len = m_Packet.count();
+    if (len <= 0) {
+        printf("Bad packet len\n");
+        m_Err = 1; // FIXME
+        return;
+    }
+
+    /* Check PID symmetry */
     if((m_Packet[0] & 0xf) != (~(m_Packet[0] >> 4) & 0xf) ){
+        printf("Bad PID\n");
         m_Err = 1; // FIXME
         return;
     }
@@ -84,6 +93,11 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_TOKEN:
+            if (len < 3) {
+                printf("Bad TOKEN len\n");
+                m_Err = 1; // FIXME
+                return;
+            }
             m_CRC = ((m_Packet[2] & 0xff) >> 3) & 0x1f;
             switch(pid){
                 case PID_OUT:
@@ -109,8 +123,12 @@ void USBPacket::decode()
             break;
 
         case PID_TYPE_DATA:
-            len = m_Packet.count();
             data = m_Packet.data() + 1;
+            if (len < 3) {
+                printf("Bad DATA len\n");
+                m_Err = 1; // FIXME
+                return;
+            }
             m_Data.setRawData(data, len-3);
             m_CRC = (m_Packet[len-2] & 0xff) | ((m_Packet[len-1] & 0xff) << 8);
             switch(pid){

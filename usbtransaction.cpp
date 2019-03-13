@@ -31,7 +31,7 @@ QVariant USBTransaction::data(int column) const
         case RECORD_LENGTH:
             return m_data ? m_data->m_Data.count() : 0;
         case RECORD_SUMMARY:
-            return m_data ? m_data->m_Data.toHex(' ') : "";
+            return m_data ? m_data->m_Data.toHex(' ') : QString("");
         default:
             return QVariant();
     }
