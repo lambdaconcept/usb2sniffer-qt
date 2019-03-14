@@ -86,6 +86,7 @@ void CaptureThread::run()
     uint8_t val;
     uint64_t ts;
     uint8_t event;
+    uint32_t drop_count;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
     bool stop_sent = false;
@@ -120,6 +121,7 @@ void CaptureThread::run()
     itipacker0_ev_event_write(USB_EVENT_START);
 
     /* start capture */
+    overflow0_reset_write(1);
     ulpi_enable(fd, 1);
 
     pktbuf = (char *)malloc(2048);
@@ -130,6 +132,9 @@ void CaptureThread::run()
             /* stop capture */
             ulpi_enable(fd, 0);
             stop_sent = true;
+
+            drop_count = overflow0_count_read();
+            printf("Stopped: packet dropped count (ulpi): %d\n", drop_count);
 
             /* event stop */
             itipacker0_ev_event_write(USB_EVENT_STOP);

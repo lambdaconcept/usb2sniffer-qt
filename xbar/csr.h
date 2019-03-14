@@ -197,6 +197,24 @@ static inline void itipacker0_ev_event_write(unsigned int value) {
 	csr_writel(value, 0xe000a004);
 }
 
+/* overflow0 */
+#define CSR_OVERFLOW0_BASE 0xe0008000
+#define CSR_OVERFLOW0_RESET_ADDR 0xe0008000
+#define CSR_OVERFLOW0_RESET_SIZE 1
+static inline unsigned int overflow0_reset_read(void) {
+	unsigned int r = csr_readl(0xe0008000);
+	return r;
+}
+static inline void overflow0_reset_write(unsigned int value) {
+	csr_writel(value, 0xe0008000);
+}
+#define CSR_OVERFLOW0_COUNT_ADDR 0xe0008004
+#define CSR_OVERFLOW0_COUNT_SIZE 1
+static inline unsigned int overflow0_count_read(void) {
+	unsigned int r = csr_readl(0xe0008004);
+	return r;
+}
+
 /* sdram */
 #define CSR_SDRAM_BASE 0xe0004000
 #define CSR_SDRAM_DFII_CONTROL_ADDR 0xe0004000

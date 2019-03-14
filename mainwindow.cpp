@@ -81,6 +81,7 @@ void MainWindow::newSession()
     /* Put data into model */
 
     USBModel *usbModel = new USBModel();
+    updateRecordsStats(0);
     connect(usbModel, &USBModel::numberPopulated, this, &MainWindow::updateRecordsStats);
 
     /* Create proxy view for filtering */
