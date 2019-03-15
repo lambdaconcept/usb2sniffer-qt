@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdint.h>
+
+#include "ft60x/fops.h"
 #include "etherbone.h"
 #define CSR_ACCESSORS_DEFINED 1
 #include "csr.h"
@@ -16,14 +18,14 @@ struct xbar_s {
 }__attribute__((packed));
 
 
-int gfd;
+ftdev_t gfd;
 
 void cdelay(int val)
 {
   usleep(val);
 }
 
-int ubar_send_packet(int fd, char *buf, size_t len, int streamid)
+int ubar_send_packet(ftdev_t fd, char *buf, size_t len, int streamid)
 {
   char *tosend;
   uint32_t *val;
@@ -40,20 +42,20 @@ int ubar_send_packet(int fd, char *buf, size_t len, int streamid)
     printf("%02x ", (unsigned char)tosend[i]);
   }
   printf("\n"); */
-  write(fd, tosend, len+12);
+  ft60x_write(fd, tosend, len+12);
   free(tosend);
   return 0;
 
 }
 
-size_t readft(int fd, void *buf, size_t len)
+size_t readft(ftdev_t fd, void *buf, size_t len)
 {
   size_t toread=len;
   char *pnt=(char*)buf;
   size_t rdl;
 
   while(toread){
-    rdl = read(fd, pnt, toread);
+    rdl = ft60x_read(fd, pnt, toread);
     if (rdl < 0)
         exit(0);
     if(rdl > toread)
@@ -70,20 +72,18 @@ size_t readft(int fd, void *buf, size_t len)
   return len;
 }
 
-int ubar_recv_packet(int fd, char **buf, size_t *len)
+int ubar_recv_packet(ftdev_t fd, char **buf, size_t *len)
 {
   struct xbar_s xbar;
+  int i;
   char *tmp;
-  unsigned char header[4];
+  int rdl;
+  uint32_t header;
 
-  memset(header,0, 4);
-  do{
-    header[3] = header[2];
-    header[2] = header[1];
-    header[1] = header[0];
-    readft(fd, header, 1);
-    //printf("header %02x %02x %02x %02x\n", header[0], header[1], header[2], header[3] );
-  }while(memcmp(header, "\x5a\xa5\x5a\xa5", 4));
+  do {
+      readft(fd, &header, 4);
+      // printf("magic header: %08x\n", header);
+  } while(header != 0x5aa55aa5);
   xbar.magic = 0x5aa55aa5;
   readft(fd, (unsigned char*)&xbar + 4, 8);
   // printf("XBAR: %08x %08x %08x\n", xbar.magic, (unsigned)xbar.streamid, (unsigned )xbar.len);
@@ -100,7 +100,7 @@ int ubar_recv_packet(int fd, char **buf, size_t *len)
   return xbar.streamid;
 }
 
-uint32_t  eb_read_reg32(int fd, uint32_t addr)
+uint32_t  eb_read_reg32(ftdev_t fd, uint32_t addr)
 {
   char *buf;
   size_t len;
@@ -128,7 +128,7 @@ uint32_t  eb_read_reg32(int fd, uint32_t addr)
   return ret;
 }
 
-void  eb_write_reg32(int fd, uint32_t addr, uint32_t val)
+void  eb_write_reg32(ftdev_t fd, uint32_t addr, uint32_t val)
 {
   char *buf;
   size_t len;
@@ -152,7 +152,7 @@ uint32_t csr_readl(uint32_t addr)
   return eb_read_reg32(gfd, addr);
 }
 
-uint8_t ulpi_read_reg(int fd, uint8_t addr)
+uint8_t ulpi_read_reg(ftdev_t fd, uint8_t addr)
 {
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_ADR_ADDR, addr);
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_READ_ADDR, 1);
@@ -160,7 +160,7 @@ uint8_t ulpi_read_reg(int fd, uint8_t addr)
   return eb_read_reg32(fd, CSR_ULPI_CORE0_REG_DAT_R_ADDR);
 }
 
-uint8_t ulpi_write_reg(int fd, uint8_t addr, uint8_t val)
+uint8_t ulpi_write_reg(ftdev_t fd, uint8_t addr, uint8_t val)
 {
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_ADR_ADDR, addr);
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_DAT_W_ADDR, val);
@@ -169,17 +169,17 @@ uint8_t ulpi_write_reg(int fd, uint8_t addr, uint8_t val)
 
 }
 
-void ulpi_reset(int fd, uint32_t val)
+void ulpi_reset(ftdev_t fd, uint32_t val)
 {
   eb_write_reg32(fd, CSR_ULPI_PHY0_ULPI_PHY_RESET_ADDR, val);
 }
 
-void ulpi_enable(int fd, uint32_t val)
+void ulpi_enable(ftdev_t fd, uint32_t val)
 {
   eb_write_reg32(fd, CSR_ULPI_CORE0_ENABLE_SOURCE_ADDR, val);
 }
 
-void ulpi_dump(int fd)
+void ulpi_dump(ftdev_t fd)
 {
   int i;
   printf("Registers:");
@@ -188,7 +188,7 @@ void ulpi_dump(int fd)
   printf("\n");
 }
 
-void ulpi_init(int fd, int speed)
+void ulpi_init(ftdev_t fd, int speed)
 {
   ulpi_reset(fd, 1);
   usleep(100000);

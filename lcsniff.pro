@@ -43,7 +43,8 @@ SOURCES += \
     filterwindow.cpp \
     msgitem.cpp \
     msgmodel.cpp \
-    parser/parse.c
+    parser/parse.c \
+    xbar/ft60x/fops.c
 
 HEADERS += \
         mainwindow.h \
@@ -66,7 +67,8 @@ HEADERS += \
     filterwindow.h \
     msgitem.h \
     msgmodel.h \
-    parser/parse.h
+    parser/parse.h \
+    xbar/ft60x/fops.h
 
 FORMS += \
         mainwindow.ui \
@@ -80,3 +82,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+win32: LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/Win32/ -lFTD3XX
+
+INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
+DEPENDPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.lib

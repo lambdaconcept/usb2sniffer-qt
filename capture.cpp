@@ -18,7 +18,7 @@ extern "C" {
 #include "xbar/sdram_phy.h"
 #include "xbar/xbar.h"
 
-extern int gfd;
+extern ftdev_t gfd;
 
 #ifdef __cplusplus
 }
@@ -77,7 +77,8 @@ void CaptureThread::run()
 
 void CaptureThread::run()
 {
-    int fd;
+    ftdev_t fd;
+    int ret;
     char *buf;
     char *pktbuf;
     size_t len;
@@ -87,19 +88,18 @@ void CaptureThread::run()
     uint64_t ts;
     uint8_t event;
     uint32_t drop_count;
-    mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
     bool stop_sent = false;
     bool stop_event = false;
     m_stoprequest = false;
 
-    fd = open(m_config->device.toUtf8().constData(), O_RDWR, mode);
-    if (fd < 0) {
+    ret = ft60x_open(&fd, m_config->device.toUtf8().constData());
+    if (ret < 0) {
         QMessageBox::warning(nullptr, "Error", "Capture device not found");
 
         return;
     }
-    gfd = fd;
+    memcpy(&gfd, &fd, sizeof(ftdev_t));
 
     /* configure sdram */
     sdram_configure();
@@ -171,5 +171,5 @@ void CaptureThread::run()
     m_model->lastPacket();
 
     free(pktbuf);
-    close(fd);
+    ft60x_close(fd);
 }
