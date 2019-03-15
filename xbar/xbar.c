@@ -17,7 +17,6 @@ struct xbar_s {
   uint32_t len;
 }__attribute__((packed));
 
-
 ftdev_t gfd;
 
 void cdelay(int val)
@@ -29,11 +28,10 @@ int ubar_send_packet(ftdev_t fd, char *buf, size_t len, int streamid)
 {
   char *tosend;
   uint32_t *val;
-  int i;
 
   tosend = malloc(len + 12);
   val = (uint32_t*)tosend;
-  *(val++) = 0x5aa55aa5;// 0xa55aa55a;
+  *(val++) = 0x5aa55aa5;
   *(val++) =  streamid;
   *(val++) = len;
   memcpy(tosend+12, buf, len);
@@ -45,14 +43,13 @@ int ubar_send_packet(ftdev_t fd, char *buf, size_t len, int streamid)
   ft60x_write(fd, tosend, len+12);
   free(tosend);
   return 0;
-
 }
 
 size_t readft(ftdev_t fd, void *buf, size_t len)
 {
   size_t toread=len;
   char *pnt=(char*)buf;
-  size_t rdl;
+  ssize_t rdl;
 
   while(toread){
     rdl = ft60x_read(fd, pnt, toread);
@@ -75,9 +72,7 @@ size_t readft(ftdev_t fd, void *buf, size_t len)
 int ubar_recv_packet(ftdev_t fd, char **buf, size_t *len)
 {
   struct xbar_s xbar;
-  int i;
   char *tmp;
-  int rdl;
   uint32_t header;
 
   do {
@@ -132,15 +127,11 @@ void  eb_write_reg32(ftdev_t fd, uint32_t addr, uint32_t val)
 {
   char *buf;
   size_t len;
-  uint32_t *data;
-  size_t dlen;
-  uint32_t ret;
 
   eb_make_write_pkt(addr, &val, 1, &buf, &len);
   ubar_send_packet(fd, buf, len, 0);
   free(buf);
 }
-
 
 void csr_writel(uint32_t value, uint32_t addr)
 {
@@ -160,13 +151,12 @@ uint8_t ulpi_read_reg(ftdev_t fd, uint8_t addr)
   return eb_read_reg32(fd, CSR_ULPI_CORE0_REG_DAT_R_ADDR);
 }
 
-uint8_t ulpi_write_reg(ftdev_t fd, uint8_t addr, uint8_t val)
+void ulpi_write_reg(ftdev_t fd, uint8_t addr, uint8_t val)
 {
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_ADR_ADDR, addr);
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_DAT_W_ADDR, val);
   eb_write_reg32(fd, CSR_ULPI_CORE0_REG_WRITE_ADDR, 1);
   while(!eb_read_reg32(fd, CSR_ULPI_CORE0_REG_DONE_ADDR));
-
 }
 
 void ulpi_reset(ftdev_t fd, uint32_t val)

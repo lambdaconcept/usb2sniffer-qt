@@ -29,7 +29,7 @@ struct eb_header_s {
 
 uint32_t wswap(uint32_t const val)
 {
-  uint8_t data[4] = {};
+  uint8_t data[4];
   memcpy(&data, &val, sizeof(data));
   
   return ((uint32_t) data[3] << 0)
@@ -55,7 +55,6 @@ void print_header(struct eb_header_s *h)
   printf("Read cnt: %d\n", h->r_count);
   printf("Write cnt: %d\n", h->w_count);
 }
-
 
 void print_eb_packet(char *buf, int len)
 {
@@ -131,7 +130,6 @@ int eb_make_write_pkt( uint32_t addr, uint32_t *data, uint32_t w_count, char **b
 
 int eb_decode_rcv_pkt(char *buf, int blen, uint32_t **data, size_t *len)
 {
-  
   struct eb_header_s *h;
   uint32_t *val;
   int i;
@@ -148,5 +146,5 @@ int eb_decode_rcv_pkt(char *buf, int blen, uint32_t **data, size_t *len)
   }
   *data = tmp;
   *len = h->w_count;
+  return 0;
 }
-
