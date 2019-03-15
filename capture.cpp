@@ -81,6 +81,7 @@ void CaptureThread::run()
     int ret;
     char *buf;
     char *pktbuf;
+    int streamid;
     size_t len;
     uint32_t plen;
     uint8_t type;
@@ -141,9 +142,13 @@ void CaptureThread::run()
             itipacker0_ev_event_write(USB_EVENT_STOP);
         }
 
-        if(ubar_recv_packet(fd, &buf, &len) == 1)
-        {
-            /*
+        streamid = ubar_recv_packet(fd, &buf, &len);
+        if(streamid < 0) {
+            QMessageBox::warning(nullptr, "Error", "Capture device disconnected");
+            goto exit;
+
+        } else if (streamid == 1) {
+/*
             printf("ubar_recv: %d\n", len);
             for (int i=0; i<len; i++) {
                 printf("%02x ", buf[i]);
@@ -168,6 +173,7 @@ void CaptureThread::run()
         if (buf)
             free(buf);
     }
+exit:
     m_model->lastPacket();
 
     free(pktbuf);

@@ -53,10 +53,14 @@ size_t readft(ftdev_t fd, void *buf, size_t len)
 
     while(toread){
         rdl = ft60x_read(fd, pnt, toread);
-        if (rdl < 0)
-            exit(0);
-        if(rdl > toread)
-            exit(0);
+        if (rdl < 0) {
+            printf("rdl: %ld\n", rdl);
+            return 0;
+        }
+        if(rdl > toread) {
+            printf("rdl: %ld\n", rdl);
+            return 0;
+        }
         pnt += rdl;
         toread-=rdl;
     }
@@ -76,19 +80,27 @@ int ubar_recv_packet(ftdev_t fd, char **buf, size_t *len)
     uint32_t header;
 
     do {
-        readft(fd, &header, 4);
+        if(!readft(fd, &header, 4)) {
+            return -1;
+        }
         // printf("magic header: %08x\n", header);
     } while(header != 0x5aa55aa5);
     xbar.magic = 0x5aa55aa5;
-    readft(fd, (unsigned char*)&xbar + 4, 8);
+    if (!readft(fd, (unsigned char*)&xbar + 4, 8)) {
+        return -1;
+    }
     // printf("XBAR: %08x %08x %08x\n", xbar.magic, (unsigned)xbar.streamid, (unsigned )xbar.len);
     if(xbar.len > 32768)
     {
+        printf("xbar len: %d\n", xbar.len);
         exit(1);
     }
     tmp = malloc(xbar.len);
 
-    readft(fd, tmp, xbar.len);
+    if (!readft(fd, tmp, xbar.len)) {
+        free(tmp);
+        return -1;
+    }
 
     *buf = tmp;
     *len = xbar.len;
@@ -109,8 +121,12 @@ uint32_t  eb_read_reg32(ftdev_t fd, uint32_t addr)
     free(buf);
     do {
         streamid = ubar_recv_packet(fd, &buf, &len);
+        if (streamid < 0) {
+            printf("error recv xbar packet\n");
+            return -1;
+        }
         printf("streamid %d\n", streamid);
-        if (streamid && buf) {
+        if ((streamid > 0) && buf) {
             free(buf);
         }
     } while(streamid);
