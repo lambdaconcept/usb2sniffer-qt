@@ -92,6 +92,7 @@ void CaptureThread::run()
 
     bool stop_sent = false;
     bool stop_event = false;
+    bool start_event = false;
     m_stoprequest = false;
 
     ret = ft60x_open(&fd, m_config->device.toUtf8().constData());
@@ -105,8 +106,8 @@ void CaptureThread::run()
     /* configure sdram */
     sdram_configure();
 
-    /* flush fifo */
-    // XXX FIXME
+    /* flush fifo and cores */
+    rst_manager_reset_write(1);
 
     /* ulpi switch */
     ulpi_sw_oe_n_out_write(0);
@@ -115,11 +116,11 @@ void CaptureThread::run()
     /* ulpi init */
     ulpi_init(fd, m_config->speed);
 
-    /* reset timer */
-    itipacker0_time_reset_write(1);
+    /* enable timer */
+    iticore0_packer_time_enable_write(1);
 
-    /* event start */
-    itipacker0_ev_event_write(USB_EVENT_START);
+    /* generate start pattern */
+    iticore0_start_pattern_write(1);
 
     /* start capture */
     overflow0_reset_write(1);
@@ -137,9 +138,12 @@ void CaptureThread::run()
             drop_count = overflow0_count_read();
             printf("Stopped: packet dropped count (ulpi): %d\n", drop_count);
 
-            /* event stop */
-            itipacker0_ev_event_write(USB_EVENT_STOP);
-            itipacker0_ev_event_write(USB_EVENT_STOP);
+            /* generate event stop */
+            iticore0_packer_ev_event_write(USB_EVENT_STOP);
+            iticore0_packer_ev_event_write(USB_EVENT_STOP);
+
+            /* disable timer */
+            iticore0_packer_time_enable_write(0);
         }
 
         streamid = ubar_recv_packet(fd, &buf, &len);
@@ -156,17 +160,34 @@ void CaptureThread::run()
             printf("\n");
             */
             usb_add_data(m_sess, (uint8_t*)buf, len);
+
             while(usb_read_data(m_sess, &type, &val, &ts)){
                 // printf("add message\n");
-                m_msg->addMessage(ts, type, val);
+                if (start_event) {
+                    m_msg->addMessage(ts, type, val);
+                }
             }
             while(usb_read_packet(m_sess, &type, (uint8_t*)pktbuf, &plen, &ts)){
-                // printf("add packet\n");
-                m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
+//                printf("add packet (%d)\n", plen);
+//                for (int i=0; i<plen; i++) {
+//                    printf("%02x ", (unsigned char)pktbuf[i]);
+//                }
+//                printf("\n");
+                if (start_event) {
+                    m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
+                }
             }
             while(usb_read_event(m_sess, &event)) {
-                if (event == USB_EVENT_STOP) {
+                switch(event) {
+                case USB_EVENT_STOP:
                     stop_event = true;
+                    break;
+                case USB_EVENT_START:
+                    start_event = true;
+                    usb_reset_timestamp(m_sess);
+                    break;
+                default:
+                    break;
                 }
             }
         }

@@ -326,6 +326,11 @@ int usb_write_session(struct usb_session_s *s, FILE *out)
     return len;
 }
 
+void usb_reset_timestamp(struct usb_session_s *s)
+{
+    s->ts = 0;
+}
+
 struct usb_session_s *usb_new_session()
 {
     struct usb_session_s *sess;

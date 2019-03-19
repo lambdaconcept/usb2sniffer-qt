@@ -176,25 +176,34 @@ static inline unsigned long long int flash_spi_miso_read(void) {
 	return r;
 }
 
-/* itipacker0 */
-#define CSR_ITIPACKER0_BASE 0xe000a000
-#define CSR_ITIPACKER0_TIME_RESET_ADDR 0xe000a000
-#define CSR_ITIPACKER0_TIME_RESET_SIZE 1
-static inline unsigned int itipacker0_time_reset_read(void) {
+/* iticore0 */
+#define CSR_ITICORE0_BASE 0xe000a000
+#define CSR_ITICORE0_START_PATTERN_ADDR 0xe000a000
+#define CSR_ITICORE0_START_PATTERN_SIZE 1
+static inline unsigned int iticore0_start_pattern_read(void) {
 	unsigned int r = csr_readl(0xe000a000);
 	return r;
 }
-static inline void itipacker0_time_reset_write(unsigned int value) {
+static inline void iticore0_start_pattern_write(unsigned int value) {
 	csr_writel(value, 0xe000a000);
 }
-#define CSR_ITIPACKER0_EV_EVENT_ADDR 0xe000a004
-#define CSR_ITIPACKER0_EV_EVENT_SIZE 1
-static inline unsigned int itipacker0_ev_event_read(void) {
+#define CSR_ITICORE0_PACKER_TIME_ENABLE_ADDR 0xe000a004
+#define CSR_ITICORE0_PACKER_TIME_ENABLE_SIZE 1
+static inline unsigned int iticore0_packer_time_enable_read(void) {
 	unsigned int r = csr_readl(0xe000a004);
 	return r;
 }
-static inline void itipacker0_ev_event_write(unsigned int value) {
+static inline void iticore0_packer_time_enable_write(unsigned int value) {
 	csr_writel(value, 0xe000a004);
+}
+#define CSR_ITICORE0_PACKER_EV_EVENT_ADDR 0xe000a008
+#define CSR_ITICORE0_PACKER_EV_EVENT_SIZE 1
+static inline unsigned int iticore0_packer_ev_event_read(void) {
+	unsigned int r = csr_readl(0xe000a008);
+	return r;
+}
+static inline void iticore0_packer_ev_event_write(unsigned int value) {
+	csr_writel(value, 0xe000a008);
 }
 
 /* overflow0 */
@@ -213,6 +222,18 @@ static inline void overflow0_reset_write(unsigned int value) {
 static inline unsigned int overflow0_count_read(void) {
 	unsigned int r = csr_readl(0xe0008004);
 	return r;
+}
+
+/* rst_manager */
+#define CSR_RST_MANAGER_BASE 0xe000c000
+#define CSR_RST_MANAGER_RESET_ADDR 0xe000c000
+#define CSR_RST_MANAGER_RESET_SIZE 1
+static inline unsigned int rst_manager_reset_read(void) {
+	unsigned int r = csr_readl(0xe000c000);
+	return r;
+}
+static inline void rst_manager_reset_write(unsigned int value) {
+	csr_writel(value, 0xe000c000);
 }
 
 /* sdram */
