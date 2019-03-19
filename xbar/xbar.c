@@ -93,7 +93,7 @@ int ubar_recv_packet(ftdev_t fd, char **buf, size_t *len)
     if(xbar.len > 32768)
     {
         printf("xbar len: %d\n", xbar.len);
-        exit(1);
+        return -1;
     }
     tmp = malloc(xbar.len);
 
@@ -125,7 +125,7 @@ uint32_t  eb_read_reg32(ftdev_t fd, uint32_t addr)
             printf("error recv xbar packet\n");
             return -1;
         }
-        printf("streamid %d\n", streamid);
+        // printf("streamid %d\n", streamid);
         if ((streamid > 0) && buf) {
             free(buf);
         }
@@ -202,7 +202,7 @@ void ulpi_init(ftdev_t fd, int speed)
     ulpi_reset(fd, 0);
     usleep(100000);
 
-    ulpi_dump(fd);
+    // ulpi_dump(fd);
     ulpi_write_reg(fd, 0x0a, 0x00); // disable 15kohms pull-down resistors
     ulpi_write_reg(fd, 0x0f, 0x1f); // clear interrupt rising
     ulpi_write_reg(fd, 0x12, 0x1f); // clear interrupt falling
