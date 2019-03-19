@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
+    ui->mainToolBar->addWidget(ui->statusCapture);
 
     configWindow = new ConfigureWindow(this);
     filterWindow = new FilterWindow(this);
@@ -121,6 +122,7 @@ void MainWindow::captureFinished()
 
     ui->actionStart->setEnabled(true);
     ui->actionStop->setEnabled(false);
+    ui->statusCapture->setText("");
 
     ui->actionOpen->setEnabled(true);
     ui->actionSave_As->setEnabled(true);
@@ -159,6 +161,8 @@ void MainWindow::startCapture()
 
         ui->actionStart->setEnabled(false);
         ui->actionStop->setEnabled(true);
+        ui->statusCapture->setText(QString("Capturing (%1)...")
+                                   .arg(configWindow->m_config.speedStr()));
 
         fileSaved = false;
         ui->actionOpen->setEnabled(false);
@@ -170,6 +174,9 @@ void MainWindow::startCapture()
 void MainWindow::stopCapture()
 {
     if ((captureThread != nullptr) && (captureThread->isRunning())) {
+        ui->actionStop->setEnabled(false);
+        ui->statusCapture->setText("Uploading...");
+
         captureThread->stop();
     }
 }

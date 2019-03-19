@@ -212,6 +212,16 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="statusCapture">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="indent">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -266,6 +276,7 @@
    <addaction name="actionFilter"/>
    <addaction name="separator"/>
    <addaction name="actionConfigure"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">

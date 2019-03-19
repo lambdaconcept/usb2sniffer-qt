@@ -24,6 +24,17 @@ extern ftdev_t gfd;
 }
 #endif
 
+const QVector<QString> CaptureConfig::s_speedStr = {
+    "High Speed",
+    "Full Speed",
+    "Low Speed"
+};
+
+QString CaptureConfig::speedStr()
+{
+    return s_speedStr.value(speed);
+}
+
 void CaptureThread::setConfig(CaptureConfig* config)
 {
     m_config = config;
@@ -155,7 +166,7 @@ void CaptureThread::run()
 /*
             printf("ubar_recv: %d\n", len);
             for (int i=0; i<len; i++) {
-                printf("%02x ", buf[i]);
+                printf("%02x ", (unsigned char)buf[i]);
             }
             printf("\n");
             */

@@ -48,7 +48,7 @@ enum CaptureSpeed {
     HS = 0,
     FS = 1,
     LS = 2,
-    };
+};
 }
 
 class CaptureConfig
@@ -56,6 +56,10 @@ class CaptureConfig
 public:
     QString device;
     int speed = 0;
+
+    static const QVector<QString> s_speedStr;
+
+    QString speedStr();
 };
 
 class CaptureThread : public QThread
