@@ -44,7 +44,8 @@ SOURCES += \
     msgitem.cpp \
     msgmodel.cpp \
     parser/parse.c \
-    xbar/ft60x/fops.c
+    xbar/ft60x/fops.c \
+    aboutwindow.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -68,12 +69,14 @@ HEADERS += \
     msgitem.h \
     msgmodel.h \
     parser/parse.h \
-    xbar/ft60x/fops.h
+    xbar/ft60x/fops.h \
+    aboutwindow.h
 
 FORMS += \
         mainwindow.ui \
     configurewindow.ui \
-    filterwindow.ui
+    filterwindow.ui \
+    aboutwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

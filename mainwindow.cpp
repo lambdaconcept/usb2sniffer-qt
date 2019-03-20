@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     configWindow = new ConfigureWindow(this);
     filterWindow = new FilterWindow(this);
+    aboutWindow = new AboutWindow(this);
 
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
     connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
@@ -58,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionFilter, &QAction::triggered, filterWindow, &FilterWindow::open);
     connect(filterWindow, &FilterWindow::accepted, this, &MainWindow::setFilter);
+
+    connect(ui->actionAbout, &QAction::triggered, aboutWindow, &AboutWindow::open);
 }
 
 MainWindow::~MainWindow()

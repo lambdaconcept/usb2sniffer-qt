@@ -5,6 +5,7 @@
 
 #include "configurewindow.h"
 #include "filterwindow.h"
+#include "aboutwindow.h"
 #include "capture.h"
 
 #include "usbmodel.h"
@@ -58,6 +59,7 @@ private:
     Ui::MainWindow *ui;
     ConfigureWindow *configWindow;
     FilterWindow *filterWindow;
+    AboutWindow *aboutWindow;
 
     USBModel *currentModel = nullptr;
     USBProxy *currentProxy = nullptr;

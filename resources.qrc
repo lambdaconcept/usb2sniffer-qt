@@ -10,5 +10,6 @@
         <file>icons/format-list-unordered.png</file>
         <file>icons/view-list-filter.png</file>
         <file>icons/view-list-tree.png</file>
+        <file>icons/logo-alpha-small.png</file>
     </qresource>
 </RCC>
