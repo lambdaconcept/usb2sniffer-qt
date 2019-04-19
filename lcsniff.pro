@@ -87,6 +87,13 @@ RESOURCES += \
     resources.qrc
 
 win32: LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/Win32/ -lFTD3XX
+macx: LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/macOS/ -lftd3xx
+
+mac {
+    Resources.files += $$PWD/xbar/ft60x/FTD3XXLibrary/macOS/libftd3xx.dylib
+    Resources.path = Contents/MacOS
+    QMAKE_BUNDLE_DATA += Resources
+}
 
 INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
 DEPENDPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
