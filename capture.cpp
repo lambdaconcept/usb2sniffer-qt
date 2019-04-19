@@ -1,7 +1,5 @@
 #include <iostream>
 
-#include <QMessageBox>
-
 #include "capture.h"
 
 #include <unistd.h>
@@ -108,8 +106,7 @@ void CaptureThread::run()
 
     ret = ft60x_open(&fd, m_config->device.toUtf8().constData());
     if (ret < 0) {
-        QMessageBox::warning(nullptr, "Error", "Capture device not found");
-
+        emit captureDeviceNotFound();
         return;
     }
     memcpy(&gfd, &fd, sizeof(ftdev_t));
@@ -159,7 +156,7 @@ void CaptureThread::run()
 
         streamid = ubar_recv_packet(fd, &buf, &len);
         if(streamid < 0) {
-            QMessageBox::warning(nullptr, "Error", "Capture device disconnected");
+            emit captureDeviceDisconnected();
             goto exit;
 
         } else if (streamid == 1) {

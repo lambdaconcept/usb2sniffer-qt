@@ -68,6 +68,10 @@ class CaptureThread : public QThread
 
     void run();
 
+signals:
+    void captureDeviceNotFound();
+    void captureDeviceDisconnected();
+
 public:
     void setConfig(CaptureConfig* config);
     void setModel(USBModel *model, MSGModel *msg);

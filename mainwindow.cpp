@@ -155,6 +155,8 @@ void MainWindow::startCapture()
         captureThread->setUsbSession(usb_sess);
 
         connect(captureThread, &CaptureThread::finished, this, &MainWindow::captureFinished);
+        connect(captureThread, SIGNAL(captureDeviceNotFound()), this, SLOT(displayDeviceNotFound()), Qt::BlockingQueuedConnection);
+        connect(captureThread, SIGNAL(captureDeviceDisconnected()), this, SLOT(displayDeviceDisconnected()), Qt::BlockingQueuedConnection);
 
         configWindow->autoConfig();
         captureThread->setConfig(&configWindow->m_config);
@@ -312,4 +314,14 @@ void MainWindow::updateDetails(const QModelIndex& index)
 void MainWindow::updateRecordsStats(int number)
 {
     ui->statusPacketNum->setText(QString("Records: %1").arg(number));
+}
+
+void MainWindow::displayDeviceNotFound()
+{
+    QMessageBox::warning(this, "Error", "Capture device not found");
+}
+
+void MainWindow::displayDeviceDisconnected()
+{
+    QMessageBox::warning(this, "Error", "Capture device disconnected");
 }
