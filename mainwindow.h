@@ -36,6 +36,10 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+public slots:
+    void displayDeviceNotFound();
+    void displayDeviceDisconnected();
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
