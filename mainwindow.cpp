@@ -40,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
     ui->mainToolBar->addWidget(ui->statusCapture);
 
+    /* This greatly improves widget drawing perfs when dealing with large datasets */
+    ui->treeView->setUniformRowHeights(true);
+    ui->messageView->setUniformRowHeights(true);
+
     configWindow = new ConfigureWindow(this);
     filterWindow = new FilterWindow(this);
     aboutWindow = new AboutWindow(this);
