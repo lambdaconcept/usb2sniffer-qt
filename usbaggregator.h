@@ -25,6 +25,7 @@ public:
     void done();
     void setRoot(USBItem* root);
     bool getPending(USBItem **item);
+    int getPendingCount();
 
 private:
     USBItem *m_root;
