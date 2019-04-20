@@ -26,10 +26,10 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     /* custom API */
-    int addPacket(USBPacket *packet);
+    int addPacket(USBPacket *packet, bool nodeUpdate = true);
     int lastPacket();
     void updateNodes();
-
+    void updateNumberPopulated();
 signals:
     void numberPopulated(int number);
 

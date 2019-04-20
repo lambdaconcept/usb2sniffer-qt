@@ -266,7 +266,7 @@ void MainWindow::loadFile()
     }
     usb_sess = usb_new_session();
     newSession();
-
+    
     while(!feof(in)){
         len = fread(swp, 1, 512, in);
         if(len < 0)
@@ -281,9 +281,10 @@ void MainWindow::loadFile()
             currentMsg->addMessage(ts, type, val);
         }
         while(usb_read_packet(usb_sess, &type, buf, &plen, &ts)){
-            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)));
+            currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)), false);
         }
     }
+    currentModel->updateNumberPopulated();
 
     currentModel->lastPacket();
     fclose(in);
