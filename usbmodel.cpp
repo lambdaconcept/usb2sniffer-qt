@@ -13,14 +13,21 @@ USBModel::~USBModel()
     delete m_rootItem; // FIXME
 }
 
-int USBModel::addPacket(USBPacket *packet)
+int USBModel::addPacket(USBPacket *packet, bool nodeUpdate)
 {
     /* Push packet to aggregator */
     m_aggregator.append(packet);
-    updateNodes();
-    emit numberPopulated(m_aggregator.count());
+    if (nodeUpdate) {
+        updateNodes();
+        emit numberPopulated(m_aggregator.count());
+    }
 
     return true;
+}
+
+void USBModel::updateNumberPopulated()
+{
+    emit numberPopulated(m_aggregator.count());
 }
 
 int USBModel::lastPacket()
@@ -37,14 +44,16 @@ void USBModel::updateNodes()
     USBItem *child;
 
     /* Add new nodes from aggregator, if any */
+    auto pendingCount = m_aggregator.getPendingCount();
+    size = m_rootItem->childCount();
+    beginInsertRows(QModelIndex(), size, size+pendingCount);
 
     while(m_aggregator.getPending(&child))
     {
-        size = m_rootItem->childCount();
-        beginInsertRows(QModelIndex(), size, size);
         m_rootItem->appendChild(child);
-        endInsertRows();
     }
+
+    endInsertRows();
 }
 
 QModelIndex USBModel::index(int row, int column, const QModelIndex &parent)
