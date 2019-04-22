@@ -269,8 +269,9 @@ void MainWindow::loadFile()
     
     while(!feof(in)){
         len = fread(swp, 1, 512, in);
-        if(len < 0)
+        if (ferror(in)) {
             return;
+        }
 
         /* file stored in byte swapped format */
         usb_swap_bytes(buf, swp, len);
