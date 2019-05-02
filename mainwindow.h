@@ -39,6 +39,7 @@ class MainWindow : public QMainWindow
 public slots:
     void displayDeviceNotFound();
     void displayDeviceDisconnected();
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);

@@ -48,9 +48,6 @@ MainWindow::MainWindow(QWidget *parent) :
     filterWindow = new FilterWindow(this);
     aboutWindow = new AboutWindow(this);
 
-    connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateAscii);
-    connect(ui->treeView, &QTreeView::clicked, this, &MainWindow::updateDetails);
-
     // loadFile(); // FIXME for dev
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
@@ -102,6 +99,8 @@ void MainWindow::newSession()
     ui->treeView->setModel(proxyModel);
     ui->treeView->setColumnWidth(0, 300);
     ui->treeView->setColumnWidth(1, 150);
+    connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this, SLOT(selectionChanged(const QItemSelection&,const QItemSelection&)));
 
     /* Put raw messages into model */
 
@@ -330,4 +329,13 @@ void MainWindow::displayDeviceNotFound()
 void MainWindow::displayDeviceDisconnected()
 {
     QMessageBox::warning(this, "Error", "Capture device disconnected");
+}
+
+void MainWindow::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    (void)deselected;
+
+    QModelIndexList selectedList = selected.indexes();
+    this->updateAscii(selectedList.first());
+    this->updateDetails(selectedList.first());
 }
