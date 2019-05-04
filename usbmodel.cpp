@@ -46,14 +46,17 @@ void USBModel::updateNodes()
     /* Add new nodes from aggregator, if any */
     auto pendingCount = m_aggregator.getPendingCount();
     size = m_rootItem->childCount();
-    beginInsertRows(QModelIndex(), size, size+pendingCount);
 
-    while(m_aggregator.getPending(&child))
-    {
-        m_rootItem->appendChild(child);
+    if (pendingCount > 0) {
+        beginInsertRows(QModelIndex(), size, size+pendingCount-1);
+
+        while(m_aggregator.getPending(&child))
+        {
+            m_rootItem->appendChild(child);
+        }
+
+        endInsertRows();
     }
-
-    endInsertRows();
 }
 
 QModelIndex USBModel::index(int row, int column, const QModelIndex &parent)
