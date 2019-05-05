@@ -1,5 +1,9 @@
-#include "usbproxy.h"
 #include "usbitem.h"
+#include "usbpacket.h"
+#include "usbmodel.h"
+#include "usbproxy.h"
+
+#include <iostream>
 
 USBProxy::USBProxy(QObject *parent)
     : QSortFilterProxyModel (parent)
@@ -16,21 +20,20 @@ void USBProxy::setFilter(const USBProxyFilter *filter)
 bool USBProxy::filterAcceptsRow(int sourceRow,
         const QModelIndex &sourceParent) const
 {
+    std::cout << "handling row " << sourceRow << std::endl;
+
     QModelIndex index = sourceModel()->index(sourceRow, RECORD_NAME, sourceParent);
 
     if (!m_filter) {
         return true;
     }
 
-    /* Search inside record name: SOF */
+    quint8 pid = usbModel()->getPid(index);
 
-    if (sourceModel()->data(index).toString().contains("SOF")) { // FIXME check pid type instead of string matching
+    /* Search inside record name */
+    if (pid == PID_SOF) {
         return m_filter->sof;
-    }
-
-    /* Search inside record name: SPLIT */
-
-    if (sourceModel()->data(index).toString().contains("SPLIT")) { // FIXME check pid type instead of string matching
+    } else if (pid == PID_SPLIT) {
         return true; // XXX FIXME SPLIT filter not yet implemented
     }
 
@@ -57,4 +60,9 @@ bool USBProxy::filterAcceptsRow(int sourceRow,
     }
 
     return false;
+}
+
+USBModel* USBProxy::usbModel() const
+{
+    return static_cast<USBModel*>(sourceModel());
 }

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QSortFilterProxyModel>
+#include "usbmodel.h"
 
 class USBProxyFilter
 {
@@ -26,6 +27,7 @@ public:
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    USBModel* usbModel() const;
 
 private:
     const USBProxyFilter *m_filter = nullptr;
