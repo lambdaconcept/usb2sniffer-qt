@@ -30,6 +30,7 @@ public:
     const QString asciiData();
     const QString asciiPacket();
     const QString details();
+    quint8 getPid() const;
 
 private:
     QList<USBItem*> m_childItems;

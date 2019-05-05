@@ -99,3 +99,8 @@ const QString USBItem::details()
 {
     return m_record->details();
 }
+
+quint8 USBItem::getPid() const
+{
+    return m_record->getPid();
+}

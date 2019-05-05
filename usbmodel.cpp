@@ -1,6 +1,8 @@
 #include "usbmodel.h"
 #include "usbitem.h"
 
+#include <iostream>
+
 USBModel::USBModel(QObject *parent) : QAbstractItemModel(parent)
 {
     m_rootItem = new USBItem(new USBPacket(0, QByteArray()));
@@ -132,6 +134,16 @@ QVariant USBModel::data(const QModelIndex &index, int role) const
         default:
             return QVariant();
     }
+}
+
+quint8 USBModel::getPid(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return 0;
+
+    USBItem *item = static_cast<USBItem*>(index.internalPointer());
+
+    return item->getPid();
 }
 
 Qt::ItemFlags USBModel::flags(const QModelIndex &index) const
