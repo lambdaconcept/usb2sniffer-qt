@@ -3,8 +3,6 @@
 #include "usbmodel.h"
 #include "usbproxy.h"
 
-#include <iostream>
-
 USBProxy::USBProxy(QObject *parent)
     : QSortFilterProxyModel (parent)
 {
@@ -20,8 +18,6 @@ void USBProxy::setFilter(const USBProxyFilter *filter)
 bool USBProxy::filterAcceptsRow(int sourceRow,
         const QModelIndex &sourceParent) const
 {
-    std::cout << "handling row " << sourceRow << std::endl;
-
     QModelIndex index = sourceModel()->index(sourceRow, RECORD_NAME, sourceParent);
 
     if (!m_filter) {
