@@ -12,7 +12,7 @@ USBProxy::USBProxy(QObject *parent)
 void USBProxy::setFilter(const USBProxyFilter *filter)
 {
     m_filter = filter;
-    invalidateFilter();
+    invalidate();
 }
 
 bool USBProxy::filterAcceptsRow(int sourceRow,
