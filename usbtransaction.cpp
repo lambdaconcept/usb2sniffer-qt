@@ -94,3 +94,8 @@ const QString USBTransaction::details()
 
     return details;
 }
+
+quint8 USBTransaction::getPid() const
+{
+    return m_token->getPid();
+}

@@ -24,6 +24,7 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    quint8 getPid(const QModelIndex &index) const;
 
     /* custom API */
     int addPacket(USBPacket *packet, bool nodeUpdate = true);

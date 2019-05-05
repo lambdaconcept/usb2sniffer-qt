@@ -54,3 +54,8 @@ const QString USBGroup::details()
 
     return details;
 }
+
+quint8 USBGroup::getPid() const
+{
+    return m_first->getPid();
+}

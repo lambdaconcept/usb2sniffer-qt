@@ -12,7 +12,7 @@ public:
     QVariant data(int column) const;
     QBrush background() const;
     const QString details();
-
+	quint8 getPid() const;
 private:
     int m_count;
     USBPacket *m_first;

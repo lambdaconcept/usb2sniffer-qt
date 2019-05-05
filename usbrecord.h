@@ -29,6 +29,7 @@ public:
     virtual const QString asciiData();
     virtual const QString asciiPacket();
     virtual const QString details();
+    virtual quint8 getPid() const = 0;
 };
 
 #endif // USBRECORD_H

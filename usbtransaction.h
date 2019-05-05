@@ -14,6 +14,7 @@ public:
     QFont font(int column) const;
     const QString asciiData();
     const QString details();
+    quint8 getPid() const;
 
 private:
     USBPacket* m_token;
