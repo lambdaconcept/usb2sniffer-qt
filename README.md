@@ -1,6 +1,8 @@
 # usb2sniffer-qt
 
-LambdaConcept lcsniff software for USB2Sniffer hardware
+LambdaConcept lcsniff software for [USB2Sniffer hardware](http://blog.lambdaconcept.com/doku.php?id=products:usb_sniffer) ([buy](http://shop.lambdaconcept.com/home/35-usb2-sniffer.html)).
+
+![LCSniff running on macOS](docs/lcsniff-mac.png)
 
 ## Build instructions
 
@@ -11,6 +13,16 @@ Open lcsniff.pro with Qt Creator
 ### Linux
 
 ```
+mkdir build
+cd build
+qmake ../lcsniff.pro
+make -j
+```
+
+### macOS
+
+```
+brew install qt
 mkdir build
 cd build
 qmake ../lcsniff.pro
