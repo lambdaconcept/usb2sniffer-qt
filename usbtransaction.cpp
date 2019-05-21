@@ -55,6 +55,8 @@ QBrush USBTransaction::background() const
                 return !ack ? QBrush(QColor(165, 214, 167)) : QBrush(QColor(102, 187, 106));
             case PID_OUT:
                 return !ack ? QBrush(QColor(144, 202, 249)) : QBrush(QColor(66, 165, 245));
+            case PID_PING:
+                return !ack ? QBrush(QColor(255, 191, 226)) : QBrush(QColor(255, 123, 195));
             default:
                 // XXX FIXME PID_SPLIT color not implemented
                 return QBrush();
