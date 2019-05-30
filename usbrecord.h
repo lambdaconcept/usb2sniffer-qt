@@ -30,6 +30,9 @@ public:
     virtual const QString asciiPacket();
     virtual const QString details();
     virtual quint8 getPid() const = 0;
+    virtual QPair<QByteArray, QByteArray> recordData();
+private:
+    const QByteArray emptyByteArray;
 };
 
 #endif // USBRECORD_H

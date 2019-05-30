@@ -101,3 +101,12 @@ quint8 USBTransaction::getPid() const
 {
     return m_token->getPid();
 }
+
+QPair<QByteArray, QByteArray> USBTransaction::recordData()
+{
+    if (m_data) {
+        return qMakePair(m_data->m_Data, emptyBuffer);
+    } else {
+        return qMakePair(emptyBuffer, emptyBuffer);
+    }
+}

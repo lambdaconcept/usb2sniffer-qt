@@ -44,3 +44,8 @@ const QString USBRecord::details()
 {
     return QString();
 }
+
+QPair<QByteArray, QByteArray> USBRecord::recordData()
+{
+    return qMakePair(emptyByteArray, emptyByteArray);
+}
