@@ -13,6 +13,8 @@ Open lcsniff.pro with Qt Creator
 ### Linux
 
 ```
+git submodule init
+git submodule update
 mkdir build
 cd build
 qmake ../lcsniff.pro
@@ -22,6 +24,8 @@ make -j
 ### macOS
 
 ```
+git submodule init
+git submodule update
 brew install qt
 mkdir build
 cd build
