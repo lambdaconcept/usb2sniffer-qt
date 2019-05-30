@@ -175,3 +175,8 @@ const QString USBPacket::details()
 
     return details;
 }
+
+QPair<QByteArray, QByteArray> USBPacket::recordData()
+{
+    return qMakePair(m_Data, m_Packet);
+}

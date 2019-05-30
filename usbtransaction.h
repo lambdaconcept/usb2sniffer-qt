@@ -15,11 +15,13 @@ public:
     const QString asciiData();
     const QString details();
     quint8 getPid() const;
+    QPair<QByteArray, QByteArray> recordData();
 
 private:
     USBPacket* m_token;
     USBPacket* m_data;
     USBPacket* m_handshake;
+    QByteArray emptyBuffer;
 };
 
 #endif // USBTRANSACTION_H

@@ -104,3 +104,7 @@ quint8 USBItem::getPid() const
 {
     return m_record->getPid();
 }
+
+QPair<QByteArray, QByteArray> USBItem::recordData() {
+    return m_record->recordData();
+}

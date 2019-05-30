@@ -62,6 +62,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(filterWindow, &FilterWindow::accepted, this, &MainWindow::setFilter);
 
     connect(ui->actionAbout, &QAction::triggered, aboutWindow, &AboutWindow::open);
+
+    ui->textAsciiPacket->setReadOnly(true);
+    ui->textAsciiPacket->setDynamicBytesPerLine(true);
+    ui->textAsciiData->setReadOnly(true);
+    ui->textAsciiData->setDynamicBytesPerLine(true);
 }
 
 MainWindow::~MainWindow()
@@ -301,8 +306,11 @@ void MainWindow::updateAscii(const QModelIndex& index)
     QModelIndex source = currentProxy->mapToSource(index);
     USBItem *item = static_cast<USBItem*>(source.internalPointer());
 
-    ui->textAsciiPacket->setPlainText(item->asciiPacket());
-    ui->textAsciiData->setPlainText(item->asciiData());
+    auto recordData = item->recordData();
+    dataBuffer = recordData.first;
+    packetBuffer = recordData.second;
+    ui->textAsciiPacket->setData(packetBuffer);
+    ui->textAsciiData->setData(dataBuffer);
 }
 
 void MainWindow::updateDetails(const QModelIndex& index)

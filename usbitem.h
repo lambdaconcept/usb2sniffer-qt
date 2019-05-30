@@ -31,6 +31,7 @@ public:
     const QString asciiPacket();
     const QString details();
     quint8 getPid() const;
+    QPair<QByteArray, QByteArray> recordData();
 
 private:
     QList<USBItem*> m_childItems;

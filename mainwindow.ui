@@ -134,20 +134,12 @@
             </attribute>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
-              <widget class="QTextEdit" name="textAsciiPacket">
+              <widget class="QHexEdit" name="textAsciiPacket">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
                  <height>0</height>
                 </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Monospace</family>
-                </font>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -159,20 +151,12 @@
             </attribute>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
-              <widget class="QTextEdit" name="textAsciiData">
+              <widget class="QHexEdit" name="textAsciiData">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
                  <height>0</height>
                 </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Monospace</family>
-                </font>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
                </property>
               </widget>
              </item>

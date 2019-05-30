@@ -25,8 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
+    main.cpp \
+    qhexedit2/src/chunks.cpp \
+    qhexedit2/src/commands.cpp \
+    qhexedit2/src/qhexedit.cpp \
+    mainwindow.cpp \
     usbitem.cpp \
     usbmodel.cpp \
     usbpacket.cpp \
@@ -48,7 +51,10 @@ SOURCES += \
     aboutwindow.cpp
 
 HEADERS += \
-        mainwindow.h \
+    qhexedit2/src/commands.h \
+    qhexedit2/src/chunks.h \
+    qhexedit2/src/qhexedit.h \
+    mainwindow.h \
     usbitem.h \
     usbmodel.h \
     usbpacket.h \
@@ -96,6 +102,7 @@ mac {
 }
 
 INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
+INCLUDEPATH += $$PWD/qhexedit2/src
 DEPENDPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
 
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.lib

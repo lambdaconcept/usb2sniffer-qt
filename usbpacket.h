@@ -49,6 +49,7 @@ public:
     const QString asciiData();
     const QString asciiPacket();
     const QString details();
+    QPair<QByteArray, QByteArray> recordData();
 
 public:
     quint64 m_Timestamp;

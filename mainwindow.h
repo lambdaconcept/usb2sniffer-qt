@@ -74,6 +74,9 @@ private:
     bool fileSaved = true; /* Used for warning on exit */
 
     struct usb_session_s *usb_sess = nullptr;
+
+    QByteArray dataBuffer;
+    QByteArray packetBuffer;
 };
 
 #endif // MAINWINDOW_H
