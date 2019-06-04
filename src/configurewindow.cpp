@@ -40,15 +40,18 @@ void ConfigureWindow::open()
 
     /* Refresh devices list */
 
+    #if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+    ui->comboDevice->hide();
+    ui->captureDeviceLabel->hide();
+    #else
     ui->comboDevice->clear();
     QStringList devices = listAvailableDevices();
     ui->comboDevice->addItems(devices);
-
     /* Restore last device selection if still available */
-
     if (devices.contains(current)) {
         ui->comboDevice->setCurrentText(current);
     }
+    #endif
 
     index = ui->comboSpeed->findData(m_config.speed);
     ui->comboSpeed->setCurrentIndex(index);
