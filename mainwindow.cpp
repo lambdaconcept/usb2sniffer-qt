@@ -40,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
     ui->mainToolBar->addWidget(ui->statusCapture);
 
+    #ifdef Q_OS_MACOS
+    setUnifiedTitleAndToolBarOnMac(true);
+    #endif
+
     /* This greatly improves widget drawing perfs when dealing with large datasets */
     ui->treeView->setUniformRowHeights(true);
     ui->messageView->setUniformRowHeights(true);
