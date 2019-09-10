@@ -30,6 +30,10 @@
 #define PID_TYPE_HANDSHAKE 2
 #define PID_TYPE_DATA      3
 
+#define ERR_OK      0
+#define ERR_DECODE  1
+#define ERR_FSM     2
+
 class USBPacket : public USBRecord
 {
 public:
@@ -46,6 +50,7 @@ public:
     static const QVector<QString> typeStr;
 
     QVariant data(int column) const;
+    QBrush background() const;
     const QString asciiData();
     const QString asciiPacket();
     const QString details();
@@ -60,7 +65,7 @@ public:
     quint16 m_FrameNumber = 0;
     QByteArray m_Packet;
     QByteArray m_Data;
-    quint8 m_Err = 0;
+    quint8 m_Err = ERR_OK;
 };
 
 #endif // USBPACKET_H

@@ -66,14 +66,14 @@ void USBPacket::decode()
     len = m_Packet.count();
     if (len <= 0) {
         printf("Bad packet len\n");
-        m_Err = 1; // FIXME
+        m_Err = ERR_DECODE;
         return;
     }
 
     /* Check PID symmetry */
     if((m_Packet[0] & 0xf) != (~(m_Packet[0] >> 4) & 0xf) ){
         printf("Bad PID\n");
-        m_Err = 1; // FIXME
+        m_Err = ERR_DECODE;
         return;
     }
 
@@ -85,7 +85,7 @@ void USBPacket::decode()
     if ((pid_type == PID_TYPE_TOKEN) || (pid == PID_PING)) {
         if (len < 3) {
             printf("Bad TOKEN len\n");
-            m_Err = 1; // FIXME
+            m_Err = ERR_DECODE;
             return;
         }
         m_CRC = ((m_Packet[2] & 0xff) >> 3) & 0x1f;
@@ -99,7 +99,7 @@ void USBPacket::decode()
         data = m_Packet.data() + 1;
         if (len < 3) {
             printf("Bad DATA len\n");
-            m_Err = 1; // FIXME
+            m_Err = ERR_DECODE;
             return;
         }
         m_Data.setRawData(data, len-3);
@@ -130,6 +130,15 @@ QVariant USBPacket::data(int column) const
             return m_Packet.toHex(' ');
         default:
             return QVariant();
+    }
+}
+
+QBrush USBPacket::background() const
+{
+    if (m_Err != ERR_OK) {
+        return QBrush(QColor(255, 55, 55));
+    } else {
+        return QBrush();
     }
 }
 

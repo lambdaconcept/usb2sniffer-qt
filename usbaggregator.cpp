@@ -171,6 +171,13 @@ void USBAggregator::append(USBPacket* packet)
                      QString("%1").arg(pid, 2, 16, QChar('0')).toStdString()
                   << ") (state: " << _state << ")\n";
         endTransaction();
+
+        /* We still want to show the error packet in the GUI */
+        USBItem *node;
+        packet->m_Err = ERR_FSM;
+        node = new USBItem(packet, m_root);
+        node->appendChild(new USBItem(packet, node));
+        m_pending.append(node);
     }
 
     _lastPid = pid;
