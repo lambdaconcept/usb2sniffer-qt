@@ -25,64 +25,64 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    main.cpp \
+    src/main.cpp \
     qhexedit2/src/chunks.cpp \
     qhexedit2/src/commands.cpp \
     qhexedit2/src/qhexedit.cpp \
-    mainwindow.cpp \
-    usbitem.cpp \
-    usbmodel.cpp \
-    usbpacket.cpp \
-    usbrecord.cpp \
-    helpers.cpp \
-    usbgroup.cpp \
-    usbtransaction.cpp \
-    usbaggregator.cpp \
-    capture.cpp \
+    src/mainwindow.cpp \
+    src/usbitem.cpp \
+    src/usbmodel.cpp \
+    src/usbpacket.cpp \
+    src/usbrecord.cpp \
+    src/helpers.cpp \
+    src/usbgroup.cpp \
+    src/usbtransaction.cpp \
+    src/usbaggregator.cpp \
+    src/capture.cpp \
     xbar/etherbone.c \
     xbar/xbar.c \
-    configurewindow.cpp \
-    usbproxy.cpp \
-    filterwindow.cpp \
-    msgitem.cpp \
-    msgmodel.cpp \
+    src/configurewindow.cpp \
+    src/usbproxy.cpp \
+    src/filterwindow.cpp \
+    src/msgitem.cpp \
+    src/msgmodel.cpp \
     parser/parse.c \
     xbar/ft60x/fops.c \
-    aboutwindow.cpp
+    src/aboutwindow.cpp
 
 HEADERS += \
     qhexedit2/src/commands.h \
     qhexedit2/src/chunks.h \
     qhexedit2/src/qhexedit.h \
-    mainwindow.h \
-    usbitem.h \
-    usbmodel.h \
-    usbpacket.h \
-    usbrecord.h \
-    helpers.h \
-    usbgroup.h \
-    usbtransaction.h \
-    usbaggregator.h \
-    capture.h \
+    src/mainwindow.h \
+    src/usbitem.h \
+    src/usbmodel.h \
+    src/usbpacket.h \
+    src/usbrecord.h \
+    src/helpers.h \
+    src/usbgroup.h \
+    src/usbtransaction.h \
+    src/usbaggregator.h \
+    src/capture.h \
     xbar/csr.h \
     xbar/etherbone.h \
     xbar/flags.h \
     xbar/sdram_phy.h \
     xbar/xbar.h \
-    configurewindow.h \
-    usbproxy.h \
-    filterwindow.h \
-    msgitem.h \
-    msgmodel.h \
+    src/configurewindow.h \
+    src/usbproxy.h \
+    src/filterwindow.h \
+    src/msgitem.h \
+    src/msgmodel.h \
     parser/parse.h \
     xbar/ft60x/fops.h \
-    aboutwindow.h
+    src/aboutwindow.h
 
 FORMS += \
-        mainwindow.ui \
-    configurewindow.ui \
-    filterwindow.ui \
-    aboutwindow.ui
+    ui/mainwindow.ui \
+    ui/configurewindow.ui \
+    ui/filterwindow.ui \
+    ui/aboutwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
