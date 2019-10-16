@@ -13,12 +13,25 @@ MSGModel::~MSGModel()
 
 int MSGModel::addMessage(uint64_t ts, uint8_t type, uint8_t val)
 {
-    int size;
-
-    size = m_rootItem->childCount();
+    int size = m_rootItem->childCount();
     beginInsertRows(QModelIndex(), size, size);
     m_rootItem->appendChild(new MSGItem(ts, type, val, m_rootItem));
     endInsertRows();
+
+    return true;
+}
+
+int MSGModel::addMessageVector(std::vector<std::tuple<uint64_t, uint8_t, uint8_t>>& vec)
+{
+    if (vec.size() > 0) {
+        int size = m_rootItem->childCount();
+
+        beginInsertRows(QModelIndex(), size, size+vec.size()-1);
+        for (auto&& message: vec) {
+            m_rootItem->appendChild(new MSGItem(std::get<0>(message), std::get<1>(message), std::get<2>(message), m_rootItem));
+        }
+        endInsertRows();
+    }
 
     return true;
 }
