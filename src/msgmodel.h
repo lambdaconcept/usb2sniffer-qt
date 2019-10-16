@@ -25,6 +25,7 @@ public:
 
     /* custom API */
     int addMessage(uint64_t ts, uint8_t type, uint8_t val);
+    int addMessageVector(std::vector<std::tuple<uint64_t, uint8_t, uint8_t>>& vec);
 
 private:
     MSGItem *m_rootItem;

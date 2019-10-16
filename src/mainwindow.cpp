@@ -274,7 +274,7 @@ void MainWindow::loadFile()
     }
     usb_sess = usb_new_session();
     newSession();
-    
+
     while(!feof(in)){
         len = fread(swp, 1, 512, in);
         if (ferror(in)) {
@@ -286,9 +286,12 @@ void MainWindow::loadFile()
 
         usb_add_data(usb_sess, buf, len);
 
+        std::vector<std::tuple<uint64_t, uint8_t, uint8_t>> msgVec;
         while(usb_read_data(usb_sess, &type, &val, &ts)){
-            currentMsg->addMessage(ts, type, val);
+            msgVec.push_back(std::make_tuple(ts, type, val));
         }
+        currentMsg->addMessageVector(msgVec);
+
         while(usb_read_packet(usb_sess, &type, buf, &plen, &ts)){
             currentModel->addPacket(new USBPacket(ts, QByteArray((char *)buf, plen)), false);
         }
