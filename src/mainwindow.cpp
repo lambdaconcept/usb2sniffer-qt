@@ -253,8 +253,8 @@ void MainWindow::loadFile()
     FILE *in;
     size_t len;
     uint32_t plen;
-    uint8_t buf[512];
-    uint8_t swp[512];
+    uint8_t buf[1024];
+    uint8_t swp[1024];
     uint8_t type;
     uint8_t val;
     uint64_t ts;
