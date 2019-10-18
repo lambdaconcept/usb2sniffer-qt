@@ -3,19 +3,8 @@
 
 #include <QString>
 #include <QSortFilterProxyModel>
+#include "usbproxyfilter.h"
 #include "usbmodel.h"
-
-class USBProxyFilter
-{
-public:
-    bool sof = true;
-    /* For now Incomplete is treated as NAK */
-    bool nakIn = true;
-    bool nakOut = true;
-    bool nakSetup = true;
-    QString device;
-    QString endpoint;
-};
 
 class USBProxy : public QSortFilterProxyModel
 {
@@ -27,7 +16,6 @@ public:
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    USBModel* usbModel() const;
 
 private:
     const USBProxyFilter *m_filter = nullptr;

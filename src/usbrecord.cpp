@@ -49,3 +49,8 @@ QPair<QByteArray, QByteArray> USBRecord::recordData()
 {
     return qMakePair(emptyByteArray, emptyByteArray);
 }
+
+bool USBRecord::matchForFilter(const USBProxyFilter *filter) const
+{
+    return true;
+}

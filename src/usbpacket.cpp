@@ -189,3 +189,8 @@ QPair<QByteArray, QByteArray> USBPacket::recordData()
 {
     return qMakePair(m_Data, m_Packet);
 }
+
+bool USBPacket::matchForFilter(const USBProxyFilter *filter) const
+{
+    return true;
+}

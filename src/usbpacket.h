@@ -55,6 +55,7 @@ public:
     const QString asciiPacket();
     const QString details();
     QPair<QByteArray, QByteArray> recordData();
+    bool matchForFilter(const USBProxyFilter *filter) const;
 
 public:
     quint64 m_Timestamp;

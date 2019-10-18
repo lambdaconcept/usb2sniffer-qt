@@ -7,6 +7,8 @@
 #include <QBrush>
 #include <QFont>
 
+#include "usbproxyfilter.h"
+
 #define RECORD_NAME     0
 #define RECORD_TS       1
 #define RECORD_DEVICE   2
@@ -31,6 +33,7 @@ public:
     virtual const QString details();
     virtual quint8 getPid() const = 0;
     virtual QPair<QByteArray, QByteArray> recordData();
+    virtual bool matchForFilter(const USBProxyFilter *filter) const;
 private:
     const QByteArray emptyByteArray;
 };
