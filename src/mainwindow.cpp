@@ -104,7 +104,7 @@ void MainWindow::newSession()
     proxyModel->setFilter(filterWindow->getFilter());
     proxyModel->setSourceModel(usbModel);
 
-    QItemSelectionModel *m = ui->treeView->selectionModel();
+    QItemSelectionModel *selectionModel = ui->treeView->selectionModel();
     ui->treeView->setModel(proxyModel);
     ui->treeView->setColumnWidth(0, 300);
     ui->treeView->setColumnWidth(1, 150);
@@ -120,8 +120,9 @@ void MainWindow::newSession()
     ui->messageView->setColumnWidth(2, 60);
 
     /* Delete previous data */
-
-    m->deleteLater();
+    if (selectionModel) {
+        selectionModel->deleteLater();
+    }
     delete currentProxy;
     delete currentModel;
     delete currentMsg;
