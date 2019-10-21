@@ -110,3 +110,31 @@ QPair<QByteArray, QByteArray> USBTransaction::recordData()
         return qMakePair(emptyBuffer, emptyBuffer);
     }
 }
+
+bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
+{
+    /* Check device and endpoint numbers */
+    if ((filter->deviceNum == -1 || m_token->m_Dev == filter->deviceNum)
+        && (filter->endpointNum == -1 || m_token->m_Endpoint == filter->endpointNum)) {
+
+        /* Check for NAK or Incomplete */
+        if ((m_handshake && m_handshake->getPid() == PID_NAK) || (!m_handshake)) {
+            switch (m_token->getPid()) {
+            case PID_IN:
+                return filter->nakIn;
+            case PID_OUT:
+                return filter->nakOut;
+            case PID_SETUP:
+                return filter->nakSetup;
+            case PID_PING:
+                return filter->nakPing;
+            default:
+                return true;
+            }
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
+}

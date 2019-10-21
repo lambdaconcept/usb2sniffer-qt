@@ -13,6 +13,7 @@ public:
     QBrush background() const;
     const QString details();
 	quint8 getPid() const;
+	bool matchForFilter(const USBProxyFilter *filter) const;
 private:
     int m_count;
     USBPacket *m_first;

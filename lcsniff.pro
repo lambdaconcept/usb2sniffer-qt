@@ -58,6 +58,7 @@ HEADERS += \
     src/usbitem.h \
     src/usbmodel.h \
     src/usbpacket.h \
+    src/usbproxyfilter.h \
     src/usbrecord.h \
     src/helpers.h \
     src/usbgroup.h \
