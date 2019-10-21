@@ -197,6 +197,10 @@ void CaptureThread::run()
         if (buf)
             free(buf);
     }
+
+    /* Append last bufferized messages on capture stop */
+    m_msg->addMessageVector(messageBuffer);
+
 exit:
     m_model->lastPacket();
 
