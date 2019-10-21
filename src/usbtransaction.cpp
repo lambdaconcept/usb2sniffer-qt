@@ -126,6 +126,8 @@ bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
                 return filter->nakOut;
             case PID_SETUP:
                 return filter->nakSetup;
+            case PID_PING:
+                return filter->nakPing;
             default:
                 return true;
             }

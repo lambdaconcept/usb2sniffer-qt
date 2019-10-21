@@ -10,6 +10,7 @@ struct USBProxyFilter
     bool nakIn = true;
     bool nakOut = true;
     bool nakSetup = true;
+    bool nakPing = true;
     QString device;
     int deviceNum = -1;
     QString endpoint;
