@@ -113,24 +113,21 @@ QPair<QByteArray, QByteArray> USBTransaction::recordData()
 
 bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
 {
-    // Check for NAK or Incomplete
+    /* Check device and endpoint numbers */
     if ((filter->deviceNum == -1 || m_token->m_Dev == filter->deviceNum)
         && (filter->endpointNum == -1 || m_token->m_Endpoint == filter->endpointNum)) {
-        if ((m_handshake && m_handshake->getPid() == PID_NAK)
-            || (!m_handshake && m_token->getPid() != PID_SPLIT)) {
+
+        /* Check for NAK or Incomplete */
+        if ((m_handshake && m_handshake->getPid() == PID_NAK) || (!m_handshake)) {
             switch (m_token->getPid()) {
             case PID_IN:
                 return filter->nakIn;
-                break;
             case PID_OUT:
                 return filter->nakOut;
-                break;
             case PID_SETUP:
                 return filter->nakSetup;
-                break;
             default:
                 return true;
-                break;
             }
         } else {
             return true;
