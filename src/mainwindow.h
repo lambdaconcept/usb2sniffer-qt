@@ -40,12 +40,13 @@ public slots:
     void displayDeviceNotFound();
     void displayDeviceDisconnected();
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void loadFile(QString file);
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void loadFile();
+    void loadFileDialog();
     void saveFile();
     void exit();
 

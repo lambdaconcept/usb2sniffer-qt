@@ -48,7 +48,8 @@ SOURCES += \
     src/msgmodel.cpp \
     parser/parse.c \
     xbar/ft60x/fops.c \
-    src/aboutwindow.cpp
+    src/aboutwindow.cpp \
+    src/lcsniffapplication.cpp
 
 HEADERS += \
     qhexedit2/src/commands.h \
@@ -76,7 +77,8 @@ HEADERS += \
     src/msgmodel.h \
     parser/parse.h \
     xbar/ft60x/fops.h \
-    src/aboutwindow.h
+    src/aboutwindow.h \
+    src/lcsniffapplication.h
 
 FORMS += \
     ui/mainwindow.ui \
@@ -99,6 +101,7 @@ mac {
     Resources.files += $$PWD/xbar/ft60x/FTD3XXLibrary/macOS/libftd3xx.dylib
     Resources.path = Contents/MacOS
     QMAKE_BUNDLE_DATA += Resources
+    QMAKE_INFO_PLIST = $$PWD/lcsniff.plist
 }
 
 INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32

@@ -1,11 +1,13 @@
+#include "lcsniffapplication.h"
 #include "mainwindow.h"
-#include <QApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.showMaximized();
+    LCSniffApplication app(argc, argv);
+    MainWindow win;
 
-    return a.exec();
+    QObject::connect(&app, SIGNAL(fileEvent(QString)), &win, SLOT(loadFile(QString)));
+    win.showMaximized();
+
+    return app.exec();
 }
