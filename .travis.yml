@@ -21,6 +21,7 @@ matrix:
             - build-essential
             - qt512base
             - qt512declarative
+            - libgl1-mesa-dev
       install:
         - source /opt/qt512/bin/qt512-env.sh
 
