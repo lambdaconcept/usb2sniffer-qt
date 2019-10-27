@@ -3,16 +3,24 @@ language: c
 matrix:
   include:
     - os: linux
-      dist: bionic
+      arch:
+        - amd64
+        - arm64
+      dist: xenial
+      sudo: required
       compiler:
         - gcc
         - clang
       addons:
         apt:
           update: true
+          sources:
+            - deadsnakes
+            - sourceline: 'ppa:beineri/opt-qt-5.12.3-xenial'
           packages:
             - build-essential
-            - qtdeclarative5-dev
+            - qt510base
+            - qt510declarative
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
