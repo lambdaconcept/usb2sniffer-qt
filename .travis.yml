@@ -9,6 +9,7 @@ compiler:
 
 addons:
   apt:
+    update: true
     packages:
       - build-essential
       - qtdeclarative5-dev
@@ -18,9 +19,10 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt5; fi
 
 script:
+  - qmake -qt=qt5 --version
   - git submodule init
   - git submodule update
   - mkdir build
   - cd build
-  - qmake config+="release" ../lcsniff.pro
+  - qmake -qt=qt5 config+="release" ../lcsniff.pro
   - make -j
