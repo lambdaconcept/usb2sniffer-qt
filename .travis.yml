@@ -19,8 +19,8 @@ matrix:
             - sourceline: 'ppa:beineri/opt-qt-5.12.3-xenial'
           packages:
             - build-essential
-            - qt510base
-            - qt510declarative
+            - qt512base
+            - qt512declarative
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
