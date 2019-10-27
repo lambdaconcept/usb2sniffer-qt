@@ -21,6 +21,8 @@ matrix:
             - build-essential
             - qt512base
             - qt512declarative
+      install:
+        - source /opt/qt512/bin/qt512-env.sh
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
