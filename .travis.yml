@@ -1,18 +1,20 @@
 language: c
 
-dist:
-  - linux
-
-compiler:
-  - gcc
-  - clang
-
-addons:
-  apt:
-    update: true
-    packages:
-      - build-essential
-      - qtdeclarative5-dev
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      compiler:
+        - gcc
+        - clang
+      addons:
+        apt:
+          update: true
+          packages:
+            - build-essential
+            - qtdeclarative5-dev
+            - 'g++-9'
+            - 'clang-8'
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
