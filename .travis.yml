@@ -2,7 +2,6 @@ language: c
 
 dist:
   - linux
-  - osx
 
 compiler:
   - gcc
