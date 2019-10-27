@@ -98,6 +98,7 @@ void CaptureThread::run()
     uint64_t ts;
     uint8_t event;
     uint32_t drop_count;
+    std::vector<std::tuple<uint64_t, uint8_t, uint8_t>> messageBuffer;
 
     bool stop_sent = false;
     bool stop_event = false;
@@ -158,33 +159,21 @@ void CaptureThread::run()
         if(streamid < 0) {
             emit captureDeviceDisconnected();
             goto exit;
-
         } else if (streamid == 1) {
-/*
-            printf("ubar_recv: %d\n", len);
-            for (int i=0; i<len; i++) {
-                printf("%02x ", (unsigned char)buf[i]);
-            }
-            printf("\n");
-            */
             usb_add_data(m_sess, (uint8_t*)buf, len);
 
-            while(usb_read_data(m_sess, &type, &val, &ts)){
-                // printf("add message\n");
+            while(usb_read_data(m_sess, &type, &val, &ts)) {
                 if (start_event) {
-                    m_msg->addMessage(ts, type, val);
+                    messageBuffer.push_back(std::make_tuple(ts, type, val));
                 }
             }
-            while(usb_read_packet(m_sess, &type, (uint8_t*)pktbuf, &plen, &ts)){
-//                printf("add packet (%d)\n", plen);
-//                for (int i=0; i<plen; i++) {
-//                    printf("%02x ", (unsigned char)pktbuf[i]);
-//                }
-//                printf("\n");
+
+            while(usb_read_packet(m_sess, &type, (uint8_t*)pktbuf, &plen, &ts)) {
                 if (start_event) {
                     m_model->addPacket(new USBPacket(ts, QByteArray(pktbuf, plen)));
                 }
             }
+
             while(usb_read_event(m_sess, &event)) {
                 switch(event) {
                 case USB_EVENT_STOP:
@@ -199,9 +188,19 @@ void CaptureThread::run()
                 }
             }
         }
+
+        if (messageBuffer.size() > 1000) {
+            m_msg->addMessageVector(messageBuffer);
+            messageBuffer.clear();
+        }
+
         if (buf)
             free(buf);
     }
+
+    /* Append last bufferized messages on capture stop */
+    m_msg->addMessageVector(messageBuffer);
+
 exit:
     m_model->lastPacket();
 

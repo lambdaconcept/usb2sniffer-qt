@@ -59,3 +59,13 @@ quint8 USBGroup::getPid() const
 {
     return m_first->getPid();
 }
+
+bool USBGroup::matchForFilter(const USBProxyFilter *filter) const
+{
+    switch (m_first->getPid()) {
+    case PID_SOF:
+        return filter->sof;
+    default:
+        return true;
+    }
+}

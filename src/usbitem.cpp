@@ -105,6 +105,12 @@ quint8 USBItem::getPid() const
     return m_record->getPid();
 }
 
-QPair<QByteArray, QByteArray> USBItem::recordData() {
+QPair<QByteArray, QByteArray> USBItem::recordData()
+{
     return m_record->recordData();
+}
+
+bool USBItem::matchForFilter(const USBProxyFilter *filter) const
+{
+    return m_record->matchForFilter(filter);
 }

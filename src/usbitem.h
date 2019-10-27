@@ -8,6 +8,7 @@
 #include <QFont>
 #include <QMutex>
 
+#include "usbproxyfilter.h"
 #include "usbrecord.h"
 
 class USBItem
@@ -32,6 +33,7 @@ public:
     const QString details();
     quint8 getPid() const;
     QPair<QByteArray, QByteArray> recordData();
+    bool matchForFilter(const USBProxyFilter *filter) const;
 
 private:
     QList<USBItem*> m_childItems;
