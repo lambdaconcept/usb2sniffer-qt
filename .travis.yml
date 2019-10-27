@@ -13,8 +13,6 @@ matrix:
           packages:
             - build-essential
             - qtdeclarative5-dev
-            - 'g++-9'
-            - 'clang-8'
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
