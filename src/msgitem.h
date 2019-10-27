@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QMutex>
+#include <QVariant>
 
 /* Columns numbers */
 #define MSG_TS      0
