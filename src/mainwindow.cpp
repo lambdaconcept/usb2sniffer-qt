@@ -52,9 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     filterWindow = new FilterWindow(this);
     aboutWindow = new AboutWindow(this);
 
-    // loadFile(); // FIXME for dev
-
-    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFile);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFileDialog);
     connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::exit);
 
@@ -248,7 +246,14 @@ void MainWindow::saveFile()
     fileSaved = true;
 }
 
-void MainWindow::loadFile()
+void MainWindow::loadFileDialog()
+{
+    QString file = QFileDialog::getOpenFileName(this,
+        "Open File", "", "*.usb");
+    loadFile(file);
+}
+
+void MainWindow::loadFile(QString file)
 {
     FILE *in;
     size_t len;
@@ -258,9 +263,6 @@ void MainWindow::loadFile()
     uint8_t type;
     uint8_t val;
     uint64_t ts;
-
-    QString file = QFileDialog::getOpenFileName(this,
-        "Open File", "", "*.usb");
 
     in = fopen(file.toUtf8().constData(), "rb");
     if(!in) {
