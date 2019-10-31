@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>123</height>
+    <height>132</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -64,6 +64,42 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboSpeed"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="labelHighLevelMode">
+       <property name="toolTip">
+        <string>When enabled, low level ULPI messages (RxCmd) are not displayed in the GUI. This avoids slowing down the interface when you are only interested in the USB packets.</string>
+       </property>
+       <property name="text">
+        <string>High level capture</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="highLevelMode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
