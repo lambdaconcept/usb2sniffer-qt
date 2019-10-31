@@ -34,6 +34,7 @@ public:
     quint8 getPid() const;
     QPair<QByteArray, QByteArray> recordData();
     bool matchForFilter(const USBProxyFilter *filter) const;
+    USBRecord* getRecord() const;
 
 private:
     QList<USBItem*> m_childItems;

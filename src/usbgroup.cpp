@@ -69,3 +69,13 @@ bool USBGroup::matchForFilter(const USBProxyFilter *filter) const
         return true;
     }
 }
+
+int USBGroup::packetCount() const
+{
+    return m_count;
+}
+
+USBPacket* USBGroup::packet(int i) const
+{
+    return &m_first[i];
+}

@@ -48,6 +48,7 @@ public:
 
     void loadFileDialog();
     void saveFile();
+    void exportAsPcap();
     void exit();
 
     void startCapture();

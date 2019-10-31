@@ -138,3 +138,22 @@ bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
         return false;
     }
 }
+
+int USBTransaction::packetCount() const
+{
+    return 3;
+}
+
+USBPacket* USBTransaction::packet(int i) const
+{
+    switch (i) {
+    case 0:
+        return m_token;
+    case 1:
+        return m_data;
+    case 2:
+        return m_handshake;
+    default:
+        return nullptr;
+    }
+}

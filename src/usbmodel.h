@@ -31,6 +31,7 @@ public:
     int lastPacket();
     void updateNodes();
     void updateNumberPopulated();
+    USBItem& getRoot() const;
 signals:
     void numberPopulated(int number);
 

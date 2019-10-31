@@ -114,3 +114,8 @@ bool USBItem::matchForFilter(const USBProxyFilter *filter) const
 {
     return m_record->matchForFilter(filter);
 }
+
+USBRecord* USBItem::getRecord() const
+{
+    return m_record;
+}

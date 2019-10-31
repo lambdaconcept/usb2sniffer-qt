@@ -162,3 +162,8 @@ QVariant USBModel::headerData(int section, Qt::Orientation orientation,
 
     return QVariant();
 }
+
+USBItem& USBModel::getRoot() const
+{
+    return *m_rootItem;
+}

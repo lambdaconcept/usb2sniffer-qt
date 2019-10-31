@@ -17,6 +17,8 @@
 #define RECORD_LENGTH   5
 #define RECORD_SUMMARY  6
 
+class USBPacket;
+
 class USBRecord
 {
 public:
@@ -34,6 +36,8 @@ public:
     virtual quint8 getPid() const = 0;
     virtual QPair<QByteArray, QByteArray> recordData();
     virtual bool matchForFilter(const USBProxyFilter *filter) const;
+    virtual int packetCount() const;
+    virtual USBPacket* packet(int i) const;
 private:
     const QByteArray emptyByteArray;
 };

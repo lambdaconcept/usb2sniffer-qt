@@ -1,6 +1,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include "pcapexport.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -54,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFileDialog);
     connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(ui->actionExport_As_Pcap, &QAction::triggered, this, &MainWindow::exportAsPcap);
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::exit);
 
     connect(ui->actionConfigure, &QAction::triggered, configWindow, &ConfigureWindow::open);
@@ -140,6 +142,7 @@ void MainWindow::captureFinished()
 
     ui->actionOpen->setEnabled(true);
     ui->actionSave_As->setEnabled(true);
+    ui->actionExport_As_Pcap->setEnabled(true);
     ui->actionConfigure->setEnabled(true);
 
     captureThread->deleteLater();
@@ -183,6 +186,7 @@ void MainWindow::startCapture()
         fileSaved = false;
         ui->actionOpen->setEnabled(false);
         ui->actionSave_As->setEnabled(false);
+        ui->actionExport_As_Pcap->setEnabled(false);
         ui->actionConfigure->setEnabled(false);
     }
 }
@@ -246,6 +250,17 @@ void MainWindow::saveFile()
     fileSaved = true;
 }
 
+void MainWindow::exportAsPcap()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        "Export As PCap", "", "*.pcap");
+
+    if (!fileName.isEmpty()&& !fileName.isNull()) {
+        PCapExport exp(fileName.toUtf8().constData(), *currentModel);
+        exp.write();
+    }
+}
+
 void MainWindow::loadFileDialog()
 {
     QString file = QFileDialog::getOpenFileName(this,
@@ -306,6 +321,7 @@ void MainWindow::loadFile(QString file)
 
     fileSaved = true;
     ui->actionSave_As->setEnabled(false);
+    ui->actionExport_As_Pcap->setEnabled(true);
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)
