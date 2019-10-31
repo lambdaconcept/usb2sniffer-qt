@@ -2,7 +2,9 @@
 #define MSGITEM_H
 
 #include <QList>
+#include <QVector>
 #include <QMutex>
+#include <QVariant>
 
 /* Columns numbers */
 #define MSG_TS      0
