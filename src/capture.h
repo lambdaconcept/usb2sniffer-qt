@@ -56,7 +56,7 @@ class CaptureConfig
 public:
     QString device;
     int speed = 0;
-    bool enableHighLevelMode = false;
+    bool highLevelMode = false;
 
     static const QVector<QString> s_speedStr;
 

@@ -62,7 +62,7 @@ void ConfigureWindow::accept()
 
     m_config.device = ui->comboDevice->currentText();
     m_config.speed = ui->comboSpeed->currentData().toInt();
-    m_config.enableHighLevelMode = ui->enableHighLevelMode->checkState() == Qt::Checked;
+    m_config.highLevelMode = ui->highLevelMode->checkState() == Qt::Checked;
 
     QDialog::accept();
 }

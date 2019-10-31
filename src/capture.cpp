@@ -163,7 +163,7 @@ void CaptureThread::run()
             usb_add_data(m_sess, (uint8_t*)buf, len);
 
             while(usb_read_data(m_sess, &type, &val, &ts)) {
-                if (start_event && !m_config->enableHighLevelMode) {
+                if (start_event && !m_config->highLevelMode) {
                     messageBuffer.push_back(std::make_tuple(ts, type, val));
                 }
             }
