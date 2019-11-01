@@ -26,7 +26,10 @@ void PCapExport::write(void)
 {
 	writeGlobalHeader();
 
-	writePacketsFromItem(model.getRoot());
+	auto& aggregator = model.getAggregator();
+	for (int i = 0; i < aggregator.count(); i++) {
+		writePacket(*aggregator.value(i));
+	}
 }
 
 void PCapExport::writeGlobalHeader(void)
@@ -42,28 +45,6 @@ void PCapExport::writeGlobalHeader(void)
     header.network = DLT_USB_2_0;
 
     fwrite(&header, sizeof(pcap_hdr_t), 1, fh);
-}
-
-void PCapExport::writePacketsFromItem(USBItem& item)
-{
-	for (int i = 0; i < item.childCount(); i++) {
-		writePacketsFromItem(*item.child(i));
-	}
-
-	auto record = item.getRecord();
-	if (record) {
-		writePacketsFromRecord(*record);
-	}
-}
-
-void PCapExport::writePacketsFromRecord(USBRecord& record)
-{
-	for (int i = 0; i < record.packetCount(); i++) {
-		auto packet = record.packet(i);
-		if (packet) {
-			writePacket(*packet);
-		}
-	}
 }
 
 void PCapExport::writePacket(USBPacket& packet)

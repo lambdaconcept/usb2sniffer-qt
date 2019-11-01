@@ -14,8 +14,6 @@ public:
     const QString details();
 	quint8 getPid() const;
 	bool matchForFilter(const USBProxyFilter *filter) const;
-	int packetCount() const;
-    USBPacket* packet(int i) const;
 private:
     int m_count;
     USBPacket *m_first;

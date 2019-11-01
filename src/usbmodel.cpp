@@ -163,7 +163,7 @@ QVariant USBModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-USBItem& USBModel::getRoot() const
+const USBAggregator& USBModel::getAggregator() const
 {
-    return *m_rootItem;
+    return m_aggregator;
 }

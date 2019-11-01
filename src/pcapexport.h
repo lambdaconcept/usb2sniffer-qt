@@ -28,8 +28,6 @@ class PCapExport {
 	FILE *fh;
 	USBModel& model;
 	void writeGlobalHeader(void);
-	void writePacketsFromItem(USBItem& item);
-	void writePacketsFromRecord(USBRecord& record);
 	void writePacket(USBPacket& packet);
 
 public:

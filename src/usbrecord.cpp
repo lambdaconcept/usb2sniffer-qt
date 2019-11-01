@@ -54,13 +54,3 @@ bool USBRecord::matchForFilter(const USBProxyFilter *filter) const
 {
     return true;
 }
-
-int USBRecord::packetCount() const
-{
-    return 0;
-}
-
-USBPacket* USBRecord::packet(int i) const
-{
-    return nullptr;
-}
