@@ -36,7 +36,7 @@ void PCapExport::writeGlobalHeader(void)
 {
 	pcap_hdr_t header;
 
-    header.magic_number = 0xA1B2C3D4;
+    header.magic_number = 0xA1B2C34D;
     header.version_major = 2;
     header.version_minor = 4;
     header.thiszone = 0 /* Assume UTC */;
@@ -54,7 +54,7 @@ void PCapExport::writePacket(USBPacket& packet)
 	pcaprec_hdr_t header;
 
 	header.ts_sec = packet.m_Timestamp / 1000000000;
-	header.ts_usec = (packet.m_Timestamp / 1000) % 1000000;
+	header.ts_usec = packet.m_Timestamp % 1000000000;
 	header.incl_len = packetData.size();
     header.orig_len = packetData.size();
 
