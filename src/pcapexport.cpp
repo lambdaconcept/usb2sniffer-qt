@@ -4,37 +4,37 @@
 #include "pcapexport.h"
 
 /*
-	Useful documentation:
-	- https://wiki.wireshark.org/Development/LibpcapFileFormat
-	- http://www.tcpdump.org/linktypes.html
+    Useful documentation:
+    - https://wiki.wireshark.org/Development/LibpcapFileFormat
+    - http://www.tcpdump.org/linktypes.html
 */
 
 #define DLT_USB_2_0 288
 
 PCapExport::PCapExport(const char* filename, USBModel& _model) : model(_model)
 {
-	fh = fopen(filename, "wb");
-	assert(fh);
+    fh = fopen(filename, "wb");
+    assert(fh);
 }
 
 PCapExport::~PCapExport(void)
 {
-	fclose(fh);
+    fclose(fh);
 }
 
 void PCapExport::write(void)
 {
-	writeGlobalHeader();
+    writeGlobalHeader();
 
-	auto& aggregator = model.getAggregator();
-	for (int i = 0; i < aggregator.count(); i++) {
-		writePacket(*aggregator.value(i));
-	}
+    auto& aggregator = model.getAggregator();
+    for (int i = 0; i < aggregator.count(); i++) {
+        writePacket(*aggregator.value(i));
+    }
 }
 
 void PCapExport::writeGlobalHeader(void)
 {
-	pcap_hdr_t header;
+    pcap_hdr_t header;
 
     header.magic_number = 0xA1B23C4D;
     header.version_major = 2;
@@ -49,13 +49,13 @@ void PCapExport::writeGlobalHeader(void)
 
 void PCapExport::writePacket(USBPacket& packet)
 {
-	auto packetData = packet.recordData().second;
+    auto packetData = packet.recordData().second;
 
-	pcaprec_hdr_t header;
+    pcaprec_hdr_t header;
 
-	header.ts_sec = packet.m_Timestamp / 1000000000;
-	header.ts_usec = packet.m_Timestamp % 1000000000;
-	header.incl_len = packetData.size();
+    header.ts_sec = packet.m_Timestamp / 1000000000;
+    header.ts_usec = packet.m_Timestamp % 1000000000;
+    header.incl_len = packetData.size();
     header.orig_len = packetData.size();
 
     fwrite(&header, sizeof(pcaprec_hdr_t), 1, fh);
