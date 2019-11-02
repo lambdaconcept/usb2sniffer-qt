@@ -36,7 +36,7 @@ void PCapExport::writeGlobalHeader(void)
 {
 	pcap_hdr_t header;
 
-    header.magic_number = 0xA1B2C34D;
+    header.magic_number = 0xA1B23C4D;
     header.version_major = 2;
     header.version_minor = 4;
     header.thiszone = 0 /* Assume UTC */;
