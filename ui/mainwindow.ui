@@ -303,7 +303,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Export As PCap</string>
+    <string>Export As Pcap</string>
    </property>
   </action>
   <action name="actionExit">

@@ -24,15 +24,15 @@ extern "C" {
 	} __attribute__((packed)) pcaprec_hdr_t;
 }
 
-class PCapExport {
+class PcapExport {
 	FILE *fh;
 	USBModel& model;
 	void writeGlobalHeader(void);
 	void writePacket(USBPacket& packet);
 
 public:
-	PCapExport(const char* filename, USBModel& _model);
-	~PCapExport(void);
+	PcapExport(const char* filename, USBModel& _model);
+	~PcapExport(void);
 	void write(void);
 };
 

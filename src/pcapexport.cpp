@@ -11,18 +11,18 @@
 
 #define DLT_USB_2_0 288
 
-PCapExport::PCapExport(const char* filename, USBModel& _model) : model(_model)
+PcapExport::PcapExport(const char* filename, USBModel& _model) : model(_model)
 {
     fh = fopen(filename, "wb");
     assert(fh);
 }
 
-PCapExport::~PCapExport(void)
+PcapExport::~PcapExport(void)
 {
     fclose(fh);
 }
 
-void PCapExport::write(void)
+void PcapExport::write(void)
 {
     writeGlobalHeader();
 
@@ -32,7 +32,7 @@ void PCapExport::write(void)
     }
 }
 
-void PCapExport::writeGlobalHeader(void)
+void PcapExport::writeGlobalHeader(void)
 {
     pcap_hdr_t header;
 
@@ -47,7 +47,7 @@ void PCapExport::writeGlobalHeader(void)
     fwrite(&header, sizeof(pcap_hdr_t), 1, fh);
 }
 
-void PCapExport::writePacket(USBPacket& packet)
+void PcapExport::writePacket(USBPacket& packet)
 {
     auto packetData = packet.recordData().second;
 

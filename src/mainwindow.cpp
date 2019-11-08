@@ -253,10 +253,10 @@ void MainWindow::saveFile()
 void MainWindow::exportAsPcap()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        "Export As PCap", "", "*.pcap");
+        "Export As Pcap", "", "*.pcap");
 
     if (!fileName.isEmpty()&& !fileName.isNull()) {
-        PCapExport exp(fileName.toUtf8().constData(), *currentModel);
+        PcapExport exp(fileName.toUtf8().constData(), *currentModel);
         exp.write();
     }
 }
