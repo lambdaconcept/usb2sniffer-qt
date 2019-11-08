@@ -49,7 +49,8 @@ SOURCES += \
     parser/parse.c \
     xbar/ft60x/fops.c \
     src/aboutwindow.cpp \
-    src/lcsniffapplication.cpp
+    src/lcsniffapplication.cpp \
+    src/pcapexport.cpp
 
 HEADERS += \
     qhexedit2/src/commands.h \
@@ -79,7 +80,8 @@ HEADERS += \
     parser/parse.h \
     xbar/ft60x/fops.h \
     src/aboutwindow.h \
-    src/lcsniffapplication.h
+    src/lcsniffapplication.h \
+    src/pcapexport.h
 
 FORMS += \
     ui/mainwindow.ui \

@@ -223,6 +223,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave_As"/>
+    <addaction name="actionExport_As_Pcap"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -295,6 +296,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionExport_As_Pcap">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Export As Pcap</string>
    </property>
   </action>
   <action name="actionExit">

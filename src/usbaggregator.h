@@ -18,14 +18,14 @@ public:
     ~USBAggregator();
 
     int count() const;
-    USBPacket* value(int i);
+    USBPacket* value(int i) const;
     void append(USBPacket* packet);
     void endTransaction();
     void endGroup();
     void done();
     void setRoot(USBItem* root);
     bool getPending(USBItem **item);
-    int getPendingCount();
+    int getPendingCount() const;
 
 private:
     USBItem *m_root;

@@ -14,7 +14,7 @@ USBAggregator::~USBAggregator()
     qDeleteAll(m_packets);
 }
 
-USBPacket* USBAggregator::value(int i)
+USBPacket* USBAggregator::value(int i) const
 {
     return m_packets.value(i);
 }
@@ -38,7 +38,7 @@ bool USBAggregator::getPending(USBItem **item)
     return true;
 }
 
-int USBAggregator::getPendingCount()
+int USBAggregator::getPendingCount() const
 {
     return m_pending.size();
 }

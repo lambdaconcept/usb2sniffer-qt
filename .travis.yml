@@ -36,4 +36,4 @@ script:
   - mkdir build
   - cd build
   - qmake config+="release" ../lcsniff.pro
-  - make -j
+  - make
