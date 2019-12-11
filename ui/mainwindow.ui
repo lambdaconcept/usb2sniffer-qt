@@ -134,7 +134,7 @@
             </attribute>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
-              <widget class="QHexEdit" name="textAsciiPacket">
+              <widget class="QHexEdit" name="textAsciiPacket" native="true">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -151,7 +151,7 @@
             </attribute>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
-              <widget class="QHexEdit" name="textAsciiData">
+              <widget class="QHexEdit" name="textAsciiData" native="true">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -273,7 +273,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/document-open.png</normaloff>:/icons/icons/document-open.png</iconset>
    </property>
    <property name="text">
@@ -288,7 +288,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/document-save-as.png</normaloff>:/icons/icons/document-save-as.png</iconset>
    </property>
    <property name="text">
@@ -316,7 +316,7 @@
   </action>
   <action name="actionConfigure">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/applications-development.png</normaloff>:/icons/icons/applications-development.png</iconset>
    </property>
    <property name="text">
@@ -325,7 +325,7 @@
   </action>
   <action name="actionStart">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/media-playback-start.png</normaloff>:/icons/icons/media-playback-start.png</iconset>
    </property>
    <property name="text">
@@ -337,7 +337,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/media-playback-stop.png</normaloff>:/icons/icons/media-playback-stop.png</iconset>
    </property>
    <property name="text">
@@ -346,7 +346,7 @@
   </action>
   <action name="actionFilter">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../resources.qrc">
      <normaloff>:/icons/icons/format-justify-center.png</normaloff>:/icons/icons/format-justify-center.png</iconset>
    </property>
    <property name="text">
@@ -360,8 +360,15 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QHexEdit</class>
+   <extends>QWidget</extends>
+   <header>qhexedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
