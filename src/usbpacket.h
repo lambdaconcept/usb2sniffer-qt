@@ -55,6 +55,7 @@ public:
     const QString asciiPacket();
     const QString details();
     QPair<QByteArray, QByteArray> recordData();
+    bool matchForSearch(const QByteArray &search) const;
 
 public:
     quint64 m_Timestamp;

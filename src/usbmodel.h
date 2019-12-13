@@ -32,6 +32,10 @@ public:
     void updateNodes();
     void updateNumberPopulated();
     const USBAggregator& getAggregator() const;
+
+    /* search */
+    QModelIndex runSearch(const QByteArray &search, QList<QModelIndex> *dest = nullptr);
+
 signals:
     void numberPopulated(int number);
 

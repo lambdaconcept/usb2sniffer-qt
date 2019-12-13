@@ -40,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->statusBar->addPermanentWidget(ui->statusPacketNum);
     ui->mainToolBar->addWidget(ui->statusCapture);
+    ui->mainToolBar->addWidget(ui->searchLine);
+    ui->searchLine->installEventFilter(this);
 
     #ifdef Q_OS_MACOS
     setUnifiedTitleAndToolBarOnMac(true);
@@ -66,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(filterWindow, &FilterWindow::accepted, this, &MainWindow::setFilter);
 
     connect(ui->actionAbout, &QAction::triggered, aboutWindow, &AboutWindow::open);
+
+    connect(ui->searchLine, &QLineEdit::returnPressed, this, &MainWindow::nextSearch);
 
     ui->textAsciiPacket->setReadOnly(true);
     ui->textAsciiPacket->setDynamicBytesPerLine(true);
@@ -110,6 +114,9 @@ void MainWindow::newSession()
     ui->treeView->setColumnWidth(1, 150);
     connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this, SLOT(selectionChanged(const QItemSelection&,const QItemSelection&)));
+
+    /* Reset search box */
+    ui->searchLine->clear();
 
     /* Put raw messages into model */
 
@@ -372,4 +379,63 @@ void MainWindow::selectionChanged(const QItemSelection &selected, const QItemSel
     QModelIndexList selectedList = selected.indexes();
     this->updateAscii(selectedList.first());
     this->updateDetails(selectedList.first());
+}
+
+QByteArray MainWindow::parseSearch(const QString &text)
+{
+    QByteArray input;
+    input.append(text);
+
+    /* interpret the search string as hexadecimal data */
+    return QByteArray::fromHex(input);
+}
+
+void MainWindow::nextSearch()
+{
+    if (!currentProxy) {
+        return;
+    }
+
+    QByteArray search = parseSearch(ui->searchLine->text());
+    QModelIndex index = currentProxy->nextSearch(search);
+    if (!index.isValid()) {
+        return;
+    }
+
+    ui->treeView->setCurrentIndex(index);
+}
+
+void MainWindow::prevSearch()
+{
+    if (!currentProxy) {
+        return;
+    }
+
+    QByteArray search = parseSearch(ui->searchLine->text());
+    QModelIndex index = currentProxy->prevSearch(search);
+    if (!index.isValid()) {
+        return;
+    }
+
+    ui->treeView->setCurrentIndex(index);
+}
+
+bool MainWindow::eventFilter(QObject* obj, QEvent *event)
+{
+    /* jump to prev/next search result with up/down arrow keys */
+
+    if (obj == ui->searchLine) {
+        if (event->type() == QEvent::KeyPress) {
+            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Up) {
+                prevSearch();
+                return true;
+            } else if(keyEvent->key() == Qt::Key_Down) {
+                nextSearch();
+                return true;
+            }
+        }
+        return false;
+    }
+    return QMainWindow::eventFilter(obj, event);
 }

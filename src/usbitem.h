@@ -24,6 +24,7 @@ public:
     QVariant headerData(int column) const;
     int row();
     USBItem *parentItem();
+    int searchRecursive(const QByteArray &search, QList<USBItem*> &dest);
 
     QVariant data(int column) const;
     QBrush background() const;

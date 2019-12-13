@@ -167,3 +167,26 @@ const USBAggregator& USBModel::getAggregator() const
 {
     return m_aggregator;
 }
+
+QModelIndex USBModel::runSearch(const QByteArray &search, QList<QModelIndex> *dest)
+{
+    QList<USBItem*> list;
+    m_rootItem->searchRecursive(search, list);
+    if (list.isEmpty()) {
+        return QModelIndex();
+    }
+
+    /* Build model indexes */
+    QList<QModelIndex> searchList;
+    QList<USBItem*>::const_iterator it;
+    for (it=list.constBegin(); it!=list.constEnd(); it++) {
+        USBItem *item = *it;
+        searchList.append(createIndex(item->row(), 0, item));
+    }
+
+    if (dest) {
+        dest->append(searchList);
+    }
+
+    return searchList.value(0);
+}

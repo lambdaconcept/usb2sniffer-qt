@@ -57,6 +57,11 @@ public:
     void captureFinished();
 
     void setFilter();
+    /* search */
+    QByteArray parseSearch(const QString &text);
+    void nextSearch();
+    void prevSearch();
+    bool eventFilter(QObject* obj, QEvent *event);
 
     void updateAscii(const QModelIndex& index);
     void updateDetails(const QModelIndex& index);

@@ -54,3 +54,8 @@ bool USBRecord::matchForFilter(const USBProxyFilter *filter) const
 {
     return true;
 }
+
+bool USBRecord::matchForSearch(const QByteArray &search) const
+{
+    return false;
+}

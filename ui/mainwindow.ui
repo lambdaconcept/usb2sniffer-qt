@@ -24,6 +24,23 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <widget class="QLabel" name="statusCapture">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="indent">
+       <number>5</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="statusPacketNum">
+      <property name="text">
+       <string>Records: 0</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitterV">
       <property name="orientation">
@@ -189,20 +206,10 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="statusPacketNum">
-      <property name="text">
-       <string>Records: 0</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="statusCapture">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="indent">
-       <number>5</number>
+    <item row="3" column="0">
+     <widget class="QLineEdit" name="searchLine">
+      <property name="placeholderText">
+       <string>Search: (hex string)</string>
       </property>
      </widget>
     </item>

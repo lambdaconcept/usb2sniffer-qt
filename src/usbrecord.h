@@ -34,6 +34,7 @@ public:
     virtual quint8 getPid() const = 0;
     virtual QPair<QByteArray, QByteArray> recordData();
     virtual bool matchForFilter(const USBProxyFilter *filter) const;
+    virtual bool matchForSearch(const QByteArray &search) const;
 private:
     const QByteArray emptyByteArray;
 };

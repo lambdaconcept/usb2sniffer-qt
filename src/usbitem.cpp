@@ -55,6 +55,28 @@ int USBItem::row()
     return idx;
 }
 
+int USBItem::searchRecursive(const QByteArray &search, QList<USBItem*> &dest)
+{
+    int count;
+    USBItem *child;
+
+    m_mutex.lock();
+
+    count = m_childItems.count();
+    for (int i=0; i<count; i++) {
+        child = m_childItems.at(i);
+        child->searchRecursive(search, dest);
+    }
+
+    if (m_record->matchForSearch(search)) {
+        dest.append(this);
+    }
+
+    m_mutex.unlock();
+
+    return dest.count();
+}
+
 int USBItem::columnCount() const
 {
     return USBRecord::s_header.count();
