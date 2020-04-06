@@ -90,9 +90,21 @@ FORMS += \
     ui/aboutwindow.ui
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+# Attempt to set the PREFIX variable from one of these sources:
+# 1. PREFIX qmake variable (i.e. leave it as-is)
+# 2. PREFIX environment variable
+# 3. Platform-specific defaults
+isEmpty(PREFIX) {
+	ENV_PREFIX = $$(PREFIX)
+	!isEmpty(ENV_PREFIX): PREFIX = $$ENV_PREFIX
+	else:qnx: PREFIX = /tmp/$${TARGET}
+	else:unix:!android: PREFIX = /opt/$${TARGET}
+}
+
+!isEmpty(PREFIX) {
+	target.path = $$PREFIX/bin
+	INSTALLS += target
+}
 
 RESOURCES += \
     resources.qrc
