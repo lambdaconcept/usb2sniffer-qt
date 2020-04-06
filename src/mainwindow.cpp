@@ -1,5 +1,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QKeyEvent>
 
 #include "pcapexport.h"
 #include "mainwindow.h"
