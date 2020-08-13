@@ -110,7 +110,13 @@ isEmpty(PREFIX) {
 RESOURCES += \
     resources.qrc
 
-win32: LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/Win32/ -lFTD3XX
+win32 {
+    contains(QT_ARCH, i386) {
+        LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/Win32/ -lFTD3XX
+    } else {
+        LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/x64/ -lFTD3XX
+    }
+}
 macx: LIBS += -L$$PWD/xbar/ft60x/FTD3XXLibrary/macOS/ -lftd3xx
 
 mac {
@@ -120,8 +126,14 @@ mac {
     QMAKE_INFO_PLIST = $$PWD/lcsniff.plist
 }
 
-INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
+# INCLUDEPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
 INCLUDEPATH += $$PWD/qhexedit2/src
-DEPENDPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
+# DEPENDPATH += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.lib
+win32:!win32-g++ {
+    contains(QT_ARCH, i386) {
+        PRE_TARGETDEPS += $$PWD/xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.lib
+    } else {
+        PRE_TARGETDEPS += $$PWD/xbar/ft60x/FTD3XXLibrary/x64/FTD3XX.lib
+    }
+}

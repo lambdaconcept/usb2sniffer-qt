@@ -51,11 +51,30 @@ make -j cc qt5
 export PATH=/xxx/mxe/usr/bin:$PATH
 ```
 
-#### Cross compile (Static)
+#### Cross compile (Static 32bits)
 
 ```
-mkdir build-win
-cd build-win
+mkdir build-win-32
+cd build-win-32
 i686-w64-mingw32.static-qmake-qt5 ../lcsniff.pro
 make -j
+
+mkdir lcsniff-win-32
+cp release/lcsniff.exe lcsniff-win-32/
+cp ../xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.dll lcsniff-win-32/
+zip -r lcsniff-win-32.zip lcsniff-win-32/
+```
+
+#### Cross compile (Static 64bits)
+
+```
+mkdir build-win-64
+cd build-win-64
+x86_64-w64-mingw32.static-qmake-qt5 ../lcsniff.pro
+make -j
+
+mkdir lcsniff-win-64
+cp release/lcsniff.exe lcsniff-win-64/
+cp ../xbar/ft60x/FTD3XXLibrary/x64/FTD3XX.dll lcsniff-win-64/
+zip -r lcsniff-win-64.zip lcsniff-win-64/
 ```
