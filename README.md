@@ -4,6 +4,10 @@ LambdaConcept lcsniff software for [USB2Sniffer hardware](http://blog.lambdaconc
 
 ![LCSniff running on macOS](docs/lcsniff-mac.png)
 
+## Dependencies
+
+Qt >=5.10
+
 ## Build instructions
 
 ### Qt Creator
