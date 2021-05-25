@@ -63,10 +63,11 @@ cd build-win-32
 i686-w64-mingw32.static-qmake-qt5 ../lcsniff.pro
 make -j
 
-mkdir lcsniff-win-32
-cp release/lcsniff.exe lcsniff-win-32/
-cp ../xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.dll lcsniff-win-32/
-zip -r lcsniff-win-32.zip lcsniff-win-32/
+DIR=lcsniff-win-32
+mkdir $DIR
+cp release/lcsniff.exe $DIR
+cp ../xbar/ft60x/FTD3XXLibrary/Win32/FTD3XX.dll $DIR
+zip -r $DIR.zip $DIR
 ```
 
 #### Cross compile (Static 64bits)
@@ -77,8 +78,9 @@ cd build-win-64
 x86_64-w64-mingw32.static-qmake-qt5 ../lcsniff.pro
 make -j
 
-mkdir lcsniff-win-64
-cp release/lcsniff.exe lcsniff-win-64/
-cp ../xbar/ft60x/FTD3XXLibrary/x64/FTD3XX.dll lcsniff-win-64/
-zip -r lcsniff-win-64.zip lcsniff-win-64/
+DIR=lcsniff-win-64
+mkdir $DIR
+cp release/lcsniff.exe $DIR
+cp ../xbar/ft60x/FTD3XXLibrary/x64/FTD3XX.dll $DIR
+zip -r $DIR.zip $DIR
 ```
