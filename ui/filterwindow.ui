@@ -51,7 +51,7 @@
          <string>NAK/Incomplete IN</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -61,7 +61,7 @@
          <string>NAK/Incomplete OUT</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -71,7 +71,7 @@
          <string>NAK/Incomplete SETUP</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -81,7 +81,7 @@
          <string>NAK/Incomplete PING</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -113,7 +113,7 @@
          <string>SOF</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
