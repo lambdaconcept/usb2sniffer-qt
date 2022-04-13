@@ -6,11 +6,14 @@
 struct USBProxyFilter
 {
     bool sof = false;
+    bool split = false;
+
     /* For now Incomplete is treated as NAK */
     bool nakIn = false;
     bool nakOut = false;
     bool nakSetup = false;
     bool nakPing = false;
+
     QString device;
     int deviceNum = -1;
     QString endpoint;

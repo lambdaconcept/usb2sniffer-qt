@@ -128,6 +128,10 @@ bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
                 return filter->nakSetup;
             case PID_PING:
                 return filter->nakPing;
+
+            case PID_SPLIT:
+                return filter->split;
+
             default:
                 return true;
             }

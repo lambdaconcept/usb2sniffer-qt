@@ -23,10 +23,13 @@ void FilterWindow::open()
     /* Restore filter configuration */
 
     ui->checkSOF->setChecked(m_filter.sof);
+    ui->checkSPLIT->setChecked(m_filter.split);
+
     ui->checkNAKIN->setChecked(m_filter.nakIn);
     ui->checkNAKOUT->setChecked(m_filter.nakOut);
     ui->checkNAKSETUP->setChecked(m_filter.nakSetup);
     ui->checkNAKPING->setChecked(m_filter.nakPing);
+
     ui->lineDevice->setText(m_filter.device);
     ui->lineEndpoint->setText(m_filter.endpoint);
 
@@ -39,6 +42,7 @@ void FilterWindow::accept()
     /* Update configuration object based on user input */
 
     m_filter.sof = ui->checkSOF->checkState();
+    m_filter.split = ui->checkSPLIT->checkState();
 
     m_filter.nakIn = ui->checkNAKIN->checkState();
     m_filter.nakOut = ui->checkNAKOUT->checkState();
