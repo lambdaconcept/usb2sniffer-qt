@@ -17,7 +17,7 @@
    <item row="0" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Transaction Filters</string>
+      <string>Show Transactions:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -79,7 +79,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Packet Filters</string>
+      <string>Show Packets:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -131,7 +131,7 @@
       <bool>true</bool>
      </property>
      <property name="title">
-      <string>Device Filters</string>
+      <string>Show only one Device:</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -152,7 +152,7 @@
       <bool>true</bool>
      </property>
      <property name="title">
-      <string>Endpoint Filters</string>
+      <string>Show only one Endpoint:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
