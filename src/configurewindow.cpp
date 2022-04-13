@@ -14,7 +14,7 @@ ConfigureWindow::ConfigureWindow(QWidget *parent) :
     ui->comboSpeed->addItem("FS (Full Speed)", CaptureSpeed::FS);
     ui->comboSpeed->addItem("LS (Low Speed)", CaptureSpeed::LS);
 
-    m_config.speed = CaptureSpeed::FS;
+    m_config.speed = CaptureSpeed::HS;
 }
 
 ConfigureWindow::~ConfigureWindow()
