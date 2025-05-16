@@ -25,6 +25,8 @@ QVariant USBTransaction::data(int column) const
                 return m_handshake->getPidStr();
             } else if (m_token->getPid() == PID_SPLIT) {
                 return QString("");
+            } else if (m_data) {
+                return QString("Isochronous");
             } else {
                 return QString("Incomplete");
             }
@@ -46,6 +48,9 @@ QBrush USBTransaction::background() const
             if (m_handshake->getPid() == PID_ACK) {
                 ack = 1;
             }
+        } else if (m_data) {
+            /* Probably isochronous, consider as complete */
+            ack = 1;
         }
 
         switch(m_token->getPid()) {
@@ -119,7 +124,7 @@ bool USBTransaction::matchForFilter(const USBProxyFilter *filter) const
         && (filter->endpointNum == -1 || m_token->m_Endpoint == filter->endpointNum)) {
 
         /* Check for NAK or Incomplete */
-        if ((m_handshake && m_handshake->getPid() == PID_NAK) || (!m_handshake)) {
+        if ((m_handshake && m_handshake->getPid() == PID_NAK) || (!m_handshake && !m_data)) {
             switch (m_token->getPid()) {
             case PID_IN:
                 return filter->nakIn;
