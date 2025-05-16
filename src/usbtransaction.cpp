@@ -17,9 +17,9 @@ QVariant USBTransaction::data(int column) const
         case RECORD_TS:
             return formatTimestamp(m_token->m_Timestamp);
         case RECORD_DEVICE:
-            return QString("%1").arg(m_token->m_Dev, 2, 16, QChar('0'));
+            return QString("%1").arg(m_token->m_Dev, 2, 10, QChar('0'));
         case RECORD_ENDPOINT:
-            return QString("%1").arg(m_token->m_Endpoint, 2, 16, QChar('0'));
+            return QString("%1").arg(m_token->m_Endpoint, 2, 10, QChar('0'));
         case RECORD_STATUS:
             if (m_handshake) {
                 return m_handshake->getPidStr();
