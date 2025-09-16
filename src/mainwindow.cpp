@@ -384,10 +384,8 @@ void MainWindow::selectionChanged(const QItemSelection &selected, const QItemSel
 
 QByteArray MainWindow::parseSearch(const QString &text)
 {
-    QByteArray input;
-    input.append(text);
-
     /* interpret the search string as hexadecimal data */
+    QByteArray input(text.toUtf8());
     return QByteArray::fromHex(input);
 }
 
