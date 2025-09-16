@@ -28,6 +28,7 @@ QMAKE_CXXFLAGS_RELEASE += -O2
 SOURCES += \
     src/main.cpp \
     qhexedit2/src/chunks.cpp \
+    qhexedit2/src/color_manager.cpp \
     qhexedit2/src/commands.cpp \
     qhexedit2/src/qhexedit.cpp \
     src/mainwindow.cpp \
