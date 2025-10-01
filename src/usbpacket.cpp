@@ -116,9 +116,9 @@ QVariant USBPacket::data(int column) const
         case RECORD_TS:
             return formatTimestamp(m_Timestamp);
         case RECORD_DEVICE:
-            return QString("%1").arg(m_Dev, 2, 16, QChar('0'));
+            return QString("%1").arg(m_Dev, 2, 10, QChar('0'));
         case RECORD_ENDPOINT:
-            return QString("%1").arg(m_Endpoint, 2, 16, QChar('0'));
+            return QString("%1").arg(m_Endpoint, 2, 10, QChar('0'));
         case RECORD_STATUS:
             return QString("");
         case RECORD_LENGTH:
