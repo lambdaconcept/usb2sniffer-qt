@@ -29,6 +29,11 @@ void USBAggregator::setRoot(USBItem* root)
     m_root = root;
 }
 
+USBItem* USBAggregator::getRoot() const
+{
+    return m_root;
+}
+
 bool USBAggregator::getPending(USBItem **item)
 {
     if (m_pending.isEmpty())

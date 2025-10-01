@@ -24,6 +24,7 @@ public:
     void endGroup();
     void done();
     void setRoot(USBItem* root);
+    USBItem* getRoot() const;
     bool getPending(USBItem **item);
     int getPendingCount() const;
 

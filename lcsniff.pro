@@ -52,6 +52,7 @@ SOURCES += \
     xbar/ft60x/fops.c \
     src/aboutwindow.cpp \
     src/lcsniffapplication.cpp \
+    src/csvexport.cpp \
     src/pcapexport.cpp
 
 HEADERS += \
@@ -83,6 +84,7 @@ HEADERS += \
     xbar/ft60x/fops.h \
     src/aboutwindow.h \
     src/lcsniffapplication.h \
+    src/csvexport.h \
     src/pcapexport.h
 
 FORMS += \

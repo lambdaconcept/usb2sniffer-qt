@@ -49,6 +49,7 @@ public:
     void loadFileDialog();
     void saveFile();
     void exportAsPcap();
+    void exportAsCsv();
     void exit();
 
     void startCapture();

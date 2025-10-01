@@ -3,6 +3,7 @@
 #include <QKeyEvent>
 
 #include "pcapexport.h"
+#include "csvexport.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -59,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::loadFileDialog);
     connect(ui->actionSave_As, &QAction::triggered, this, &MainWindow::saveFile);
     connect(ui->actionExport_As_Pcap, &QAction::triggered, this, &MainWindow::exportAsPcap);
+    connect(ui->actionExport_As_Csv, &QAction::triggered, this, &MainWindow::exportAsCsv);
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::exit);
 
     connect(ui->actionConfigure, &QAction::triggered, configWindow, &ConfigureWindow::open);
@@ -151,6 +153,7 @@ void MainWindow::captureFinished()
     ui->actionOpen->setEnabled(true);
     ui->actionSave_As->setEnabled(true);
     ui->actionExport_As_Pcap->setEnabled(true);
+    ui->actionExport_As_Csv->setEnabled(true);
     ui->actionConfigure->setEnabled(true);
 
     captureThread->deleteLater();
@@ -195,6 +198,7 @@ void MainWindow::startCapture()
         ui->actionOpen->setEnabled(false);
         ui->actionSave_As->setEnabled(false);
         ui->actionExport_As_Pcap->setEnabled(false);
+        ui->actionExport_As_Csv->setEnabled(false);
         ui->actionConfigure->setEnabled(false);
     }
 }
@@ -242,6 +246,10 @@ void MainWindow::saveFile()
     QString file = QFileDialog::getSaveFileName(this,
         "Save File", "", "*.usb");
 
+    if (!file.endsWith(".usb")) {
+        file += ".usb";
+    }
+
     FILE *out;
 
     out = fopen(file.toUtf8().constData(), "wb");
@@ -263,8 +271,27 @@ void MainWindow::exportAsPcap()
     QString fileName = QFileDialog::getSaveFileName(this,
         "Export As Pcap", "", "*.pcap");
 
+    if (!fileName.endsWith(".pcap")) {
+        fileName += ".pcap";
+    }
+
     if (!fileName.isEmpty()&& !fileName.isNull()) {
         PcapExport exp(fileName.toUtf8().constData(), *currentModel);
+        exp.write();
+    }
+}
+
+void MainWindow::exportAsCsv()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+        "Export As CSV", "", "*.csv");
+
+    if (!fileName.endsWith(".csv")) {
+        fileName += ".csv";
+    }
+
+    if (!fileName.isEmpty()&& !fileName.isNull()) {
+        CSVExport exp(fileName.toUtf8().constData(), *currentModel);
         exp.write();
     }
 }
@@ -330,6 +357,7 @@ void MainWindow::loadFile(QString file)
     fileSaved = true;
     ui->actionSave_As->setEnabled(false);
     ui->actionExport_As_Pcap->setEnabled(true);
+    ui->actionExport_As_Csv->setEnabled(true);
 }
 
 void MainWindow::updateAscii(const QModelIndex& index)
